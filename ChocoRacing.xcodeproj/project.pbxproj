@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5CFA78002E2A53F000808F5A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 5CFA77FF2E2A53EA00808F5A /* .gitignore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		5CFA77C92E2A44F200808F5A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,22 +31,13 @@
 		5CFA77BB2E2A44F100808F5A /* ChocoRacing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChocoRacing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CFA77C82E2A44F200808F5A /* ChocoRacingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChocoRacingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CFA77D22E2A44F200808F5A /* ChocoRacingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChocoRacingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CFA77FF2E2A53EA00808F5A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5CFA77BD2E2A44F100808F5A /* ChocoRacing */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ChocoRacing;
-			sourceTree = "<group>";
-		};
-		5CFA77CB2E2A44F200808F5A /* ChocoRacingTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ChocoRacingTests;
-			sourceTree = "<group>";
-		};
-		5CFA77D52E2A44F200808F5A /* ChocoRacingUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ChocoRacingUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,9 +70,8 @@
 		5CFA77B22E2A44F100808F5A = {
 			isa = PBXGroup;
 			children = (
+				5CFA77FF2E2A53EA00808F5A /* .gitignore */,
 				5CFA77BD2E2A44F100808F5A /* ChocoRacing */,
-				5CFA77CB2E2A44F200808F5A /* ChocoRacingTests */,
-				5CFA77D52E2A44F200808F5A /* ChocoRacingUITests */,
 				5CFA77BC2E2A44F100808F5A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,9 +124,6 @@
 			dependencies = (
 				5CFA77CA2E2A44F200808F5A /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				5CFA77CB2E2A44F200808F5A /* ChocoRacingTests */,
-			);
 			name = ChocoRacingTests;
 			packageProductDependencies = (
 			);
@@ -152,9 +143,6 @@
 			);
 			dependencies = (
 				5CFA77D42E2A44F200808F5A /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				5CFA77D52E2A44F200808F5A /* ChocoRacingUITests */,
 			);
 			name = ChocoRacingUITests;
 			packageProductDependencies = (
@@ -212,6 +200,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CFA78002E2A53F000808F5A /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
