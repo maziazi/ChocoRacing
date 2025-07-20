@@ -7,15 +7,10 @@
 
 import SwiftUI
 import RealityKit
+import PlayTest
 
-struct ContentView : View {
-
+struct ContentView: View {
     var body: some View {
-//        BeforeView()
+        GameView()
     }
-
-}
-
-#Preview {
-    ContentView()
 }
