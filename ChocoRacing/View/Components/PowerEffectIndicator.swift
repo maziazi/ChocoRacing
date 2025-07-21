@@ -10,33 +10,55 @@ import SwiftUI
 struct PowerEffectIndicator: View {
     @ObservedObject var gameController: GameController
     
+    private var progress: Double {
+        guard gameController.currentPowerEffect != .none else { return 0.0 }
+        
+        let maxDuration: Double
+        switch gameController.currentPowerEffect {
+        case .speedBoost:
+            maxDuration = 5.0
+        case .speedReduction:
+            maxDuration = 3.0
+        case .none:
+            maxDuration = 1.0
+        }
+        
+        return gameController.powerEffectTimeRemaining / maxDuration
+    }
+    
     var body: some View {
         if gameController.currentPowerEffect != .none {
             HStack(spacing: 8) {
-                effectIcon
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(effectText)
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(effectColor)
+                // Circle Timer
+                ZStack {
+                    // Background circle
+                    Circle()
+                        .stroke(Color.black.opacity(0.3), lineWidth: 6)
+                        .frame(width: 60, height: 60)
                     
-                    Text("\(String(format: "%.1f", gameController.powerEffectTimeRemaining))s remaining")
-                        .font(.caption)
-                        .foregroundColor(effectColor.opacity(0.8))
+                    // Progress circle (countdown from full to empty)
+                    Circle()
+                        .trim(from: 0, to: progress)
+                        .stroke(
+                            effectColor,
+                            style: StrokeStyle(
+                                lineWidth: 6,
+                                lineCap: .round
+                            )
+                        )
+                        .frame(width: 60, height: 60)
+                        .rotationEffect(.degrees(-90))
+                        .animation(.linear(duration: 0.1), value: progress)
+                    
+                    // Center icon
+                    effectIcon
+                        .font(.title3)
+                        .foregroundColor(effectColor)
                 }
                 
                 Spacer()
             }
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(effectColor.opacity(0.1))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(effectColor, lineWidth: 2)
-                    )
-            )
             .transition(.scale.combined(with: .opacity))
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: gameController.currentPowerEffect)
         }
@@ -47,26 +69,11 @@ struct PowerEffectIndicator: View {
             switch gameController.currentPowerEffect {
             case .speedBoost:
                 Image(systemName: "bolt.fill")
-                    .font(.title)
-                    .foregroundColor(.yellow)
             case .speedReduction:
                 Image(systemName: "tortoise.fill")
-                    .font(.title)
-                    .foregroundColor(.orange)
             case .none:
                 EmptyView()
             }
-        }
-    }
-    
-    private var effectText: String {
-        switch gameController.currentPowerEffect {
-        case .speedBoost:
-            return "SPEED BOOST!"
-        case .speedReduction:
-            return "SLOWED DOWN!"
-        case .none:
-            return ""
         }
     }
     
