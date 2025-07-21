@@ -8,7 +8,7 @@
 import Foundation
 
 struct GameConfiguration {
-    var forwardSpeed: Float = 2.0
+    var forwardSpeed: Float = 10.0
     var botVariationSpeed: Float = 0.5
     var countdownDuration: Double = 1.0
     var leftBoundary: Float = -0.5
