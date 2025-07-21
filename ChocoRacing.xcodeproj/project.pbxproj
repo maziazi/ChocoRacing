@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C3AB6FE2E2E3835000B21DF /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 2C3AB6FD2E2E3835000B21DF /* PlayTest */; };
 		5CFA78002E2A53F000808F5A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 5CFA77FF2E2A53EA00808F5A /* .gitignore */; };
 		5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA783B2E2D03E900808F5A /* PlayTest */; };
 		5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA787D2E2D0F5C00808F5A /* PlayTest */; };
@@ -51,6 +52,7 @@
 			files = (
 				5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */,
 				5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */,
+				2C3AB6FE2E2E3835000B21DF /* PlayTest in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +114,7 @@
 			packageProductDependencies = (
 				5CFA783B2E2D03E900808F5A /* PlayTest */,
 				5CFA787D2E2D0F5C00808F5A /* PlayTest */,
+				2C3AB6FD2E2E3835000B21DF /* PlayTest */,
 			);
 			productName = ChocoRacing;
 			productReference = 5CFA77BB2E2A44F100808F5A /* ChocoRacing.app */;
@@ -190,7 +193,7 @@
 			mainGroup = 5CFA77B22E2A44F100808F5A;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				5CFA787C2E2D0F5C00808F5A /* XCLocalSwiftPackageReference "../../../Downloads/Packages" */,
+				2C3AB6FC2E2E3835000B21DF /* XCLocalSwiftPackageReference "Package" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5CFA77BC2E2A44F100808F5A /* Products */;
@@ -562,13 +565,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		5CFA787C2E2D0F5C00808F5A /* XCLocalSwiftPackageReference "../../../Downloads/Packages" */ = {
+		2C3AB6FC2E2E3835000B21DF /* XCLocalSwiftPackageReference "Package" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../Downloads/Packages;
+			relativePath = Package;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2C3AB6FD2E2E3835000B21DF /* PlayTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayTest;
+		};
 		5CFA783B2E2D03E900808F5A /* PlayTest */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayTest;
