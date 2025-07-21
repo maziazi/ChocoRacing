@@ -108,24 +108,24 @@ struct GameView: View {
         }
         
         // Apply collision to slide
-        if let slide = scene.findEntity(named: "Slide") {
+        if let slide = scene.findEntity(named: "world_slide_v1_2") {
+            await applyStaticMeshCollision(to: slide)
+        }
+        if let slide = scene.findEntity(named: "world_slide_v1_1") {
             await applyStaticMeshCollision(to: slide)
         }
     }
     
     private func setupControllers() {
-        // Configure game
         var config = GameConfiguration()
         config.leftBoundary = -0.5
         config.rightBoundary = 1.8
         gameController.configure(with: config)
         
-        // Link controllers
         playerController.setGameController(gameController)
         playerController.setBoundaries(left: config.leftBoundary, right: config.rightBoundary)
         collisionController.setGameController(gameController)
         
-        // Setup game callbacks
         setupGameCallbacks()
     }
     
