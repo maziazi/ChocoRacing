@@ -152,8 +152,15 @@ class GameController: ObservableObject {
         
         stopAllTimers()
         stopAllMovement()
-        resetAllPositions()
+        
         clearAllPowerEffects()
+        currentPowerEffect = .none
+        powerEffectTimeRemaining = 0.0
+        
+        finishedEntities.removeAll()
+        gameStartTime = nil
+            
+        resetAllPositions()
         finishedEntities.removeAll()
         
         onReset?()
