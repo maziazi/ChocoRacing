@@ -20,6 +20,7 @@ class GameController: ObservableObject {
     @Published var powerEffectTimeRemaining: Double = 0.0
     @Published var finishedEntities: [FinishInfo] = []
     @Published var showLeaderboard = false
+    @Published var playerCurrentPosition: Int = 1
     
     private var configuration = GameConfiguration()
     private var racingEntities: [String: RacingEntity] = [:]
@@ -87,9 +88,7 @@ class GameController: ObservableObject {
         self.finishEntity = entity
         print("🏁 Finish entity set: \(entity.name)")
     }
-    
-    // MARK: - Game Flow Control
-    
+        
     func startGame() {
         guard gameState == .waiting else { return }
         
@@ -355,6 +354,7 @@ class GameController: ObservableObject {
         boundaryCheckTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             self.checkPlayerBoundaries()
             self.checkAllEntitiesFinish()
+            self.updatePlayerPosition()
         }
     }
     
@@ -559,5 +559,69 @@ class GameController: ObservableObject {
         racingEntities.removeAll()
         finishedEntities.removeAll()
         print("🧹 GameController cleanup completed")
+    }
+    
+    private func updatePlayerPosition() {
+        guard gameState == .playing,
+              let player = getPlayerEntity(),
+              let finishEntity = finishEntity else {
+            playerCurrentPosition = 1
+            return
+        }
+        
+        var entityDistances: [(name: String, distance: Float, isPlayer: Bool)] = []
+        
+        for (name, racingEntity) in racingEntities {
+            if finishedEntities.contains(where: { $0.entityName == name }) {
+                continue
+            }
+            
+            let distance = simd_distance(racingEntity.entity.position, finishEntity.position)
+            let isPlayer = (name == "player")
+            entityDistances.append((name: name, distance: distance, isPlayer: isPlayer))
+        }
+        
+        entityDistances.sort { $0.distance < $1.distance }
+        
+        for (index, entityInfo) in entityDistances.enumerated() {
+            if entityInfo.isPlayer {
+                let newPosition = index + 1
+                
+                if newPosition != playerCurrentPosition {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        playerCurrentPosition = newPosition
+                    }
+                }
+                break
+            }
+        }
+    }
+    
+    func getCurrentLeaderboard() -> [(name: String, distance: Float, position: Int)] {
+        guard let finishEntity = finishEntity else { return [] }
+        
+        var entityDistances: [(name: String, distance: Float)] = []
+        
+        for (name, racingEntity) in racingEntities {
+            if finishedEntities.contains(where: { $0.entityName == name }) {
+                continue
+            }
+            
+            let distance = simd_distance(racingEntity.entity.position, finishEntity.position)
+            entityDistances.append((name: name, distance: distance))
+        }
+        
+        entityDistances.sort { $0.distance < $1.distance }
+        
+        var leaderboard: [(name: String, distance: Float, position: Int)] = []
+        for (index, entityInfo) in entityDistances.enumerated() {
+            leaderboard.append((name: entityInfo.name, distance: entityInfo.distance, position: index + 1))
+        }
+        
+        return leaderboard
+    }
+
+    private func resetPlayerPosition() {
+        playerCurrentPosition = 1
     }
 }

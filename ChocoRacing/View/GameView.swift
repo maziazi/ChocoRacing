@@ -23,7 +23,6 @@ struct GameView: View {
     var body: some View {
         ZStack {
             VStack {
-                PowerEffectIndicator(gameController: gameController)
                 
                 RealityView { content in
                     await setupGameWorld(content: content)
@@ -38,6 +37,18 @@ struct GameView: View {
                     PlayButtonView(gameController: gameController)
                     GameControlsView(gameController: gameController)
                 }
+            }
+
+            VStack {
+                HStack {
+                    PositionRaceIndicator(gameController: gameController)
+                    PowerEffectIndicator(gameController: gameController)
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
+
+                        
+                Spacer()
             }
             
             CountdownView(gameController: gameController)
@@ -131,14 +142,9 @@ struct GameView: View {
             self.resetPowerItems()
             self.playerController.cleanup()
         }
-        
-//        gameController.onEntityFinished = { finishInfo in
-//            print("🏆 \(finishInfo.displayName) finished in position \(finishInfo.position)!")
-//        }
     }
     
     private func setupCollisionDetection(content: any RealityViewContentProtocol) {
-        // Setup collision for player
         if let player = playerEntity {
             let playerCollision = content.subscribe(to: CollisionEvents.Began.self, on: player) { event in
                 collisionController.handleCollision(event)
@@ -146,7 +152,6 @@ struct GameView: View {
             collisionSubscriptions.append(playerCollision)
         }
         
-        // Setup collision for bots
         for bot in botEntities {
             let botCollision = content.subscribe(to: CollisionEvents.Began.self, on: bot) { event in
                 collisionController.handleCollision(event)
