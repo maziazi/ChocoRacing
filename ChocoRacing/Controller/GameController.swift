@@ -41,7 +41,7 @@ class GameController: ObservableObject {
     var onPowerEffectEnded: (() -> Void)?
     var onEntityFinished: ((FinishInfo) -> Void)?
     var onAllEntitiesFinished: (([FinishInfo]) -> Void)?
-        
+    
     func configure(with config: GameConfiguration) {
         self.configuration = config
     }
@@ -88,7 +88,7 @@ class GameController: ObservableObject {
         self.finishEntity = entity
         print("🏁 Finish entity set: \(entity.name)")
     }
-        
+    
     func startGame() {
         guard gameState == .waiting else { return }
         
@@ -102,6 +102,10 @@ class GameController: ObservableObject {
         clearAllPowerEffects()
         stopAllMovement()
         startCountdown()
+        
+        Task {
+            await MusicController.shared.playReadyGoAndThenBackground()
+        }
         
         print("🎯 Starting game with \(racingEntities.count) entities...")
     }
@@ -158,14 +162,15 @@ class GameController: ObservableObject {
         
         finishedEntities.removeAll()
         gameStartTime = nil
-            
+        
         resetAllPositions()
         finishedEntities.removeAll()
+        MusicController.shared.playBeforePlayMusic()
         
         onReset?()
         print("🔄 Game reset complete")
     }
-        
+    
     func applyPowerEffect(to entity: Entity, effectType: PowerEffectType, duration: Double) {
         guard gameState == .playing else { return }
         
@@ -183,11 +188,26 @@ class GameController: ObservableObject {
             currentPowerEffect = effectType
             powerEffectTimeRemaining = duration
             onPowerEffectApplied?(effectType)
+            
+            // ✅ Mainkan suara Whoosh
+            playSound(named: "Whoosh", on: entity)
         }
         
+        // ✅ Jalankan timer power effect
         startPowerEffectTimer(for: entityName, duration: duration)
+        
         print("💫 \(entityName) got \(effectType) for \(duration)s")
     }
+    
+    func playSound(named soundName: String, on entity: Entity) {
+        do {
+            let audioResource = try AudioFileResource.load(named: soundName)
+            entity.playAudio(audioResource)
+        } catch {
+            print("❌ Gagal memuat suara \(soundName): \(error)")
+        }
+    }
+        
         
     func checkFinish(for entity: Entity) {
         guard gameState == .playing,

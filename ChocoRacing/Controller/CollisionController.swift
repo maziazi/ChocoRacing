@@ -41,6 +41,7 @@ class CollisionController {
         case .powerup:
             gameController.applyPowerEffect(to: entity, effectType: .speedBoost, duration: 5.0)
             otherEntity.isEnabled = false
+            playSound(named: "Whoosh", on: entity) // ✅ Tambahkan pemutaran suara di sini
             print("⚡ Speed boost applied!")
             
         case .powerdown:
@@ -56,4 +57,13 @@ class CollisionController {
             break
         }
     }
-}
+    
+    func playSound(named soundName: String, on entity: Entity) {
+           do {
+               let audioResource = try AudioFileResource.load(named: soundName)
+               entity.playAudio(audioResource)
+           } catch {
+               print("❌ Gagal memuat suara \(soundName): \(error)")
+           }
+       }
+   }
