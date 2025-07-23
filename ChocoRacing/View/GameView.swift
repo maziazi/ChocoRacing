@@ -65,6 +65,9 @@ struct GameView: View {
         
         if let scene = try? await Entity(named: "Scene", in: playTestBundle) {
             content.add(scene)
+            MusicController.shared.addToScene(to: scene)
+              await MusicController.shared.ensureAllSoundsLoaded() // ✅ tunggu sound selesai dimuat
+              MusicController.shared.playBeforePlayMusic()
             await setupGameEntities(in: scene)
             setupControllers()
             setupCollisionDetection(content: content)
