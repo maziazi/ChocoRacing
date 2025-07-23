@@ -28,10 +28,14 @@ class GameController: ObservableObject {
     private var gameStartTime: Date?
     
     private var countdownTimer: Timer?
-    private var movementTimer: Timer?
+    private var playerMovementTimer: Timer?  // Player's movement timer
+    private var botMovementTimers: [String: Timer] = [:]  // Bot-specific timers
+
     private var botAITimer: Timer?
     private var boundaryCheckTimer: Timer?
     private var powerEffectTimers: [String: Timer] = [:]
+    
+    private var oneSec: Bool = false
     
     var onGameStart: (() -> Void)?
     var onGameEnd: (() -> Void)?
@@ -41,6 +45,7 @@ class GameController: ObservableObject {
     var onPowerEffectEnded: (() -> Void)?
     var onEntityFinished: ((FinishInfo) -> Void)?
     var onAllEntitiesFinished: (([FinishInfo]) -> Void)?
+    
         
     func configure(with config: GameConfiguration) {
         self.configuration = config
@@ -166,11 +171,23 @@ class GameController: ObservableObject {
         print("🔄 Game reset complete")
     }
         
+    
+    //FCS
     func applyPowerEffect(to entity: Entity, effectType: PowerEffectType, duration: Double) {
         guard gameState == .playing else { return }
         
         let entityName = getEntityName(entity)
         guard var racingEntity = racingEntities[entityName] else { return }
+        
+        //NYALAIN KALAU MAU PAS ADA SHIELD GA ISA AMBIL ITEM BURUK DAN ITEMNYA ILANG
+        // If the player has shield, prevent slowDown or bom effects
+//        if racingEntity.powerEffect == .shield {
+//            if effectType == .speedReduction || effectType == .splash {
+//                // If shield is active, ignore slowDown or bomb effects
+//                print("🛡️ Shield prevents effect: \(effectType)!")
+//                return
+//            }
+//        }
         
         clearPowerEffectForEntity(entityName)
         
@@ -188,6 +205,66 @@ class GameController: ObservableObject {
         startPowerEffectTimer(for: entityName, duration: duration)
         print("💫 \(entityName) got \(effectType) for \(duration)s")
     }
+    
+    //FCS: Penalti tabrakan — dorong ke belakang dan hentikan sementara gerakan
+    func handleObstacleCollision(entity: Entity, otherEntity: Entity) {
+        guard gameState == .playing else { return }
+        
+        let entityName = getEntityName(entity)
+        guard var racingEntity = racingEntities[entityName] else { return }
+        
+        // Jika punya shield, tidak kena penalti
+        if racingEntity.powerEffect == .shield {
+            print("🛡️ \(entityName) protected by shield, no penalty.")
+            return
+        }
+
+        print("⚠️ \(entityName) collided with obstacle!")
+
+        // Hentikan gerakan sementara
+        if entityName == "player" {
+            print("Stop PLAYER")
+            stopPlayerMovement()
+            playerMovementTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+                guard self.gameState == .playing else { return }
+                
+                if let playerEntity = self.racingEntities["player"] {
+                    self.applyBackwardMovement(to: playerEntity.entity, racingEntity: playerEntity)
+                }
+            }
+            
+        } else {
+            print("Stop bot \(entityName)")
+            stopBotMovement(botName: entityName)
+            self.botMovementTimers[entityName] = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+                guard self.gameState == .playing else { return }
+                if let botEntity = self.racingEntities[entityName] {
+                    self.applyBackwardMovement(to: botEntity.entity, racingEntity: botEntity)
+                }
+            }
+        }
+        
+//        // Lanjutkan gerakan normal setelah 1 detik
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            if self.gameState == .playing {
+                if entityName == "player" {
+                    self.stopPlayerMovement()
+                    self.startPlayerMovement()
+                } else {
+                    self.stopBotMovement(botName: entityName)
+                    self.botMovementTimers[entityName] = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+                        guard self.gameState == .playing else { return }
+                        if let botEntity = self.racingEntities[entityName] {
+                            self.applyForwardMovement(to: botEntity.entity, racingEntity: botEntity)
+                        }
+                    }
+                }
+                print("✅ \(entityName) resumed after penalty")
+            }
+        }
+    }
+
+
         
     func checkFinish(for entity: Entity) {
         guard gameState == .playing,
@@ -200,7 +277,9 @@ class GameController: ObservableObject {
         }
     }
         
+    // FCS
     func applyPlayerHorizontalMovement(_ horizontalVelocity: Float) {
+        print("update horizontal movement")
         guard gameState == .playing,
               let player = getPlayerEntity(),
               var motion = player.components[PhysicsMotionComponent.self] else { return }
@@ -218,9 +297,11 @@ class GameController: ObservableObject {
                 speed *= 0.3
             case .none:
                 break
+            default:
+                break
             }
             
-            motion.linearVelocity.z = -speed
+//            motion.linearVelocity.z = -speed
         }
         
         player.components.set(motion)
@@ -288,28 +369,74 @@ class GameController: ObservableObject {
         freezeAllEntities()
     }
     
+    //FCS
     private func startForwardMovement() {
-        movementTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+        // Start the player's forward movement
+        startPlayerMovement()
+        
+        // Start the bots' forward movement
+        startBotsMovement()
+    }
+
+    //FCS: Start the player's forward movement
+    private func startPlayerMovement() {
+        guard self.gameState == .playing else { return }
+        
+        // Start the movement timer for the player
+        playerMovementTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
             guard self.gameState == .playing else { return }
             
-            for (_, racingEntity) in self.racingEntities {
-                self.applyForwardMovement(to: racingEntity.entity, racingEntity: racingEntity)
+            if let playerEntity = self.racingEntities["player"] {
+                self.applyForwardMovement(to: playerEntity.entity, racingEntity: playerEntity)
             }
         }
     }
     
+    
+
+    //FCS: Start the bots' forward movement independently
+    private func startBotsMovement() {
+        for (botName, racingEntity) in self.racingEntities where racingEntity.type == .bot {
+            // Start a movement timer for each bot
+            botMovementTimers[botName] = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+                guard self.gameState == .playing else { return }
+                
+                if let botEntity = self.racingEntities[botName] {
+                    self.applyForwardMovement(to: botEntity.entity, racingEntity: botEntity)
+                }
+            }
+        }
+    }
+    
+    //FCS:
+    private func stopPlayerMovement() {
+        playerMovementTimer?.invalidate()  // Stop the player's movement timer
+        playerMovementTimer = nil  // Reset the timer
+    }
+    
+    //FCS:
+    private func stopBotMovement(botName: String) {
+        botMovementTimers[botName]?.invalidate()  // Stop the bot's movement timer
+        botMovementTimers[botName] = nil  // Reset the timer
+    }
+
+    
+    //FCS: ini dipanggil setiap waktu
     private func applyForwardMovement(to entity: Entity, racingEntity: RacingEntity) {
+//        print("move forward")
         guard var motion = entity.components[PhysicsMotionComponent.self] else { return }
         
         var entitySpeed = racingEntity.originalSpeed
         
         switch racingEntity.powerEffect {
-        case .speedBoost:
-            entitySpeed *= 2.0
-        case .speedReduction:
-            entitySpeed *= 0.3
-        case .none:
-            break
+            case .speedBoost:
+                entitySpeed *= 2.0
+            case .speedReduction:
+                entitySpeed *= 0.3
+            case .none:
+                break
+            default:
+                break
         }
         
         motion.linearVelocity.z = -entitySpeed
@@ -317,6 +444,20 @@ class GameController: ObservableObject {
         motion.linearVelocity.y *= 0.95
         
         entity.components.set(motion)
+    }
+    
+    //FCS
+    private func applyBackwardMovement(to entity: Entity, racingEntity: RacingEntity) {
+        guard var motion = entity.components[PhysicsMotionComponent.self] else { return }
+
+        // Dorong ke belakang (z positif)
+        motion.linearVelocity.z = 8.0  // dorong ke belakang dengan kecepatan 8
+
+        // Kurangi kontrol horizontal untuk mencegah pergerakan lateral
+        motion.linearVelocity.x *= 0.3  // Kurangi kontrol horizontal
+        motion.linearVelocity.y = 0.0  // Netralisir gerakan vertikal (menghindari lonjakan)
+
+        entity.components.set(motion)  // Terapkan perubahan pada entitas
     }
     
     private func startBotAI() {
@@ -539,8 +680,12 @@ class GameController: ObservableObject {
     
     private func stopAllTimers() {
         stopCountdownTimer()
-        movementTimer?.invalidate()
-        movementTimer = nil
+        playerMovementTimer?.invalidate()  // Invalidate the timer to stop it
+        playerMovementTimer = nil  // Reset the timer to release resources
+        for (_, botTimer) in botMovementTimers {
+                botTimer.invalidate()  // Invalidate each bot's movement timer
+            }
+        botMovementTimers.removeAll()  // Clear the dictionary
         botAITimer?.invalidate()
         botAITimer = nil
         boundaryCheckTimer?.invalidate()

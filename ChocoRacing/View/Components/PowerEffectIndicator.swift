@@ -1,10 +1,3 @@
-//
-//  PowerEffectIndicator.swift
-//  ChocoRacing
-//
-//  Created by Muhamad Azis on 20/07/25.
-//
-
 import SwiftUI
 
 struct PowerEffectIndicator: View {
@@ -15,12 +8,16 @@ struct PowerEffectIndicator: View {
         
         let maxDuration: Double
         switch gameController.currentPowerEffect {
-        case .speedBoost:
-            maxDuration = 5.0
-        case .speedReduction:
-            maxDuration = 3.0
-        case .none:
-            maxDuration = 1.0
+            case .speedBoost:
+                maxDuration = 5.0
+            case .speedReduction:
+                maxDuration = 3.0
+            case .shield:
+                maxDuration = 5.0 // Or whatever duration you choose for the shield
+            case .splash:
+                maxDuration = 2.0 // Or whatever duration you choose for the splash
+            case .none:
+                maxDuration = 1.0
         }
         
         return gameController.powerEffectTimeRemaining / maxDuration
@@ -67,12 +64,20 @@ struct PowerEffectIndicator: View {
     private var effectIcon: some View {
         Group {
             switch gameController.currentPowerEffect {
-            case .speedBoost:
-                Image(systemName: "bolt.fill")
-            case .speedReduction:
-                Image(systemName: "tortoise.fill")
-            case .none:
-                EmptyView()
+                case .speedBoost:
+                    Image(systemName: "bolt.fill")
+                
+                case .speedReduction:
+                    Image(systemName: "tortoise.fill")
+                
+                case .shield:
+                    Image(systemName: "shield.fill") // Icon for shield effect
+                
+                case .splash:
+                    Image(systemName: "flame.fill") // Icon for splash effect
+                
+                case .none:
+                    EmptyView()
             }
         }
     }
@@ -83,6 +88,10 @@ struct PowerEffectIndicator: View {
             return .yellow
         case .speedReduction:
             return .orange
+        case .shield:
+            return .blue // Color for shield effect
+        case .splash:
+            return .red // Color for splash effect
         case .none:
             return .clear
         }

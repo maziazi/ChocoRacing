@@ -1,13 +1,12 @@
-//
-//  CollisionController.swift
-//  ChocoRacing
-//
-//  Created by Muhamad Azis on 20/07/25.
-//
-
 import RealityKit
+import SwiftUI
+
 
 class CollisionController {
+    let entityTypes: [GameEntityType] = [.speedUp, .slowDown, .protection, .bom, .finish, .obstacle]
+    
+    private var oneSec: Bool = false
+    private var oneSec2: Bool = false
     
     private weak var gameController: GameController?
     
@@ -27,33 +26,60 @@ class CollisionController {
         
         guard let tA = typeA, let tB = typeB else { return }
         
-        if (tA == .player || tA == .bot) && (tB == .powerup || tB == .powerdown || tB == .finish) {
+        // Check if entity A or B is player or bot, and if the other entity is in entityTypes
+        if (tA == .player || tA == .bot), entityTypes.contains(tB) {
+            
+            print("masuk 1")
             applyCollisionEffect(to: entityA, collidedWith: tB, otherEntity: entityB)
-        } else if (tB == .player || tB == .bot) && (tA == .powerup || tA == .powerdown || tA == .finish) {
-            applyCollisionEffect(to: entityB, collidedWith: tA, otherEntity: entityA)
         }
     }
     
     private func applyCollisionEffect(to entity: Entity, collidedWith type: GameEntityType, otherEntity: Entity) {
         guard let gameController = gameController else { return }
         
+    
+        
+        // NYALAIN KALAU MAU PAS ADA SHIELD GA ISA AMBIL ITEM BURUK DAN ITEMNYA GA MAU ILANG
+        if gameController.currentPowerEffect == .shield {
+            // If shield is active, prevent slowDown or bom from applying
+            if type == .slowDown || type == .bom {
+                print("🛡️ Protection prevents effect: \(type)!")
+                return  // Skip applying slowDown and bom effects
+            }
+        }
+        
         switch type {
-        case .powerup:
+        case .speedUp:
             gameController.applyPowerEffect(to: entity, effectType: .speedBoost, duration: 5.0)
             otherEntity.isEnabled = false
             print("⚡ Speed boost applied!")
             
-        case .powerdown:
+        case .slowDown:
             gameController.applyPowerEffect(to: entity, effectType: .speedReduction, duration: 3.0)
             otherEntity.isEnabled = false
             print("🐌 Speed reduced!")
             
+        case .protection:
+            gameController.applyPowerEffect(to: entity, effectType: .shield, duration: 5.0)
+            otherEntity.isEnabled = false
+            print("🛡️ Protection activated!")
+            
+        case .bom:
+            // Bomb effect logic
+            // gameController.applyPowerEffect(to: entity, effectType: .splash, duration: 0.0)
+            print("💥 Bomb exploded!")
+            
         case .finish:
             gameController.checkFinish(for: entity)
             print("🏁 Finish line reached!")
-            
+        
+        case .obstacle:
+            gameController.handleObstacleCollision(entity: entity, otherEntity: otherEntity)
+              
+           print("⚠️ Collision with obstacle!")
         default:
-            break
+            print("masuk default di collisionControl")
+
         }
     }
 }

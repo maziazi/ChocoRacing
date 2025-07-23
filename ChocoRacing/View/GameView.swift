@@ -76,7 +76,7 @@ struct GameView: View {
         var foundBots: [Entity] = []
         var finishEntity: Entity?
         
-                    walkThroughEntities(entity: scene) { entity in
+        walkThroughEntities(entity: scene) { entity in
             if entity.name.contains("player") {
                 entity.components.set(GameTagComponent(type: .player))
                 playerEntity = entity
@@ -88,12 +88,21 @@ struct GameView: View {
                 foundBots.append(entity)
                 
             } else if entity.name.contains("powerup") {
-                entity.components.set(GameTagComponent(type: .powerup))
+                entity.components.set(GameTagComponent(type: .speedUp))
                 
             } else if entity.name.contains("powerdown") {
-                entity.components.set(GameTagComponent(type: .powerdown))
+                entity.components.set(GameTagComponent(type: .slowDown))
                 
-            } else if entity.name.lowercased().contains("choco") && entity.name.lowercased().contains("fountain") {
+            } else if entity.name.lowercased().contains("protection") {
+                entity.components.set(GameTagComponent(type: .protection))
+                
+            } else if entity.name.lowercased().contains("bom") {
+                entity.components.set(GameTagComponent(type: .bom))
+                
+            }else if entity.name.contains("obstacle") {
+                entity.components.set(GameTagComponent(type: .obstacle))
+                
+            }else if entity.name.lowercased().contains("choco") && entity.name.lowercased().contains("fountain") {
                 entity.components.set(GameTagComponent(type: .finish))
                 finishEntity = entity
             }
@@ -101,8 +110,28 @@ struct GameView: View {
         
         botEntities = foundBots
         
+       
         // Setup game with entities
         gameController.setEntities(player: playerEntity, bots: botEntities)
+        
+        //FCS UPDT:
+//        if let player = playerEntity {
+//            print("✅ masuk player")
+//
+//            print("📦 Mencoba load CloudChunk")
+//            if let particleScene = try? await Entity(named: "CloudChunk", in: playTestBundle) {
+//                print("✅ CloudChunk loaded")
+//
+//                print("🔍 Mencari entity bernama smokeParticle")
+//                if let particle = particleScene.findEntity(named: "smokeParticle") {
+//                    print("🎉 >>> Particle added to player")
+//                    particle.position = [0, 0.5, 0]
+//                    player.addChild(particle)
+//                }
+//            } 
+//        }
+
+        
         if let finish = finishEntity {
             gameController.setFinishEntity(finish)
         }
@@ -189,11 +218,12 @@ struct GameView: View {
         }
     }
     
+    //FCS: 
     private func resetPowerItems() {
         if let scene = playerEntity?.parent {
             walkThroughEntities(entity: scene) { entity in
                 if let tagComponent = entity.components[GameTagComponent.self] {
-                    if tagComponent.type == .powerup || tagComponent.type == .powerdown {
+                    if tagComponent.type == .speedUp || tagComponent.type == .slowDown || tagComponent.type == .protection || tagComponent.type == .bom || tagComponent.type == .obstacle{
                         entity.isEnabled = true
                     }
                 }

@@ -10,7 +10,7 @@ import RealityKit
 
 class CameraController: ObservableObject {
     
-    @Published var followDistance: Float = 1.2//Jarak dengan character
+    @Published var followDistance: Float = 3.2//Jarak dengan character
     @Published var followHeight: Float = 0.6 // Ketinggian kamera
     @Published var followSmoothness: Float = 0.2
     @Published var lookAtTarget = true

@@ -10,5 +10,7 @@ import Foundation
 enum PowerEffectType {
     case speedBoost
     case speedReduction
+    case shield
+    case splash
     case none
 }

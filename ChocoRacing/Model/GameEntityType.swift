@@ -10,7 +10,10 @@ import Foundation
 enum GameEntityType: UInt8, Codable {
     case player
     case bot
-    case powerup
-    case powerdown
+    case speedUp
+    case slowDown
+    case protection
+    case bom
+    case obstacle
     case finish
 }
