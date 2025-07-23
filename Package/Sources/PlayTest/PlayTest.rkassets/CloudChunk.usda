@@ -10,7 +10,7 @@
 
 def Xform "Root"
 {
-    def Xform "ParticleEmitter" (
+    def Xform "smokeParticle" (
         customData = {
             float3 rotationEulerHint = (0, 0, 0)
         }
@@ -89,7 +89,7 @@ def Xform "Root"
                     token sortOrder = "DecreasingDepth"
                     float spreadingAngle = 0
                     float4 startColorA = (0.09483284, 0.11663702, 0.13665093, 1)
-                    float4 startColorB = (0.9999908, 1, 1, 1)
+                    float4 startColorB = (1, 0, 0, 1)
                     float stretchFactor = 0
                     bool useEndColor = 0
                     bool useEndColorRange = 0
