@@ -17,11 +17,12 @@ struct CountdownView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    Text("\(gameController.countdownNumber)")
-                        .font(.system(size: 120, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                    Image("count_\(gameController.countdownNumber)")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 300, height: 300)
                         .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 5)
-                        .scaleEffect(gameController.countdownNumber <= 3 ? 1.2 : 1.0)
+                        .scaleEffect(1.2)
                         .animation(.spring(response: 0.4, dampingFraction: 0.5), value: gameController.countdownNumber)
                     
                     Text("RACE STARTING!")

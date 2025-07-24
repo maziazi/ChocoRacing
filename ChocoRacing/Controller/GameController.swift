@@ -90,6 +90,7 @@ class GameController: ObservableObject {
     }
         
     func startGame() {
+        print("pos")
         guard gameState == .waiting else { return }
         
         gameState = .countdown
@@ -245,19 +246,30 @@ class GameController: ObservableObject {
         entity.components.set(motion)
     }
     
-    private func startCountdown() {
+    func startCountdown() {
+        print ("Start Count Down")
         countdownNumber = 3
         isCountdownVisible = true
-        
-        countdownTimer = Timer.scheduledTimer(withTimeInterval: configuration.countdownDuration, repeats: true) { _ in
+
+//        stopCountdownTimer()
+ 
+        countdownTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            print ("timer count")
             self.updateCountdown()
         }
+        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            self.updateCountdown()
+        }
+        print("🔁 Countdown started from 3")
     }
     
     private func updateCountdown() {
-        if countdownNumber > 1 {
+        if countdownNumber > 0 {
+            print("⏱️ Countdown now: \(countdownNumber)")
             countdownNumber -= 1
         } else {
+            stopCountdownTimer()
+            isCountdownVisible = false
             finishCountdown()
         }
     }

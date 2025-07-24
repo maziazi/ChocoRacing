@@ -10,7 +10,7 @@ import RealityKit
 import PlayTest
 
 struct GameView: View {
-    @StateObject private var gameController = GameController()
+    @ObservedObject var gameController: GameController // ✅ receives from BeforeView
     @StateObject private var playerController = PlayerController()
     @StateObject private var cameraController = CameraController()
     private let collisionController = CollisionController()
@@ -34,9 +34,9 @@ struct GameView: View {
                 )
                 
                 VStack(spacing: 12) {
-                    PlayButtonView(gameController: gameController)
                     GameControlsView(gameController: gameController)
                 }
+
             }
 
             VStack {
@@ -53,6 +53,12 @@ struct GameView: View {
             
             CountdownView(gameController: gameController)
             LeaderboardView(gameController: gameController)
+        }
+        .navigationBarBackButtonHidden(true)
+        .gesture(DragGesture())             
+        .task{
+            print("on apear ")
+            gameController.startGame()
         }
         .onDisappear {
             cleanup()
@@ -120,6 +126,7 @@ struct GameView: View {
         var config = GameConfiguration()
         config.leftBoundary = -0.5
         config.rightBoundary = 1.8
+        config.countdownDuration = 1.0
         gameController.configure(with: config)
         
         playerController.setGameController(gameController)
