@@ -49,7 +49,7 @@ class CollisionController {
             print("🐌 Speed reduced!")
             
         case .finish:
-            gameController.checkFinish(for: entity)
+//            gameController.checkFinish(for: entity)
             print("🏁 Finish line reached!")
             
         default:

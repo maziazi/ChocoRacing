@@ -10,8 +10,8 @@ import RealityKit
 
 class PlayerController: ObservableObject {
     
-    @Published var maxLeftDistance: Float = -0.5
-    @Published var maxRightDistance: Float = 1.8
+    @Published var maxLeftDistance: Float = -1.65
+    @Published var maxRightDistance: Float = 2.2
     @Published var sensitivity: Float = 0.02
     @Published var responsiveness: Float = 0.15
     @Published var returnSpeed: Float = 0.1
@@ -47,7 +47,7 @@ class PlayerController: ObservableObject {
         let deltaX = Float(translation.width) * sensitivity
         let currentX = player.position.x
         
-        var targetVelocity = deltaX * 3.0
+        var targetVelocity = deltaX * 14.0
         
         // Apply boundary resistance
         if currentX <= maxLeftDistance && targetVelocity < 0 {
