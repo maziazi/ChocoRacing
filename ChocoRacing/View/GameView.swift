@@ -96,7 +96,6 @@ struct GameView: View {
                 entity.components.set(GameTagComponent(type: .slowDown))
                 
             } else if entity.name.lowercased().contains("protection") {
-                print(
                 entity.components.set(GameTagComponent(type: .protection))
                 
             } else if entity.name.lowercased().contains("bom") {

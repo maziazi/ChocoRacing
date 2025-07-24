@@ -22,20 +22,20 @@
       },
       [
         "B6613891-0877-4625-883C-781989A64D0A",
-        "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B6613891-0877-4625-883C-781989A64D0A",
         "Root",
         "SkyDome"
       ],
       {
         "disallowsFraming" : true,
         "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "B6613891-0877-4625-883C-781989A64D0A",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
         "isLocked" : false
       },
       [
@@ -64,17 +64,15 @@
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "SkyDome"
+        "player_bunsmores"
       ],
       {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
+        "isExpanded" : true,
         "isLocked" : false
       },
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
-        "Root",
-        "world_shader_slide_2"
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -92,15 +90,17 @@
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "player_bunsmores"
+        "SkyDome"
       ],
       {
-        "isExpanded" : true,
+        "disallowsFraming" : true,
+        "isExpanded" : false,
         "isLocked" : false
       },
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
-        "Root"
+        "Root",
+        "world_shader_slide_2"
       ],
       {
         "isExpanded" : true,
