@@ -14,7 +14,7 @@ struct GameView: View {
     @StateObject private var playerController = PlayerController()
     @StateObject private var cameraController = CameraController()
     private let collisionController = CollisionController()
-    
+
     @State private var playerEntity: Entity?
     @State private var botEntities: [Entity] = []
     @State private var collisionSubscriptions: [EventSubscription] = []
@@ -22,8 +22,8 @@ struct GameView: View {
     
     var body: some View {
         ZStack {
+            // Main content
             VStack {
-                
                 RealityView { content in
                     await setupGameWorld(content: content)
                 }
@@ -38,18 +38,23 @@ struct GameView: View {
                     GameControlsView(gameController: gameController)
                 }
             }
-
+            
+            // Top indicators overlay
             VStack {
-                HStack {
+                HStack(alignment: .top) {
                     PositionRaceIndicator(gameController: gameController)
+                    
+                    ProgressRaceIndicator(gameController: gameController)
+                    
                     PowerEffectIndicator(gameController: gameController)
                 }
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
-
-                        
+                
                 Spacer()
             }
+            
+            PlayerFinishedView(gameController: gameController)
             
             CountdownView(gameController: gameController)
             LeaderboardView(gameController: gameController)
@@ -75,8 +80,9 @@ struct GameView: View {
     private func setupGameEntities(in scene: Entity) async {
         var foundBots: [Entity] = []
         var finishEntity: Entity?
+        var startEntity: Entity?
         
-                    walkThroughEntities(entity: scene) { entity in
+            walkThroughEntities(entity: scene) { entity in
             if entity.name.contains("player") {
                 entity.components.set(GameTagComponent(type: .player))
                 playerEntity = entity
@@ -92,23 +98,35 @@ struct GameView: View {
                 
             } else if entity.name.contains("powerdown") {
                 entity.components.set(GameTagComponent(type: .powerdown))
-                
-            } else if entity.name.lowercased().contains("choco") && entity.name.lowercased().contains("fountain") {
-                entity.components.set(GameTagComponent(type: .finish))
-                finishEntity = entity
             }
         }
         
+        if let envSlide = scene.findEntity(named: "PillBottle") {
+                // Find finish line
+//                if let finishLine1 = envSlide.findEntity(named: "world_startFinish_1") {
+//                    finishLine1.components.set(GameTagComponent(type: .finish))
+                    finishEntity = envSlide
+//                }
+            }
+            
+        
         botEntities = foundBots
         
-        // Setup game with entities
         gameController.setEntities(player: playerEntity, bots: botEntities)
+        
+        if let player = playerEntity {
+            let startLine = Entity()
+            startLine.position = player.position
+            startLine.name = "virtual_start_line"
+            gameController.setStartLineEntity(startLine)
+            print("🏁 Virtual start line created at: \(player.position)")
+        }
+        
         if let finish = finishEntity {
             gameController.setFinishEntity(finish)
         }
         
-        // Apply collision to slide
-        if let slide = scene.findEntity(named: "world_slide_v1_2") {
+        if let slide = scene.findEntity(named: "enviroment_slide") {
             await applyStaticMeshCollision(to: slide)
         }
         if let slide = scene.findEntity(named: "world_slide_v1_1") {
@@ -118,8 +136,8 @@ struct GameView: View {
     
     private func setupControllers() {
         var config = GameConfiguration()
-        config.leftBoundary = -0.5
-        config.rightBoundary = 1.8
+        config.leftBoundary = -1.65
+        config.rightBoundary = 2.2
         gameController.configure(with: config)
         
         playerController.setGameController(gameController)
@@ -162,7 +180,7 @@ struct GameView: View {
     
     private func startCameraUpdate() {
         cameraController.startFollowing()
-        cameraUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+        cameraUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.00000064, repeats: true) { _ in
             cameraController.updateCameraPosition()
         }
     }
