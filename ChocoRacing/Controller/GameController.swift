@@ -43,6 +43,8 @@ class GameController: ObservableObject {
     var onReset: (() -> Void)?
     var onPowerEffectApplied: ((PowerEffectType) -> Void)?
     var onPowerEffectEnded: (() -> Void)?
+    var onEffectVisualApplied: ((Entity, PowerEffectType) -> Void)?
+    var onEffectVisualRemoved: ((Entity, PowerEffectType) -> Void)?
     var onEntityFinished: ((FinishInfo) -> Void)?
     var onAllEntitiesFinished: (([FinishInfo]) -> Void)?
     
@@ -180,14 +182,14 @@ class GameController: ObservableObject {
         guard var racingEntity = racingEntities[entityName] else { return }
         
         //NYALAIN KALAU MAU PAS ADA SHIELD GA ISA AMBIL ITEM BURUK DAN ITEMNYA ILANG
-        // If the player has shield, prevent slowDown or bom effects
-//        if racingEntity.powerEffect == .shield {
-//            if effectType == .speedReduction || effectType == .splash {
-//                // If shield is active, ignore slowDown or bomb effects
-//                print("🛡️ Shield prevents effect: \(effectType)!")
-//                return
-//            }
-//        }
+//         If the player has shield, prevent slowDown or bom effects
+        if racingEntity.powerEffect == .shield {
+            if effectType == .speedReduction || effectType == .splash {
+                // If shield is active, ignore slowDown or bomb effects
+                print("🛡️ Shield prevents effect: \(effectType)!")
+                return
+            }
+        }
         
         clearPowerEffectForEntity(entityName)
         
@@ -202,6 +204,7 @@ class GameController: ObservableObject {
             onPowerEffectApplied?(effectType)
         }
         
+        onEffectVisualApplied?(racingEntity.entity, effectType)
         startPowerEffectTimer(for: entityName, duration: duration)
         print("💫 \(entityName) got \(effectType) for \(duration)s")
     }
@@ -279,7 +282,6 @@ class GameController: ObservableObject {
         
     // FCS
     func applyPlayerHorizontalMovement(_ horizontalVelocity: Float) {
-        print("update horizontal movement")
         guard gameState == .playing,
               let player = getPlayerEntity(),
               var motion = player.components[PhysicsMotionComponent.self] else { return }
@@ -583,6 +585,7 @@ class GameController: ObservableObject {
         guard var racingEntity = racingEntities[entityName] else { return }
         
         if racingEntity.powerEffect != .none {
+            onEffectVisualRemoved?(racingEntity.entity, racingEntity.powerEffect)
             racingEntity.powerEffect = .none
             racingEntity.powerEffectTimeRemaining = 0.0
             racingEntities[entityName] = racingEntity
@@ -592,6 +595,7 @@ class GameController: ObservableObject {
                 powerEffectTimeRemaining = 0.0
                 onPowerEffectEnded?()
             }
+            
         }
     }
     

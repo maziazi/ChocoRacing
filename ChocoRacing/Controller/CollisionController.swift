@@ -27,26 +27,13 @@ class CollisionController {
         guard let tA = typeA, let tB = typeB else { return }
         
         // Check if entity A or B is player or bot, and if the other entity is in entityTypes
-        if (tA == .player || tA == .bot), entityTypes.contains(tB) {
-            
-            print("masuk 1")
+        if (tA == .player || tA == .bot), entityTypes.contains(tB) {    
             applyCollisionEffect(to: entityA, collidedWith: tB, otherEntity: entityB)
         }
     }
     
     private func applyCollisionEffect(to entity: Entity, collidedWith type: GameEntityType, otherEntity: Entity) {
         guard let gameController = gameController else { return }
-        
-    
-        
-        // NYALAIN KALAU MAU PAS ADA SHIELD GA ISA AMBIL ITEM BURUK DAN ITEMNYA GA MAU ILANG
-        if gameController.currentPowerEffect == .shield {
-            // If shield is active, prevent slowDown or bom from applying
-            if type == .slowDown || type == .bom {
-                print("🛡️ Protection prevents effect: \(type)!")
-                return  // Skip applying slowDown and bom effects
-            }
-        }
         
         switch type {
         case .speedUp:
@@ -76,7 +63,7 @@ class CollisionController {
         case .obstacle:
             gameController.handleObstacleCollision(entity: entity, otherEntity: otherEntity)
               
-           print("⚠️ Collision with obstacle!")
+//           print("⚠️ Collision with obstacle!")
         default:
             print("masuk default di collisionControl")
 

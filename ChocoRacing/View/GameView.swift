@@ -77,23 +77,26 @@ struct GameView: View {
         var finishEntity: Entity?
         
         walkThroughEntities(entity: scene) { entity in
+//            print("walkthrough \(entity.name)")
             if entity.name.contains("player") {
                 entity.components.set(GameTagComponent(type: .player))
+                toggleShieldBubbleEffect(for: entity, enable: false)
                 playerEntity = entity
                 cameraController.setTarget(entity)
                 playerController.setPlayer(entity)
                 
-            } else if entity.name.contains("bot") {
+            } else if entity.name.contains("bot_") {
                 entity.components.set(GameTagComponent(type: .bot))
                 foundBots.append(entity)
                 
-            } else if entity.name.contains("powerup") {
+            } else if entity.name.contains("speedUp") {
                 entity.components.set(GameTagComponent(type: .speedUp))
                 
             } else if entity.name.contains("powerdown") {
                 entity.components.set(GameTagComponent(type: .slowDown))
                 
             } else if entity.name.lowercased().contains("protection") {
+                print(
                 entity.components.set(GameTagComponent(type: .protection))
                 
             } else if entity.name.lowercased().contains("bom") {
@@ -119,7 +122,7 @@ struct GameView: View {
 //            print("✅ masuk player")
 //
 //            print("📦 Mencoba load CloudChunk")
-//            if let particleScene = try? await Entity(named: "CloudChunk", in: playTestBundle) {
+//            if let particleScene = try? await Entity(named: "CloudChunk", in: PlayTestbundle) {
 //                print("✅ CloudChunk loaded")
 //
 //                print("🔍 Mencari entity bernama smokeParticle")
@@ -147,7 +150,7 @@ struct GameView: View {
     
     private func setupControllers() {
         var config = GameConfiguration()
-        config.leftBoundary = -0.5
+        config.leftBoundary = -1.5
         config.rightBoundary = 1.8
         gameController.configure(with: config)
         
@@ -170,6 +173,20 @@ struct GameView: View {
         gameController.onReset = {
             self.resetPowerItems()
             self.playerController.cleanup()
+        }
+        
+        gameController.onEffectVisualApplied = { entity, effect in
+            Task {
+                if effect == .shield {
+                    toggleShieldBubbleEffect(for: entity, enable: true)
+                }
+            }
+        }
+
+        gameController.onEffectVisualRemoved = { entity, effect in
+            if effect == .shield {
+                toggleShieldBubbleEffect(for: entity, enable: false)
+            }
         }
     }
     
@@ -241,6 +258,27 @@ struct GameView: View {
         }
         collisionSubscriptions.removeAll()
     }
+    
+
+    //FCS:
+    func lockTranslation(for entity: Entity, lockX: Bool = true, lockY: Bool = true, lockZ: Bool = true) {
+        guard var physics = entity.components[PhysicsBodyComponent.self] else {
+            print("Entity does not have a PhysicsBodyComponent")
+            return
+        }
+
+        physics.isTranslationLocked = (x: lockX, y: lockY, z: lockZ)
+        entity.components.set(physics)
+    }
+    
+    //ACS:
+    private func toggleShieldBubbleEffect(for entity: Entity, enable: Bool) {
+        if let bubble = entity.findEntity(named: "ShieldBubble") {
+            bubble.isEnabled = enable
+            print("🛡️ Shield bubble effect \(enable ? "enabled" : "disabled") for \(entity.name)")
+        }
+    }
+
     
     @MainActor
     private func applyStaticMeshCollision(to entity: Entity) async {
