@@ -9,67 +9,58 @@ import SwiftUI
 
 struct PositionRaceIndicator: View {
     @ObservedObject var gameController: GameController
-       
-       var body: some View {
-           if gameController.gameState == .playing {
-               VStack(spacing: 4) {
-                   Text("\(gameController.playerCurrentPosition)")
-                       .font(.system(size: 48, weight: .bold, design: .rounded))
-                       .foregroundColor(positionColor)
-                       .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 2)
-                   
-                   Text(positionText)
-                       .font(.caption)
-                       .fontWeight(.semibold)
-                       .foregroundColor(.white)
-                       .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
-               }
-               .padding(12)
-               .background(
-                   RoundedRectangle(cornerRadius: 12)
-                       .fill(
-                           LinearGradient(
-                               gradient: Gradient(colors: [
-                                   Color.black.opacity(0.6),
-                                   Color.black.opacity(0.3)
-                               ]),
-                               startPoint: .top,
-                               endPoint: .bottom
-                           )
-                       )
-                       .overlay(
-                           RoundedRectangle(cornerRadius: 12)
-                               .stroke(positionColor.opacity(0.5), lineWidth: 2)
-                       )
-               )
-               .scaleEffect(gameController.playerCurrentPosition == 1 ? 1.1 : 1.0)
-               .animation(.spring(response: 0.3, dampingFraction: 0.7), value: gameController.playerCurrentPosition)
-           }
-       }
-       
-       private var positionColor: Color {
-           switch gameController.playerCurrentPosition {
-           case 1:
-               return .yellow
-           case 2:
-               return .gray
-           case 3:
-               return .orange
-           default:
-               return .white
-           }
-       }
-       
-       private var positionText: String {
-           switch gameController.playerCurrentPosition {
-           case 1:
-               return "1ST"
-           case 2:
-               return "2ND"
-           case 3:
-               return "3RD"
-           default:
-               return "\(gameController.playerCurrentPosition)TH"
-           }
-       }
+    
+    var body: some View {
+        if gameController.gameState == .playing || gameController.gameState == .paused {
+            VStack(spacing: 4) {
+                Text("\(gameController.playerCurrentPosition)")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
+                
+                Text(getPositionSuffix())
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white.opacity(0.8))
+                    .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
+                
+                Text("of 5")
+                    .font(.caption2)
+                    .foregroundColor(.white.opacity(0.6))
+            }
+            .padding(8)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(getPositionColor().opacity(0.8))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                    )
+            )
+        }
+    }
+    
+    private func getPositionSuffix() -> String {
+        let position = gameController.playerCurrentPosition
+        switch position {
+        case 1: return "1ST"
+        case 2: return "2ND"
+        case 3: return "3RD"
+        case 4: return "4TH"
+        case 5: return "5TH"
+        default: return "\(position)TH"
+        }
+    }
+    
+    private func getPositionColor() -> Color {
+        let position = gameController.playerCurrentPosition
+        switch position {
+        case 1: return .yellow
+        case 2: return .orange
+        case 3: return .red
+        case 4, 5: return .gray
+        default: return .gray
+        }
+    }
 }
