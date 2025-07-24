@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LeaderboardView: View {
     @ObservedObject var gameController: GameController
+    @State private var stableResults: [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] = []
     
     var body: some View {
         if gameController.showLeaderboard && !gameController.finishedEntities.isEmpty {
@@ -24,21 +25,21 @@ struct LeaderboardView: View {
                         .shadow(radius: 5)
                     
                     VStack(spacing: 8) {
-                        ForEach(Array(gameController.finishedEntities.enumerated()), id: \.element.entityName) { index, finishInfo in
+                        ForEach(Array(stableResults.prefix(5).enumerated()), id: \.element.entityName) { index, result in
                             HStack {
-                                Text(getPositionEmoji(finishInfo.position))
+                                Text(getPositionEmoji(result.finalPosition))
                                     .font(.title)
                                 
-                                Text("\(finishInfo.position).")
+                                Text("\(result.finalPosition).")
                                     .font(.headline)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                     .frame(width: 30, alignment: .trailing)
                                 
-                                Text(finishInfo.displayName)
+                                Text(result.displayName)
                                     .font(.title2)
                                     .fontWeight(.semibold)
-                                    .foregroundColor(finishInfo.isPlayer ? .yellow : .white)
+                                    .foregroundColor(result.isPlayer ? .yellow : .white)
                                 
                                 Spacer()
                             }
@@ -46,7 +47,7 @@ struct LeaderboardView: View {
                             .padding(.vertical, 8)
                             .background(
                                 RoundedRectangle(cornerRadius: 8)
-                                    .fill(finishInfo.isPlayer ? Color.yellow.opacity(0.2) : Color.white.opacity(0.1))
+                                    .fill(result.isPlayer ? Color.yellow.opacity(0.2) : Color.white.opacity(0.1))
                             )
                         }
                     }
@@ -69,6 +70,9 @@ struct LeaderboardView: View {
             }
             .transition(.opacity.combined(with: .scale))
             .animation(.easeInOut(duration: 0.5), value: gameController.showLeaderboard)
+            .onAppear {
+                stableResults = getStableRaceResults()
+            }
         }
     }
     
@@ -77,8 +81,42 @@ struct LeaderboardView: View {
         case 1: return "🥇"
         case 2: return "🥈"
         case 3: return "🥉"
+        case 4, 5: return "🏃"
         default: return "🏃"
         }
     }
+    
+    private func getStableRaceResults() -> [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] {
+        var results: [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] = []
+        
+        let allPositions = gameController.getAllEntityPositions()
+        
+        for (entityName, _) in gameController.racingEntities {
+            let isPlayer = (entityName == "player")
+            let isFinished = gameController.finishedEntities.contains { $0.entityName == entityName }
+            
+            let finalPosition: Int
+            if isPlayer {
+                finalPosition = gameController.playerFinalPosition
+            } else {
+                finalPosition = allPositions[entityName] ?? 5
+            }
+            
+            let displayName = isPlayer ? "Player" : "Bot \(entityName.replacingOccurrences(of: "bot_", with: ""))"
+            
+            results.append((
+                entityName: entityName,
+                displayName: displayName,
+                finalPosition: finalPosition,
+                isPlayer: isPlayer,
+                isFinished: isFinished
+            ))
+        }
+        
+        results.sort { $0.finalPosition < $1.finalPosition }
+        
+        return results
+    }
 }
+
 
