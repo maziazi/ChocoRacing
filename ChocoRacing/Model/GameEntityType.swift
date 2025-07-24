@@ -13,4 +13,5 @@ enum GameEntityType: UInt8, Codable {
     case powerup
     case powerdown
     case finish
+    case start
 }
