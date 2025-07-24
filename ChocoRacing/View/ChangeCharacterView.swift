@@ -35,7 +35,7 @@ struct ChangeCharacterView: View {
                             .scaledToFit()
                             .frame(width: 45, height: 45)
                             .padding(.leading, 20)
-                            .padding(.top, 10)
+                            .padding(.top, 30)
                     }
                     Spacer()
                 }

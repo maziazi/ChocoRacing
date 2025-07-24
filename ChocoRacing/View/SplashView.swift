@@ -25,7 +25,7 @@ struct SplashView: View {
                 Image("logo")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 450, height: 400)
+                    .frame(width: 290, height: 240)
                     .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 3)
 
                 ProgressView("Loading Assets...")
