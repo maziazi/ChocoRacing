@@ -14,6 +14,26 @@
       [
         "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
         "Root",
+        "enviroment_slide",
+        "world_startFinish_1",
+        "_materials"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
+        "Root",
+        "enviroment_slide"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
+        "Root",
         "player",
         "geom"
       ],
@@ -24,29 +44,7 @@
       [
         "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
         "Root",
-        "powerdown_3"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "bot_4"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "powerdown_3",
-        "geom",
-        "realistic",
-        "geo",
-        "lod0"
+        "Player"
       ],
       {
         "isExpanded" : true,
@@ -65,49 +63,8 @@
       [
         "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
         "Root",
-        "player"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "powerdown_3",
-        "geom"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "powerdown_3",
-        "geom",
-        "realistic",
-        "materials"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "Player"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "powerdown_3",
-        "geom",
-        "realistic"
+        "enviroment_slide",
+        "world_startFinish_1"
       ],
       {
         "isExpanded" : true,
@@ -116,18 +73,6 @@
       [
         "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
         "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "powerdown_3",
-        "geom",
-        "realistic",
-        "geo"
       ],
       {
         "isExpanded" : true,
@@ -165,7 +110,15 @@
         "F4762315-832E-41D1-9BAC-90989898ACD1",
         "Root",
         "Floor",
-        "Sphere_1",
+        "_materials"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
         "Mangkok",
         "Sphere"
       ],
@@ -176,57 +129,17 @@
       [
         "F4762315-832E-41D1-9BAC-90989898ACD1",
         "Root",
-        "Mangkok_2",
-        "Sphere"
+        "SkyDome"
       ],
       {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Mangkok_1",
-        "Sphere"
-      ],
-      {
-        "isExpanded" : true,
+        "disallowsFraming" : true,
+        "isExpanded" : false,
         "isLocked" : false
       },
       [
         "F4762315-832E-41D1-9BAC-90989898ACD1",
         "Root",
         "Slide",
-        "B__zierCurve_001"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Floor",
-        "Cube"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Mangko",
-        "Sphere"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Floor",
         "_materials"
       ],
       {
@@ -246,37 +159,6 @@
       [
         "F4762315-832E-41D1-9BAC-90989898ACD1",
         "Root",
-        "PLETES_Plan_B_1",
-        "Choco_Fountain_2"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Floor",
-        "Sphere_1",
-        "Mangkok"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "SkyDome"
-      ],
-      {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
         "Floor"
       ],
       {
@@ -287,18 +169,9 @@
       [
         "F4762315-832E-41D1-9BAC-90989898ACD1",
         "Root",
-        "Slide",
-        "_materials"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Mangkok",
-        "Sphere"
+        "Floor",
+        "Sphere_1",
+        "Mangkok"
       ],
       {
         "isExpanded" : true,
@@ -316,16 +189,9 @@
       },
       [
         "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
         "Root",
-        "Mangkok"
+        "Floor",
+        "Cube"
       ],
       {
         "isExpanded" : true,
@@ -337,6 +203,85 @@
         "Sphere_1",
         "Mangkok",
         "Sphere"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "Floor",
+        "Sphere_1",
+        "Mangkok",
+        "Sphere"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "Mangkok_1",
+        "Sphere"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "PLETES_Plan_B_1",
+        "Choco_Fountain_2"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "Slide",
+        "B__zierCurve_001"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "Mangkok_2",
+        "Sphere"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "Mangko",
+        "Sphere"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "Mangkok"
       ],
       {
         "isExpanded" : true,
