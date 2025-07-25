@@ -11,6 +11,7 @@ import simd
 struct LeaderboardView: View {
     @ObservedObject var gameController: GameController
     @State private var stableResults: [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] = []
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         if gameController.showLeaderboard && !gameController.finishedEntities.isEmpty {
@@ -54,6 +55,18 @@ struct LeaderboardView: View {
                     }){
                         HStack {
                             Image("button_playAgain")
+                                .resizable()
+                                .frame(width: 150, height: 60)
+                        }
+                    }
+                    .offset(y: -60)
+                    
+                    Button(action: {
+                        gameController.resetGame()
+                        presentationMode.wrappedValue.dismiss()
+                    }){
+                        HStack {
+                            Image("button_home")
                                 .resizable()
                                 .frame(width: 150, height: 60)
                         }
