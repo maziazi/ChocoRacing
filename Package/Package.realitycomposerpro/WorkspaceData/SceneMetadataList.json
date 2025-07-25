@@ -88,11 +88,7 @@
       [
         "B6613891-0877-4625-883C-781989A64D0A",
         "Root",
-<<<<<<< HEAD
-        "shader_color_water"
-=======
         "SkySphere"
->>>>>>> collision
       ],
       {
         "disallowsFraming" : true,
@@ -124,11 +120,7 @@
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-<<<<<<< HEAD
-        "player_bunsmores"
-=======
         "bubble"
->>>>>>> collision
       ],
       {
         "isExpanded" : true,
@@ -137,7 +129,7 @@
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "SkySphere"
+        "SkyDome"
       ],
       {
         "disallowsFraming" : true,
@@ -164,11 +156,7 @@
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-<<<<<<< HEAD
-        "SkyDome"
-=======
         "SkySphere"
->>>>>>> collision
       ],
       {
         "disallowsFraming" : true,
@@ -178,9 +166,6 @@
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-<<<<<<< HEAD
-        "bubble"
-=======
         "world_shader_slide_2"
       ],
       {
@@ -204,7 +189,6 @@
       [
         "E4B22B7A-362C-484F-AB0B-D6661FB85899",
         "Root"
->>>>>>> collision
       ],
       {
         "isExpanded" : true,
