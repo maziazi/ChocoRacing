@@ -32,6 +32,8 @@ class CollisionController {
         }
     }
     
+    
+    
     private func applyCollisionEffect(to entity: Entity, collidedWith type: GameEntityType, otherEntity: Entity) {
         guard let gameController = gameController else { return }
         
@@ -53,7 +55,8 @@ class CollisionController {
             
         case .bom:
             // Bomb effect logic
-            // gameController.applyPowerEffect(to: entity, effectType: .splash, duration: 0.0)
+            gameController.applyPowerEffect(to: entity, effectType: .splash, duration: 3.0)
+            otherEntity.isEnabled = false
             print("💥 Bomb exploded!")
             
         case .finish:

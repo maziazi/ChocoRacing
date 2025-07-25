@@ -19,6 +19,8 @@ struct GameView: View {
     @State private var botEntities: [Entity] = []
     @State private var collisionSubscriptions: [EventSubscription] = []
     @State private var cameraUpdateTimer: Timer?
+    @State private var splashVisible = false // Menyimpan status visibility splas
+
     
     var body: some View {
         ZStack {
@@ -38,6 +40,11 @@ struct GameView: View {
                     GameControlsView(gameController: gameController)
                 }
             }
+            
+           
+            // Gunakan SplashEffectView untuk menampilkan animasi splash
+               SplashEffectView(splashVisible: $splashVisible)
+            
 
             VStack {
                 HStack {
@@ -51,6 +58,7 @@ struct GameView: View {
                 Spacer()
             }
             
+          
             CountdownView(gameController: gameController)
             LeaderboardView(gameController: gameController)
         }
@@ -75,30 +83,32 @@ struct GameView: View {
     private func setupGameEntities(in scene: Entity) async {
         var foundBots: [Entity] = []
         var finishEntity: Entity?
-        
+        		
         walkThroughEntities(entity: scene) { entity in
 //            print("walkthrough \(entity.name)")
             if entity.name.contains("player") {
                 entity.components.set(GameTagComponent(type: .player))
                 toggleShieldBubbleEffect(for: entity, enable: false)
+                toggleSpeedBoostEffect(for: entity, status: false)
                 playerEntity = entity
                 cameraController.setTarget(entity)
                 playerController.setPlayer(entity)
                 
             } else if entity.name.contains("bot_") {
                 entity.components.set(GameTagComponent(type: .bot))
+                toggleShieldBubbleEffect(for: entity, enable: false)
                 foundBots.append(entity)
                 
             } else if entity.name.contains("speedUp") {
                 entity.components.set(GameTagComponent(type: .speedUp))
                 
-            } else if entity.name.contains("powerdown") {
+            } else if entity.name.contains("slowDown") {
                 entity.components.set(GameTagComponent(type: .slowDown))
                 
             } else if entity.name.lowercased().contains("protection") {
                 entity.components.set(GameTagComponent(type: .protection))
                 
-            } else if entity.name.lowercased().contains("bom") {
+            } else if entity.name.lowercased().contains("spray_") {
                 entity.components.set(GameTagComponent(type: .bom))
                 
             }else if entity.name.contains("obstacle") {
@@ -178,6 +188,12 @@ struct GameView: View {
             Task {
                 if effect == .shield {
                     toggleShieldBubbleEffect(for: entity, enable: true)
+                }else if effect == .splash {
+                    print("apply splash")
+                    self.splashVisible = true
+                }else if effect == .speedBoost {
+                    print("apply speed boost")
+                    toggleSpeedBoostEffect(for: entity, status: true)
                 }
             }
         }
@@ -185,6 +201,11 @@ struct GameView: View {
         gameController.onEffectVisualRemoved = { entity, effect in
             if effect == .shield {
                 toggleShieldBubbleEffect(for: entity, enable: false)
+            } else if effect == .splash {
+                print("remove splash")
+                self.splashVisible = false
+            }else if effect == .speedBoost {
+                toggleSpeedBoostEffect(for: entity, status: false)
             }
         }
     }
@@ -277,6 +298,24 @@ struct GameView: View {
             print("🛡️ Shield bubble effect \(enable ? "enabled" : "disabled") for \(entity.name)")
         }
     }
+    
+    private func toggleSpeedBoostEffect(for entity: Entity, status enable: Bool) {
+        if let powerUpEntity = entity.findEntity(named: "speedBoost") {
+            // Atur status dari PowerUp atau Boost (aktif/tidak)
+            powerUpEntity.isEnabled = enable
+            if enable {
+                       // Aktifkan efek partikel atau visual terkait lainnya untuk SpeedBoost
+                       print("⚡ Speed boost effect enabled for \(entity.name)")
+                       // Tambahkan logika untuk mengaktifkan visual efek speed boost, misalnya memulai animasi atau efek partikel
+                   } else {
+                       // Nonaktifkan efek partikel atau visual terkait lainnya
+                       print("⚡ Speed boost effect disabled for \(entity.name)")
+                       // Tambahkan logika untuk menghentikan visual efek speed boost, seperti menghentikan animasi atau partikel
+                   }
+            
+        }
+    }
+
 
     
     @MainActor

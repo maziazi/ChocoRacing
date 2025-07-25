@@ -15,7 +15,7 @@ struct PowerEffectIndicator: View {
             case .shield:
                 maxDuration = 5.0 // Or whatever duration you choose for the shield
             case .splash:
-                maxDuration = 2.0 // Or whatever duration you choose for the splash
+                maxDuration = 3.0 // Or whatever duration you choose for the splash
             case .none:
                 maxDuration = 1.0
         }
