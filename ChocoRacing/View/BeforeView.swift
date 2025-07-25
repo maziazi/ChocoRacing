@@ -50,7 +50,7 @@ struct BeforeView: View {
                     Button(action: {
                         navigateToPlayButton = true
                     }) {
-                        Image("button_play")
+                        Image("Button_Play")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 200, height: 70)

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2C1DA7DA2E321DC00042CA58 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 2C1DA7D92E321DC00042CA58 /* PlayTest */; };
 		2C3AB6FE2E2E3835000B21DF /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 2C3AB6FD2E2E3835000B21DF /* PlayTest */; };
+		5C4CFA862E33924F000861AA /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5C4CFA852E33924F000861AA /* PlayTest */; };
 		5CFA78002E2A53F000808F5A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 5CFA77FF2E2A53EA00808F5A /* .gitignore */; };
 		5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA783B2E2D03E900808F5A /* PlayTest */; };
 		5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA787D2E2D0F5C00808F5A /* PlayTest */; };
@@ -54,6 +55,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */,
+				5C4CFA862E33924F000861AA /* PlayTest in Frameworks */,
 				5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */,
 				6DDDC0E52E3384A900020553 /* PlayTest in Frameworks */,
 				2C1DA7DA2E321DC00042CA58 /* PlayTest in Frameworks */,
@@ -124,6 +126,7 @@
 				2C1DA7D92E321DC00042CA58 /* PlayTest */,
 				6DDDC0512E323B5B00020553 /* PlayTest */,
 				6DDDC0E42E3384A900020553 /* PlayTest */,
+				5C4CFA852E33924F000861AA /* PlayTest */,
 			);
 			productName = ChocoRacing;
 			productReference = 5CFA77BB2E2A44F100808F5A /* ChocoRacing.app */;
@@ -202,7 +205,7 @@
 			mainGroup = 5CFA77B22E2A44F100808F5A;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				6DDDC0E32E3384A900020553 /* XCLocalSwiftPackageReference "Package" */,
+				5C4CFA842E33924F000861AA /* XCLocalSwiftPackageReference "Package" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5CFA77BC2E2A44F100808F5A /* Products */;
@@ -407,7 +410,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = A8GT6W89CM;
+				DEVELOPMENT_TEAM = KY4XDK75RG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
@@ -438,7 +441,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = A8GT6W89CM;
+				DEVELOPMENT_TEAM = KY4XDK75RG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
@@ -576,7 +579,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		6DDDC0E32E3384A900020553 /* XCLocalSwiftPackageReference "Package" */ = {
+		5C4CFA842E33924F000861AA /* XCLocalSwiftPackageReference "Package" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Package;
 		};
@@ -588,6 +591,10 @@
 			productName = PlayTest;
 		};
 		2C3AB6FD2E2E3835000B21DF /* PlayTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayTest;
+		};
+		5C4CFA852E33924F000861AA /* PlayTest */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayTest;
 		};

@@ -105,7 +105,7 @@ struct GameView: View {
         var finishEntity: Entity?
         var startEntity: Entity?
         
-            walkThroughEntities(entity: scene) { entity in
+            
         		
         walkThroughEntities(entity: scene) { entity in
             if entity.name.contains("player") {
@@ -142,7 +142,7 @@ struct GameView: View {
             }
         }
         
-        if let envSlide = scene.findEntity(named: "PillBottle") {
+        if let envSlide = scene.findEntity(named: "world_startFinish_1") {
                     finishEntity = envSlide
             }
             
