@@ -70,10 +70,11 @@
       [
         "B6613891-0877-4625-883C-781989A64D0A",
         "Root",
-        "material_water"
+        "SkySphere"
       ],
       {
-        "isExpanded" : true,
+        "disallowsFraming" : true,
+        "isExpanded" : false,
         "isLocked" : false
       },
       [
@@ -87,12 +88,19 @@
       },
       [
         "B6613891-0877-4625-883C-781989A64D0A",
-        "Root",
-        "SkySphere"
+        "Root"
       ],
       {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B6613891-0877-4625-883C-781989A64D0A",
+        "Root",
+        "material_water"
+      ],
+      {
+        "isExpanded" : true,
         "isLocked" : false
       },
       [
@@ -104,14 +112,6 @@
         "disallowsFraming" : true,
         "isExpanded" : false,
         "isLocked" : false
-      },
-      [
-        "B6613891-0877-4625-883C-781989A64D0A",
-        "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
       }
     ]
   },
@@ -120,7 +120,7 @@
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "bubble"
+        "world_shader_slide_2"
       ],
       {
         "isExpanded" : true,
@@ -156,20 +156,20 @@
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "SkySphere"
+        "bubble"
       ],
       {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
+        "isExpanded" : true,
         "isLocked" : false
       },
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "world_shader_slide_2"
+        "SkySphere"
       ],
       {
-        "isExpanded" : true,
+        "disallowsFraming" : true,
+        "isExpanded" : false,
         "isLocked" : false
       }
     ]
@@ -178,9 +178,7 @@
     "objectMetadataList" : [
       [
         "E4B22B7A-362C-484F-AB0B-D6661FB85899",
-        "Root",
-        "powerDown_slowDown_2",
-        "Cube_004"
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -188,7 +186,9 @@
       },
       [
         "E4B22B7A-362C-484F-AB0B-D6661FB85899",
-        "Root"
+        "Root",
+        "powerDown_slowDown_2",
+        "Cube_004"
       ],
       {
         "isExpanded" : true,
