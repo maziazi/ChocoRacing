@@ -6,11 +6,21 @@
 //
 
 import SwiftUI
-import RealityKit
 import PlayTest
 
 struct ContentView: View {
+    @StateObject private var gameController = GameController()
+    @State private var isLoadingComplete = false
+
     var body: some View {
-        GameView()
+        NavigationStack {
+            if isLoadingComplete {
+                BeforeView(gameController: gameController)
+            } else {
+                SplashView {
+                    isLoadingComplete = true
+                }
+            }
+        }
     }
 }
