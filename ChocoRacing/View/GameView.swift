@@ -22,7 +22,6 @@ struct GameView: View {
     
     var body: some View {
         ZStack {
-            // Main content
             VStack {
                 RealityView { content in
                     await setupGameWorld(content: content)
@@ -32,26 +31,42 @@ struct GameView: View {
                     gameController.canControlPlayer ?
                     createPlayerGesture() : nil
                 )
+            }
+            
+            VStack {
+                HStack(alignment: .top, spacing: 0) {
+                    PositionRaceIndicator(gameController: gameController)
+                        .frame(width: 45, alignment: .leading)
+                        .offset(x: -30)
+                    
+                    ProgressRaceIndicator(gameController: gameController)
+                        .frame(width: 250, alignment: .center)
+                        .offset(x: -30)
+                    
+                    ZStack {
+                        Rectangle()
+                            .fill(Color.clear)
+                            .frame(width: 40, height: 1)
+                        
+                        PowerEffectIndicator(gameController: gameController)
+                            .frame(width: 40, alignment: .center)
+                            .offset(y: -10)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .center) 
+                .padding(.horizontal, 16)
+                .padding(.top, 50)
+                .offset(x: 10)
                 
-                VStack(spacing: 12) {
+                Spacer()
+            }
+            VStack(spacing: 12) {
+                Spacer()
+                VStack() {
                     PlayButtonView(gameController: gameController)
                     GameControlsView(gameController: gameController)
                 }
-            }
-            
-            // Top indicators overlay
-            VStack {
-                HStack(alignment: .top) {
-                    PositionRaceIndicator(gameController: gameController)
-                    
-                    ProgressRaceIndicator(gameController: gameController)
-                    
-                    PowerEffectIndicator(gameController: gameController)
-                }
-                .padding(.horizontal, 16)
-                .padding(.top, 16)
-                
-                Spacer()
+                .padding(.bottom, 16)
             }
             
             PlayerFinishedView(gameController: gameController)
@@ -62,6 +77,7 @@ struct GameView: View {
         .onDisappear {
             cleanup()
         }
+        .ignoresSafeArea(.all, edges: [.top, .bottom])
     }
     
     @MainActor
@@ -102,11 +118,7 @@ struct GameView: View {
         }
         
         if let envSlide = scene.findEntity(named: "PillBottle") {
-                // Find finish line
-//                if let finishLine1 = envSlide.findEntity(named: "world_startFinish_1") {
-//                    finishLine1.components.set(GameTagComponent(type: .finish))
                     finishEntity = envSlide
-//                }
             }
             
         
