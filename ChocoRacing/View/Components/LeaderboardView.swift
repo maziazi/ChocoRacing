@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import simd
 
 struct LeaderboardView: View {
     @ObservedObject var gameController: GameController
@@ -17,54 +18,47 @@ struct LeaderboardView: View {
                 Color.black.opacity(0.7)
                     .ignoresSafeArea()
                 
-                VStack(spacing: 16) {
-                    Text("🏁 RACE RESULTS")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .shadow(radius: 5)
-                    
-                    VStack(spacing: 8) {
-                        ForEach(Array(stableResults.prefix(5).enumerated()), id: \.element.entityName) { index, result in
-                            HStack {
-                                Text(getPositionEmoji(result.finalPosition))
-                                    .font(.title)
-                                
-                                Text("\(result.finalPosition).")
-                                    .font(.headline)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .frame(width: 30, alignment: .trailing)
-                                
-                                Text(result.displayName)
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(result.isPlayer ? .yellow : .white)
-                                
-                                Spacer()
+                VStack{
+                    ZStack{
+                        HStack {
+                            Image("Leaderboard_1")
+                                .resizable()
+                                .frame(width: 380, height: 500)
+                        }
+                        
+                        VStack(spacing: 8) {
+                            ForEach(Array(stableResults.prefix(4).enumerated()), id: \.element.entityName) { index, result in
+                                HStack {
+                                    getPositionEmoji(result.finalPosition)
+                                    
+                                    Text(result.displayName)
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(result.isPlayer ? .yellow : .white)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 8)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(result.isPlayer ? Color.black.opacity(0.3) : Color.white.opacity(0.3))
+                                )
                             }
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 8)
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(result.isPlayer ? Color.yellow.opacity(0.2) : Color.white.opacity(0.1))
-                            )
+                        }
+                        .frame(maxWidth: 200)
+                        .offset(y: 20)
+                    }
+                    Button(action: {
+                        gameController.resetGame()
+                    }){
+                        HStack {
+                            Image("button_playAgain")
+                                .resizable()
+                                .frame(width: 150, height: 60)
                         }
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.black.opacity(0.3))
-                    )
-                    
-                    Button("🔄 Play Again") {
-                        gameController.resetGame()
-                    }
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
+                    .offset(y: -60)
                 }
                 .padding()
             }
@@ -76,47 +70,91 @@ struct LeaderboardView: View {
         }
     }
     
-    private func getPositionEmoji(_ position: Int) -> String {
+    private func getPositionEmoji(_ position: Int) -> AnyView {
         switch position {
-        case 1: return "🥇"
-        case 2: return "🥈"
-        case 3: return "🥉"
-        case 4, 5: return "🏃"
-        default: return "🏃"
+        case 1:
+            return AnyView(
+                Image("badge_first")
+                    .resizable()
+                    .frame(width: 26, height: 36)
+            )
+        case 2:
+            return AnyView(
+                Image("badge_second")
+                    .resizable()
+                    .frame(width: 26, height: 36)
+            )
+        case 3:
+            return AnyView(
+                Image("badge_third")
+                    .resizable()
+                    .frame(width: 26, height: 36)
+            )
+        case 4:
+            return AnyView(
+                Image("badge_fourth")
+                    .resizable()
+                    .frame(width: 26, height: 36)
+            )
+        default:
+            return AnyView(
+                Image("badge_fourth")
+                    .resizable()
+                    .frame(width: 18, height: 27)
+            )
         }
     }
     
     private func getStableRaceResults() -> [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] {
         var results: [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] = []
         
-        let allPositions = gameController.getAllEntityPositions()
+        guard let finishEntity = gameController.finishEntity else { return results }
         
-        for (entityName, _) in gameController.racingEntities {
+        var entityDistances: [(entityName: String, displayName: String, distance: Float, isPlayer: Bool, isFinished: Bool)] = []
+        
+        for (entityName, racingEntity) in gameController.racingEntities {
             let isPlayer = (entityName == "player")
             let isFinished = gameController.finishedEntities.contains { $0.entityName == entityName }
-            
-            let finalPosition: Int
-            if isPlayer {
-                finalPosition = gameController.playerFinalPosition
-            } else {
-                finalPosition = allPositions[entityName] ?? 5
-            }
+            let distance = simd_distance(racingEntity.entity.position, finishEntity.position)
             
             let displayName = isPlayer ? "Player" : "Bot \(entityName.replacingOccurrences(of: "bot_", with: ""))"
             
-            results.append((
+            entityDistances.append((
                 entityName: entityName,
                 displayName: displayName,
-                finalPosition: finalPosition,
+                distance: distance,
                 isPlayer: isPlayer,
                 isFinished: isFinished
             ))
         }
         
-        results.sort { $0.finalPosition < $1.finalPosition }
+        entityDistances.sort { entity1, entity2 in
+            if entity1.isFinished && entity2.isFinished {
+                let index1 = gameController.finishedEntities.firstIndex { $0.entityName == entity1.entityName } ?? 999
+                let index2 = gameController.finishedEntities.firstIndex { $0.entityName == entity2.entityName } ?? 999
+                return index1 < index2
+            } else if entity1.isFinished && !entity2.isFinished {
+                return true // Finished entities di depan
+            } else if !entity1.isFinished && entity2.isFinished {
+                return false // Unfinished entities di belakang
+            } else {
+                return entity1.distance < entity2.distance
+            }
+        }
+        
+        for (index, entityInfo) in entityDistances.enumerated() {
+            let finalPosition = min(index + 1, 4)
+            
+            results.append((
+                entityName: entityInfo.entityName,
+                displayName: entityInfo.displayName,
+                finalPosition: finalPosition,
+                isPlayer: entityInfo.isPlayer,
+                isFinished: entityInfo.isFinished
+            ))
+        }
         
         return results
     }
 }
-
 

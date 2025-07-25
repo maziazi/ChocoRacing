@@ -17,8 +17,9 @@ struct PlayerFinishedView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 20) {
-                    Image(systemName: "trophy.fill")
-                        .font(.system(size: 80))
+                    Image("throphy")
+                        .resizable()
+                        .frame(width: 150, height: 150)
                         .foregroundColor(.yellow)
                         .shadow(color: .yellow.opacity(0.5), radius: 20)
                         .scaleEffect(1.2)

@@ -29,14 +29,11 @@ struct PowerEffectIndicator: View {
     var body: some View {
         if gameController.currentPowerEffect != .none {
             HStack(spacing: 8) {
-                // Circle Timer
                 ZStack {
-                    // Background circle
-                    Circle()
-                        .stroke(Color.black.opacity(0.3), lineWidth: 6)
+                    Image("indicator")
+                        .resizable()
                         .frame(width: 60, height: 60)
                     
-                    // Progress circle (countdown from full to empty)
                     Circle()
                         .trim(from: 0, to: progress)
                         .stroke(
@@ -50,7 +47,6 @@ struct PowerEffectIndicator: View {
                         .rotationEffect(.degrees(-90))
                         .animation(.linear(duration: 0.1), value: progress)
                     
-                    // Center icon
                     effectIcon
                         .font(.title3)
                         .foregroundColor(effectColor)
@@ -68,9 +64,13 @@ struct PowerEffectIndicator: View {
         Group {
             switch gameController.currentPowerEffect {
             case .speedBoost:
-                Image(systemName: "bolt.fill")
+                Image("powerUp_speedUp")
+                    .resizable()
+                    .frame(width: 32, height: 32)
             case .speedReduction:
-                Image(systemName: "tortoise.fill")
+                Image("powerDown_slowDown")
+                    .resizable()
+                    .frame(width: 32, height: 32)
             case .none:
                 EmptyView()
             }

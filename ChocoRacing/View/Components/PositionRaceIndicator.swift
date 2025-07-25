@@ -24,10 +24,6 @@ struct PositionRaceIndicator: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.white.opacity(0.8))
                     .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
-                
-                Text("of 5")
-                    .font(.caption2)
-                    .foregroundColor(.white.opacity(0.6))
             }
             .padding(8)
             .background(
@@ -48,8 +44,7 @@ struct PositionRaceIndicator: View {
         case 2: return "2ND"
         case 3: return "3RD"
         case 4: return "4TH"
-        case 5: return "5TH"
-        default: return "\(position)TH"
+        default: return "4TH"
         }
     }
     
@@ -57,10 +52,10 @@ struct PositionRaceIndicator: View {
         let position = gameController.playerCurrentPosition
         switch position {
         case 1: return .yellow
-        case 2: return .orange
-        case 3: return .red
-        case 4, 5: return .gray
-        default: return .gray
+        case 2: return .gray
+        case 3: return .orange
+        case 4: return .red
+        default: return .red
         }
     }
 }

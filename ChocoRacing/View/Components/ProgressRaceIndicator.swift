@@ -12,7 +12,11 @@ struct ProgressRaceIndicator: View {
     
     var body: some View {
         if gameController.gameState == .playing || gameController.gameState == .paused {
-            VStack(spacing: 8) {
+            ZStack() {
+                Image("progressBar")
+                    .resizable()
+                    .frame(width: 250, height: 60)
+                    .offset(x: 7, y: -10)
                 HStack {
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
@@ -24,10 +28,8 @@ struct ProgressRaceIndicator: View {
                                 .fill(
                                     LinearGradient(
                                         gradient: Gradient(colors: [
-                                            Color.blue,
-                                            Color.green,
-                                            Color.yellow,
-                                            Color.orange
+                                            Color.orange,
+                                            Color.pink
                                         ]),
                                         startPoint: .leading,
                                         endPoint: .trailing
@@ -41,40 +43,11 @@ struct ProgressRaceIndicator: View {
                             .frame(width: max(16, geometry.size.width * CGFloat(gameController.playerProgress)))
                         }
                     }
-                    .frame(height: 8)
-                }
-                
-                Text("\(Int(gameController.playerProgress * 100))%")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                    .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
-                
-                if gameController.playerDistanceToFinish > 0 {
-                    Text("Distance: \(String(format: "%.1f", gameController.playerDistanceToFinish))m")
-                        .font(.caption2)
-                        .foregroundColor(.white.opacity(0.8))
-                        .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
+                    .frame(width: 200, height: 8)
+                    .offset(x: 6, y:-3)
                 }
             }
             .padding(12)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                Color.black.opacity(0.7),
-                                Color.black.opacity(0.4)
-                            ]),
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                    )
-            )
         }
     }
 }
