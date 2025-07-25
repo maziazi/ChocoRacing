@@ -7,11 +7,13 @@
 
 import SwiftUI
 import simd
+import ConfettiSwiftUI
 
 struct LeaderboardView: View {
     @ObservedObject var gameController: GameController
     @State private var stableResults: [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] = []
     @Environment(\.presentationMode) var presentationMode
+    @State private var confettiTrigger = 0
     
     var body: some View {
         if gameController.showLeaderboard && !gameController.finishedEntities.isEmpty {
@@ -20,7 +22,26 @@ struct LeaderboardView: View {
                     .ignoresSafeArea()
                 
                 VStack{
-                    ZStack{
+                    ZStack {
+                        // Confetti Cannon Modifier
+                        Color.clear
+                            .confettiCannon(
+                                trigger: $confettiTrigger,
+                                num: 60,
+                                colors: [.yellow, .white, .brown, .pink],
+                                confettiSize: 15,
+                                rainHeight: 700,
+                                fadesOut: true,
+                                opacity: 1,
+                                openingAngle: .degrees(60),
+                                closingAngle: .degrees(120),
+                                radius: 400,
+                                repetitions: 2,
+                                repetitionInterval: 0.6,
+                                hapticFeedback: true
+                            )
+                            .frame(height: 0)
+                        
                         HStack {
                             Image("Leaderboard_1")
                                 .resizable()
@@ -50,6 +71,7 @@ struct LeaderboardView: View {
                         .frame(maxWidth: 200)
                         .offset(y: 20)
                     }
+                    
                     Button(action: {
                         gameController.resetGame()
                     }){
@@ -79,6 +101,7 @@ struct LeaderboardView: View {
             .animation(.easeInOut(duration: 0.5), value: gameController.showLeaderboard)
             .onAppear {
                 stableResults = getStableRaceResults()
+                confettiTrigger += 1
             }
         }
     }
