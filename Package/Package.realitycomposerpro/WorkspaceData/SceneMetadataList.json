@@ -77,6 +77,15 @@
       {
         "isExpanded" : true,
         "isLocked" : false
+      },
+      [
+        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
+        "Root",
+        "powerup_1"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
       }
     ]
   },
