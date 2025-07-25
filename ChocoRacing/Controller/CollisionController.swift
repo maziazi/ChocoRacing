@@ -82,7 +82,7 @@ class CollisionController {
         
         case .obstacle:
             gameController.handleObstacleCollision(entity: entity, otherEntity: otherEntity)
-            if gameController.getEntityName(entity) == "player" {
+            if gameController.getEntityName(entity) == "player" && gameController.currentPowerEffect != .shield {
                    MusicController.shared.playObstacleSound()
                }
                print("💥 Obstacle hit!")

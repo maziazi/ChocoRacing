@@ -162,6 +162,16 @@ struct GameView: View {
             slide.components.set(GameTagComponent(type: .slide)) // ✅ Tambahkan tag
             await applyStaticMeshCollision(to: slide)
         }
+        
+        if let chocoShader = scene.findEntity(named: "world_shader_slide_1") {
+            chocoShader.components.set(GameTagComponent(type: .slide)) // ✅ Tambahkan tag
+            await applyStaticMeshCollision(to: chocoShader)
+        }
+        
+        if let chocoShader = scene.findEntity(named: "world_shader_slide_4") {
+            chocoShader.components.set(GameTagComponent(type: .slide)) // ✅ Tambahkan tag
+            await applyStaticMeshCollision(to: chocoShader)
+        }
     }
     
     private func setupControllers() {
