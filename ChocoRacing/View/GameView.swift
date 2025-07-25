@@ -60,14 +60,6 @@ struct GameView: View {
                 
                 Spacer()
             }
-            VStack(spacing: 12) {
-                Spacer()
-                VStack() {
-                    PlayButtonView(gameController: gameController)
-                    GameControlsView(gameController: gameController)
-                }
-                .padding(.bottom, 16)
-            }
             
             PlayerFinishedView(gameController: gameController)
             
