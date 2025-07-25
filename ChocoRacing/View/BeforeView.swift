@@ -56,7 +56,6 @@ struct BeforeView: View {
                             .frame(width: 200, height: 70)
                     }
 
-                    // CHANGE CHARACTER Button
                     NavigationLink(destination: ChangeCharacterView(), isActive: $navigateToCharacter) {
                         EmptyView()
                     }
