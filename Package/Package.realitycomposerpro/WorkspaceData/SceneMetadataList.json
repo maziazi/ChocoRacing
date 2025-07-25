@@ -4,7 +4,7 @@
       [
         "B6613891-0877-4625-883C-781989A64D0A",
         "Root",
-        "shader_color_water"
+        "material_water"
       ],
       {
         "isExpanded" : true,
@@ -14,6 +14,25 @@
         "B6613891-0877-4625-883C-781989A64D0A",
         "Root",
         "SkySphere"
+      ],
+      {
+        "disallowsFraming" : true,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "B6613891-0877-4625-883C-781989A64D0A",
+        "Root",
+        "shader_color_water"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B6613891-0877-4625-883C-781989A64D0A",
+        "Root",
+        "SkyDome"
       ],
       {
         "disallowsFraming" : true,
@@ -27,25 +46,6 @@
       {
         "isExpanded" : true,
         "isLocked" : false
-      },
-      [
-        "B6613891-0877-4625-883C-781989A64D0A",
-        "Root",
-        "SkyDome"
-      ],
-      {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
-        "isLocked" : false
-      },
-      [
-        "B6613891-0877-4625-883C-781989A64D0A",
-        "Root",
-        "material_water"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
       }
     ]
   },
@@ -54,17 +54,16 @@
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "SkySphere"
+        "player_bunsmores"
       ],
       {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
+        "isExpanded" : true,
         "isLocked" : false
       },
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "SkyDome"
+        "SkySphere"
       ],
       {
         "disallowsFraming" : true,
@@ -82,25 +81,26 @@
       },
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
+        "Root",
+        "SkyDome"
+      ],
+      {
+        "disallowsFraming" : true,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
         "bubble"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
-        "Root",
-        "player_bunsmores"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
-        "Root"
       ],
       {
         "isExpanded" : true,

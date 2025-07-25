@@ -16,4 +16,5 @@ enum GameEntityType: UInt8, Codable {
     case bom
     case obstacle
     case finish
+    case slide // untuk seluncuran
 }

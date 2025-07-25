@@ -3,7 +3,7 @@ import SwiftUI
 
 
 class CollisionController {
-    let entityTypes: [GameEntityType] = [.speedUp, .slowDown, .protection, .bom, .finish, .obstacle]
+    let entityTypes: [GameEntityType] = [.speedUp, .slowDown, .protection, .bom, .finish, .obstacle, .slide]
     
     private var oneSec: Bool = false
     private var oneSec2: Bool = false
@@ -39,16 +39,27 @@ class CollisionController {
         case .speedUp:
             gameController.applyPowerEffect(to: entity, effectType: .speedBoost, duration: 5.0)
             otherEntity.isEnabled = false
+            // Hanya mainkan sound jika entity-nya adalah player
+            if gameController.getEntityName(entity) == "player" {
+                MusicController.shared.playSpeedUpSound()
+            }
+            
             print("⚡ Speed boost applied!")
             
         case .slowDown:
             gameController.applyPowerEffect(to: entity, effectType: .speedReduction, duration: 3.0)
             otherEntity.isEnabled = false
+            if gameController.getEntityName(entity) == "player" {
+                MusicController.shared.playslowdown4Sound()
+            }
             print("🐌 Speed reduced!")
             
         case .protection:
             gameController.applyPowerEffect(to: entity, effectType: .shield, duration: 5.0)
             otherEntity.isEnabled = false
+            if gameController.getEntityName(entity) == "player" {
+                MusicController.shared.playProtectionSound()
+            }
             print("🛡️ Protection activated!")
             
         case .bom:
@@ -56,13 +67,22 @@ class CollisionController {
             // gameController.applyPowerEffect(to: entity, effectType: .splash, duration: 0.0)
             print("💥 Bomb exploded!")
             
+        case .slide:
+            if gameController.getEntityName(entity) == "player" {
+                MusicController.shared.playSlideStoneSound()
+            }
+            print("🪨 Slide wall touched!")
+            
         case .finish:
             gameController.checkFinish(for: entity)
             print("🏁 Finish line reached!")
         
         case .obstacle:
             gameController.handleObstacleCollision(entity: entity, otherEntity: otherEntity)
-              
+            if gameController.getEntityName(entity) == "player" {
+                   MusicController.shared.playObstacleSound()
+               }
+               print("💥 Obstacle hit!")
 //           print("⚠️ Collision with obstacle!")
         default:
             print("masuk default di collisionControl")

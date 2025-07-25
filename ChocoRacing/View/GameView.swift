@@ -65,6 +65,11 @@ struct GameView: View {
         
         if let scene = try? await Entity(named: "Scene", in: playTestBundle) {
             content.add(scene)
+            
+            MusicController.shared.addToScene(to: scene)
+                    await MusicController.shared.ensureAllSoundsLoaded()
+                    MusicController.shared.playBeforePlayMusic()
+
             await setupGameEntities(in: scene)
             setupControllers()
             setupCollisionDetection(content: content)
@@ -96,7 +101,6 @@ struct GameView: View {
                 entity.components.set(GameTagComponent(type: .slowDown))
                 
             } else if entity.name.lowercased().contains("protection") {
-                print(
                 entity.components.set(GameTagComponent(type: .protection))
                 
             } else if entity.name.lowercased().contains("bom") {
@@ -141,9 +145,11 @@ struct GameView: View {
         
         // Apply collision to slide
         if let slide = scene.findEntity(named: "world_slide_v1_2") {
+            slide.components.set(GameTagComponent(type: .slide)) // ✅ Tambahkan tag
             await applyStaticMeshCollision(to: slide)
         }
         if let slide = scene.findEntity(named: "world_slide_v1_1") {
+            slide.components.set(GameTagComponent(type: .slide)) // ✅ Tambahkan tag
             await applyStaticMeshCollision(to: slide)
         }
     }

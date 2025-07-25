@@ -2,10 +2,5 @@
   "pathsToIds" : {
     "Package\/Sources\/environment_slide\/environment_slide.rkassets\/Scene.usda" : "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
     "environment_slide\/Sources\/environment_slide\/environment_slide.rkassets\/Scene.usda" : "B6613891-0877-4625-883C-781989A64D0A"
-  },
-  "projectID" : -8390983223816146947,
-  "uuidToIntID" : {
-    "B6613891-0877-4625-883C-781989A64D0A" : -1980126605932202522,
-    "C03681F5-C48D-4F4E-B0F2-AB057DC63D90" : -3240134330940638954
   }
 }

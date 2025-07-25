@@ -36,6 +36,7 @@ class GameController: ObservableObject {
     private var powerEffectTimers: [String: Timer] = [:]
     
     private var oneSec: Bool = false
+    private var hasPlayedSlideSound = false
     
     var onGameStart: (() -> Void)?
     var onGameEnd: (() -> Void)?
@@ -47,8 +48,35 @@ class GameController: ObservableObject {
     var onEffectVisualRemoved: ((Entity, PowerEffectType) -> Void)?
     var onEntityFinished: ((FinishInfo) -> Void)?
     var onAllEntitiesFinished: (([FinishInfo]) -> Void)?
-    
+    var gameConfig: GameConfiguration?
         
+    func checkSlideBoundary(for entity: Entity) {
+        let name = getEntityName(entity)
+        guard name == "player" else { fatalError("name is not player") }
+        
+//        guard let config = gameConfig else { fatalError("config is nil")  }
+        let config = gameConfig ?? configuration
+        let x = entity.position.x
+        let left = config.leftBoundary
+        let right = config.rightBoundary
+
+        if x <= -1.5 || x >= 1.8 {
+            print("🎯 Menyentuh batas: \(x)")
+            if !hasPlayedSlideSound {
+                print("🔊 Mainkan suara slide")
+                MusicController.shared.playSlideStoneSound()
+                hasPlayedSlideSound = true
+
+                // Reset flag setelah 1 detik
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self.hasPlayedSlideSound = false
+                }
+            }
+        } else {
+            // kalau bukan x <= -1.5 || x >= 1.8
+            print("🎯 sudah aman")
+        }
+    }
     func configure(with config: GameConfiguration) {
         self.configuration = config
     }
@@ -110,6 +138,9 @@ class GameController: ObservableObject {
         stopAllMovement()
         startCountdown()
         
+        Task {
+            await MusicController.shared.playReadyGoAndThenBackground()
+        }
         print("🎯 Starting game with \(racingEntities.count) entities...")
     }
     
@@ -168,11 +199,19 @@ class GameController: ObservableObject {
             
         resetAllPositions()
         finishedEntities.removeAll()
+        MusicController.shared.playBeforePlayMusic()
         
         onReset?()
         print("🔄 Game reset complete")
     }
-        
+    func playSound(named soundName: String, on entity: Entity) {
+        do {
+            let audioResource = try AudioFileResource.load(named: soundName)
+            entity.playAudio(audioResource)
+        } catch {
+            print("❌ Gagal memuat suara \(soundName): \(error)")
+        }
+    }
     
     //FCS
     func applyPowerEffect(to entity: Entity, effectType: PowerEffectType, duration: Double) {
@@ -383,13 +422,15 @@ class GameController: ObservableObject {
     //FCS: Start the player's forward movement
     private func startPlayerMovement() {
         guard self.gameState == .playing else { return }
-        
-        // Start the movement timer for the player
+
         playerMovementTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
             guard self.gameState == .playing else { return }
-            
+
             if let playerEntity = self.racingEntities["player"] {
                 self.applyForwardMovement(to: playerEntity.entity, racingEntity: playerEntity)
+
+                // Tambahan untuk mengecek posisi dan mainkan sound
+                self.checkSlideBoundary(for: playerEntity.entity)
             }
         }
     }
@@ -621,7 +662,7 @@ class GameController: ObservableObject {
         powerEffectTimeRemaining = 0.0
     }
         
-    private func getEntityName(_ entity: Entity) -> String {
+    func getEntityName(_ entity: Entity) -> String {
         for (name, racingEntity) in racingEntities {
             if racingEntity.entity === entity {
                 return name
