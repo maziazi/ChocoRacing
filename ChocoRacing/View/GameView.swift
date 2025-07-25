@@ -36,6 +36,7 @@ struct GameView: View {
             }
            
                SplashEffectView(splashVisible: $splashVisible)
+                .allowsHitTesting(false)
 
             VStack {
                 HStack(alignment: .top, spacing: 0) {
@@ -104,9 +105,7 @@ struct GameView: View {
         var foundBots: [Entity] = []
         var finishEntity: Entity?
         var startEntity: Entity?
-        
-            
-        		
+        	
         walkThroughEntities(entity: scene) { entity in
             if entity.name.contains("player") {
                 entity.components.set(GameTagComponent(type: .player))
@@ -159,8 +158,6 @@ struct GameView: View {
             print("🏁 Virtual start line created at: \(player.position)")
         }
 
-        // Setup game with entities
-        gameController.setEntities(player: playerEntity, bots: botEntities)
         
         if let finish = finishEntity {
             gameController.setFinishEntity(finish)
@@ -217,9 +214,10 @@ struct GameView: View {
         
         gameController.onEffectVisualApplied = { entity, effect in
             Task {
+                print("Entity Name: \(entity.name)")
                 if effect == .shield {
                     toggleShieldBubbleEffect(for: entity, enable: true)
-                }else if effect == .splash {
+                }else if effect == .splash && entity.name.contains("player") {
                     print("apply splash")
                     self.splashVisible = true
                 }else if effect == .speedBoost {
@@ -232,7 +230,7 @@ struct GameView: View {
         gameController.onEffectVisualRemoved = { entity, effect in
             if effect == .shield {
                 toggleShieldBubbleEffect(for: entity, enable: false)
-            } else if effect == .splash {
+            } else if effect == .splash && entity.name.contains("player") {
                 print("remove splash")
                 self.splashVisible = false
             }else if effect == .speedBoost {
@@ -310,17 +308,6 @@ struct GameView: View {
         collisionSubscriptions.removeAll()
     }
     
-
-    //FCS:
-    func lockTranslation(for entity: Entity, lockX: Bool = true, lockY: Bool = true, lockZ: Bool = true) {
-        guard var physics = entity.components[PhysicsBodyComponent.self] else {
-            print("Entity does not have a PhysicsBodyComponent")
-            return
-        }
-
-        physics.isTranslationLocked = (x: lockX, y: lockY, z: lockZ)
-        entity.components.set(physics)
-    }
     
     //ACS:
     private func toggleShieldBubbleEffect(for entity: Entity, enable: Bool) {

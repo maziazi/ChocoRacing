@@ -89,7 +89,7 @@ class GameController: ObservableObject {
             }
         } else {
             // kalau bukan x <= -1.5 || x >= 1.8
-            print("🎯 sudah aman")
+//            print("🎯 sudah aman")
         }
     }
 
@@ -130,7 +130,7 @@ class GameController: ObservableObject {
             setupEntityPhysics(bot)
             print("🤖 Bot \(index + 1) setup: \(bot.name)")
         }
-        
+        print("ini ke stop 1")
         stopAllMovement()
         print("✅ Game setup complete - \(racingEntities.count) entities ready")
     }
@@ -170,7 +170,7 @@ class GameController: ObservableObject {
         clearAllPowerEffects()
         stopAllMovement()
         startCountdown()
-        
+        print("ini setelah start countdown")
         Task {
             await MusicController.shared.playReadyGoAndThenBackground()
         }
@@ -209,10 +209,16 @@ class GameController: ObservableObject {
         showLeaderboard = true
         
         onGameEnd?()
+        //loop untuk setiap racingentities
+        for (_, racingEntity) in racingEntities {
+           lockTranslation(for: racingEntity.entity, lockX: false, lockY: false, lockZ: false)
+        }
+           
         print("🏁 Game ended")
     }
     
     func resetGame() {
+        print("reset game")
         gameState = .waiting
         countdownNumber = 3
         isCountdownVisible = false
@@ -244,10 +250,10 @@ class GameController: ObservableObject {
             racingEntity.isFinished = false
             racingEntities[name] = racingEntity
         }
-
+        
         finishedEntities.removeAll()
         MusicController.shared.playBeforePlayMusic()
-
+        startCountdown()
         
         onReset?()
         print("🔄 Game reset complete")
@@ -308,8 +314,7 @@ class GameController: ObservableObject {
         print("⚠️ \(entityName) collided with obstacle!")
 
         // Hentikan gerakan sementara
-        if entityName == "player" {
-            print("Stop PLAYER")
+        if entityName == "player"{
             stopPlayerMovement()
             playerMovementTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
                 guard self.gameState == .playing else { return }
@@ -449,16 +454,12 @@ class GameController: ObservableObject {
         print ("Start Count Down")
         countdownNumber = 3
         isCountdownVisible = true
-
-//        stopCountdownTimer()
  
         countdownTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            print ("timer count")
+            print ("timer count 1")
             self.updateCountdown()
         }
-        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.updateCountdown()
-        }
+
         print("🔁 Countdown started from 3")
     }
     
@@ -484,7 +485,11 @@ class GameController: ObservableObject {
         startAllMovement()
         onCountdownFinish?()
         onGameStart?()
-        
+       //loop untuk setiap racingentities
+       for (_, racingEntity) in racingEntities {
+          lockTranslation(for: racingEntity.entity, lockX: false, lockY: true, lockZ: false)
+       }
+          
         print("🚀 Game started!")
     }
     
@@ -495,6 +500,7 @@ class GameController: ObservableObject {
     }
     
     private func stopAllMovement() {
+        print("stop al movement")
         stopAllTimers()
         freezeAllEntities()
     }
@@ -581,7 +587,6 @@ class GameController: ObservableObject {
     //FCS
     private func applyBackwardMovement(to entity: Entity, racingEntity: RacingEntity) {
         guard var motion = entity.components[PhysicsMotionComponent.self] else { return }
-
         // Dorong ke belakang (z positif)
         motion.linearVelocity.z = 8.0  // dorong ke belakang dengan kecepatan 8
 
@@ -852,7 +857,9 @@ class GameController: ObservableObject {
     }
     
     private func stopAllTimers() {
-        stopCountdownTimer()
+        print("stop all timers")
+//        stopCountdownTimer()
+        print("setelah stop")
         playerMovementTimer?.invalidate()  // Invalidate the timer to stop it
         playerMovementTimer = nil  // Reset the timer to release resources
         for (_, botTimer) in botMovementTimers {
@@ -995,6 +1002,18 @@ class GameController: ObservableObject {
     
     func getEntityPosition(_ entityName: String) -> Int {
         return allEntityPositions[entityName] ?? totalEntityCount
+    }
+    
+    //FCS:
+    func lockTranslation(for entity: Entity, lockX: Bool = true, lockY: Bool = true, lockZ: Bool = true) {
+        guard var physics = entity.components[PhysicsBodyComponent.self] else {
+            print("Entity does not have a PhysicsBodyComponent")
+            return
+        }
+
+        physics.isTranslationLocked = (x: lockX, y: lockY, z: lockZ)
+        entity.components.set(physics)
+        print("Translation locked - x: \(lockX), y: \(lockY), z: \(lockZ)")
     }
 
 }
