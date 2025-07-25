@@ -32,13 +32,13 @@ struct SplashView: View {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: .black))
                     .scaleEffect(1.3)
-                    .padding(.bottom, -100)
+                    .padding(.bottom, 100)
                 
                 Image("text_loading")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 160)
-                    .padding(.top, -10)
+                    .padding(.top, -80)
             }
         }
         .task {

@@ -54,7 +54,7 @@ struct LeaderboardView: View {
                                     getPositionEmoji(result.finalPosition)
                                     
                                     Text(result.displayName)
-                                        .font(.title2)
+                                        .font(.custom("SuperVanilla", size: 22))
                                         .fontWeight(.semibold)
                                         .foregroundColor(result.isPlayer ? .yellow : .white)
                                     

@@ -7,16 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C1DA7DA2E321DC00042CA58 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 2C1DA7D92E321DC00042CA58 /* PlayTest */; };
 		2C3AB6FE2E2E3835000B21DF /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 2C3AB6FD2E2E3835000B21DF /* PlayTest */; };
-		5C4CFA862E33924F000861AA /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5C4CFA852E33924F000861AA /* PlayTest */; };
 		5CFA78002E2A53F000808F5A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 5CFA77FF2E2A53EA00808F5A /* .gitignore */; };
 		5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA783B2E2D03E900808F5A /* PlayTest */; };
 		5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA787D2E2D0F5C00808F5A /* PlayTest */; };
-		6DDDC0522E323B5B00020553 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 6DDDC0512E323B5B00020553 /* PlayTest */; };
-		6DDDC0E52E3384A900020553 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 6DDDC0E42E3384A900020553 /* PlayTest */; };
-		90EF67062E339A620017512B /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 90EF67052E339A620017512B /* PlayTest */; };
-		90EF670C2E33BDAE0017512B /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 90EF670B2E33BDAE0017512B /* ConfettiSwiftUI */; };
+		9080D8792E33C7F60095DADB /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9080D8782E33C7F60095DADB /* ConfettiSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +39,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		90EF670E2E33C53D0017512B /* Exceptions for "ChocoRacing" folder in "ChocoRacing" target */ = {
+		90EF66292E3209320017512B /* Exceptions for "ChocoRacing" folder in "ChocoRacing" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -57,7 +52,7 @@
 		5CFA77BD2E2A44F100808F5A /* ChocoRacing */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				90EF670E2E33C53D0017512B /* Exceptions for "ChocoRacing" folder in "ChocoRacing" target */,
+				90EF66292E3209320017512B /* Exceptions for "ChocoRacing" folder in "ChocoRacing" target */,
 			);
 			path = ChocoRacing;
 			sourceTree = "<group>";
@@ -69,14 +64,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90EF670C2E33BDAE0017512B /* ConfettiSwiftUI in Frameworks */,
 				5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */,
-				5C4CFA862E33924F000861AA /* PlayTest in Frameworks */,
 				5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */,
-				6DDDC0E52E3384A900020553 /* PlayTest in Frameworks */,
-				2C1DA7DA2E321DC00042CA58 /* PlayTest in Frameworks */,
-				6DDDC0522E323B5B00020553 /* PlayTest in Frameworks */,
-				90EF67062E339A620017512B /* PlayTest in Frameworks */,
+				9080D8792E33C7F60095DADB /* ConfettiSwiftUI in Frameworks */,
 				2C3AB6FE2E2E3835000B21DF /* PlayTest in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,12 +130,7 @@
 				5CFA783B2E2D03E900808F5A /* PlayTest */,
 				5CFA787D2E2D0F5C00808F5A /* PlayTest */,
 				2C3AB6FD2E2E3835000B21DF /* PlayTest */,
-				2C1DA7D92E321DC00042CA58 /* PlayTest */,
-				6DDDC0512E323B5B00020553 /* PlayTest */,
-				6DDDC0E42E3384A900020553 /* PlayTest */,
-				5C4CFA852E33924F000861AA /* PlayTest */,
-				90EF67052E339A620017512B /* PlayTest */,
-				90EF670B2E33BDAE0017512B /* ConfettiSwiftUI */,
+				9080D8782E33C7F60095DADB /* ConfettiSwiftUI */,
 			);
 			productName = ChocoRacing;
 			productReference = 5CFA77BB2E2A44F100808F5A /* ChocoRacing.app */;
@@ -224,8 +209,8 @@
 			mainGroup = 5CFA77B22E2A44F100808F5A;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				90EF67042E339A620017512B /* XCLocalSwiftPackageReference "Package" */,
-				90EF670A2E33BDAE0017512B /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				2C3AB6FC2E2E3835000B21DF /* XCLocalSwiftPackageReference "Package" */,
+				9080D8772E33C7F60095DADB /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5CFA77BC2E2A44F100808F5A /* Products */;
@@ -434,7 +419,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ChocoRacing/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -467,7 +451,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ChocoRacing/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -532,7 +515,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KY4XDK75RG;
+				DEVELOPMENT_TEAM = 7T6Q8ZMPNV;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.apple.academy.ChocoRacingUITests;
@@ -549,7 +532,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KY4XDK75RG;
+				DEVELOPMENT_TEAM = 7T6Q8ZMPNV;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.apple.academy.ChocoRacingUITests;
@@ -603,14 +586,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		90EF67042E339A620017512B /* XCLocalSwiftPackageReference "Package" */ = {
+		2C3AB6FC2E2E3835000B21DF /* XCLocalSwiftPackageReference "Package" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Package;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		90EF670A2E33BDAE0017512B /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+		9080D8772E33C7F60095DADB /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
 			requirement = {
@@ -621,15 +604,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2C1DA7D92E321DC00042CA58 /* PlayTest */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PlayTest;
-		};
 		2C3AB6FD2E2E3835000B21DF /* PlayTest */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PlayTest;
-		};
-		5C4CFA852E33924F000861AA /* PlayTest */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayTest;
 		};
@@ -641,21 +616,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayTest;
 		};
-		6DDDC0512E323B5B00020553 /* PlayTest */ = {
+		9080D8782E33C7F60095DADB /* ConfettiSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = PlayTest;
-		};
-		6DDDC0E42E3384A900020553 /* PlayTest */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PlayTest;
-		};
-		90EF67052E339A620017512B /* PlayTest */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PlayTest;
-		};
-		90EF670B2E33BDAE0017512B /* ConfettiSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 90EF670A2E33BDAE0017512B /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			package = 9080D8772E33C7F60095DADB /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
 			productName = ConfettiSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
