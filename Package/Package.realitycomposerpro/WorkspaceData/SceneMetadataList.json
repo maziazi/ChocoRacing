@@ -1,77 +1,8 @@
 {
-  "04CE3202-CEA9-4BF3-9159-873F0B7DB687" : {
+  "3419AD33-FC01-4034-814B-B9FA509D7753" : {
     "objectMetadataList" : [
       [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "Cream",
-        "_materials"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "enviroment_slide",
-        "world_startFinish_1",
-        "_materials"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "enviroment_slide"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "player",
-        "geom"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "Player"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "Cream",
-        "Cream_top_002"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
-        "Root",
-        "enviroment_slide",
-        "world_startFinish_1"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
+        "3419AD33-FC01-4034-814B-B9FA509D7753",
         "Root"
       ],
       {
@@ -79,9 +10,10 @@
         "isLocked" : false
       },
       [
-        "04CE3202-CEA9-4BF3-9159-873F0B7DB687",
+        "3419AD33-FC01-4034-814B-B9FA509D7753",
         "Root",
-        "powerup_1"
+
+        "ShieldBubble"
       ],
       {
         "isExpanded" : true,
@@ -89,10 +21,31 @@
       }
     ]
   },
-  "99FA4461-2B73-458B-BBA0-3DA3337862E2" : {
+  "672C0507-21C0-4910-935D-D77ED80E9E50" : {
     "objectMetadataList" : [
       [
-        "99FA4461-2B73-458B-BBA0-3DA3337862E2",
+        "672C0507-21C0-4910-935D-D77ED80E9E50",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "672C0507-21C0-4910-935D-D77ED80E9E50",
+        "Root",
+        "player_smores"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      }
+    ]
+  },
+  "6E20746C-80D1-4DB0-9DDD-5938033C8816" : {
+    "objectMetadataList" : [
+      [
+        "6E20746C-80D1-4DB0-9DDD-5938033C8816",
         "Root"
       ],
       {
@@ -101,10 +54,10 @@
       }
     ]
   },
-  "EAA78127-E00B-4BB2-82E9-7C675FAF3D1E" : {
+  "A44C2B43-E066-4E89-AC13-F21109AE98F8" : {
     "objectMetadataList" : [
       [
-        "EAA78127-E00B-4BB2-82E9-7C675FAF3D1E",
+        "A44C2B43-E066-4E89-AC13-F21109AE98F8",
         "Root"
       ],
       {
@@ -113,30 +66,71 @@
       }
     ]
   },
-  "F4762315-832E-41D1-9BAC-90989898ACD1" : {
+  "B6613891-0877-4625-883C-781989A64D0A" : {
     "objectMetadataList" : [
       [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "B6613891-0877-4625-883C-781989A64D0A",
         "Root",
-        "Floor",
-        "_materials"
+        "SkySphere"
+      ],
+      {
+        "disallowsFraming" : true,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "B6613891-0877-4625-883C-781989A64D0A",
+        "Root",
+        "shader_color_water"
       ],
       {
         "isExpanded" : true,
         "isLocked" : false
       },
       [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Mangkok",
-        "Sphere"
+        "B6613891-0877-4625-883C-781989A64D0A",
+        "Root"
       ],
       {
         "isExpanded" : true,
         "isLocked" : false
       },
       [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "B6613891-0877-4625-883C-781989A64D0A",
+        "Root",
+        "material_water"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B6613891-0877-4625-883C-781989A64D0A",
+        "Root",
+
+        "SkyDome"
+      ],
+      {
+        "disallowsFraming" : true,
+        "isExpanded" : false,
+        "isLocked" : false
+      }
+    ]
+  },
+  "C03681F5-C48D-4F4E-B0F2-AB057DC63D90" : {
+    "objectMetadataList" : [
+      [
+        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
+        "Root",
+        "world_shader_slide_2"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+
+        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
         "SkyDome"
       ],
@@ -146,72 +140,60 @@
         "isLocked" : false
       },
       [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "Slide",
-        "_materials"
+        "player_bunsmores"
       ],
       {
         "isExpanded" : true,
         "isLocked" : false
       },
       [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Mangkok_Item",
-        "Sphere"
+        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
+        "Root"
       ],
       {
         "isExpanded" : true,
         "isLocked" : false
       },
       [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
+
+        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "Floor"
-      ],
-      {
-        "disallowsFraming" : false,
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Floor",
-        "Sphere_1",
-        "Mangkok"
+        "bubble"
+
       ],
       {
         "isExpanded" : true,
         "isLocked" : false
       },
       [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
-        "Floor",
-        "Sphere_1"
+        "SkySphere"
+      ],
+      {
+        "disallowsFraming" : true,
+        "isExpanded" : false,
+        "isLocked" : false
+      }
+    ]
+  },
+  "E4B22B7A-362C-484F-AB0B-D6661FB85899" : {
+    "objectMetadataList" : [
+      [
+        "E4B22B7A-362C-484F-AB0B-D6661FB85899",
+        "Root"
       ],
       {
         "isExpanded" : true,
         "isLocked" : false
       },
       [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "E4B22B7A-362C-484F-AB0B-D6661FB85899",
         "Root",
-        "Floor",
-        "Cube"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Sphere_1",
-        "Mangkok",
-        "Sphere"
+        "powerDown_slowDown_2",
+        "Cube_004"
       ],
       {
         "isExpanded" : true,

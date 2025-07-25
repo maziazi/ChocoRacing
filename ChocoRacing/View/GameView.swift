@@ -19,6 +19,8 @@ struct GameView: View {
     @State private var botEntities: [Entity] = []
     @State private var collisionSubscriptions: [EventSubscription] = []
     @State private var cameraUpdateTimer: Timer?
+    @State private var splashVisible = false // Menyimpan status visibility splas
+
     
     var body: some View {
         ZStack {
@@ -32,7 +34,9 @@ struct GameView: View {
                     createPlayerGesture() : nil
                 )
             }
-            
+           
+               SplashEffectView(splashVisible: $splashVisible)
+
             VStack {
                 HStack(alignment: .top, spacing: 0) {
                     PositionRaceIndicator(gameController: gameController)
@@ -60,9 +64,9 @@ struct GameView: View {
                 
                 Spacer()
             }
-            
+
             PlayerFinishedView(gameController: gameController)
-            
+        
             CountdownView(gameController: gameController)
             LeaderboardView(gameController: gameController)
         }
@@ -84,6 +88,11 @@ struct GameView: View {
         
         if let scene = try? await Entity(named: "Scene", in: playTestBundle) {
             content.add(scene)
+            
+            MusicController.shared.addToScene(to: scene)
+                    await MusicController.shared.ensureAllSoundsLoaded()
+                    MusicController.shared.playBeforePlayMusic()
+
             await setupGameEntities(in: scene)
             setupControllers()
             setupCollisionDetection(content: content)
@@ -97,21 +106,39 @@ struct GameView: View {
         var startEntity: Entity?
         
             walkThroughEntities(entity: scene) { entity in
+        		
+        walkThroughEntities(entity: scene) { entity in
             if entity.name.contains("player") {
                 entity.components.set(GameTagComponent(type: .player))
+                toggleShieldBubbleEffect(for: entity, enable: false)
+                toggleSpeedBoostEffect(for: entity, status: false)
                 playerEntity = entity
                 cameraController.setTarget(entity)
                 playerController.setPlayer(entity)
                 
-            } else if entity.name.contains("bot") {
+            } else if entity.name.contains("bot_") {
                 entity.components.set(GameTagComponent(type: .bot))
+                toggleShieldBubbleEffect(for: entity, enable: false)
                 foundBots.append(entity)
                 
-            } else if entity.name.contains("powerup") {
-                entity.components.set(GameTagComponent(type: .powerup))
+            } else if entity.name.contains("speedUp") {
+                entity.components.set(GameTagComponent(type: .speedUp))
                 
-            } else if entity.name.contains("powerdown") {
-                entity.components.set(GameTagComponent(type: .powerdown))
+            } else if entity.name.contains("slowDown") {
+                entity.components.set(GameTagComponent(type: .slowDown))
+                
+            } else if entity.name.lowercased().contains("protection") {
+                entity.components.set(GameTagComponent(type: .protection))
+                
+            } else if entity.name.lowercased().contains("spray_") {
+                entity.components.set(GameTagComponent(type: .bom))
+                
+            }else if entity.name.contains("obstacle") {
+                entity.components.set(GameTagComponent(type: .obstacle))
+                
+            }else if entity.name.lowercased().contains("choco") && entity.name.lowercased().contains("fountain") {
+                entity.components.set(GameTagComponent(type: .finish))
+                finishEntity = entity
             }
         }
         
@@ -131,26 +158,40 @@ struct GameView: View {
             gameController.setStartLineEntity(startLine)
             print("🏁 Virtual start line created at: \(player.position)")
         }
+
+        // Setup game with entities
+        gameController.setEntities(player: playerEntity, bots: botEntities)
         
         if let finish = finishEntity {
             gameController.setFinishEntity(finish)
         }
         
-        if let slide = scene.findEntity(named: "enviroment_slide") {
+
+        // Apply collision to slide
+        if let slide = scene.findEntity(named: "world_slide_v1_2") {
+            slide.components.set(GameTagComponent(type: .slide)) // ✅ Tambahkan tag
             await applyStaticMeshCollision(to: slide)
         }
         if let slide = scene.findEntity(named: "world_slide_v1_1") {
+            slide.components.set(GameTagComponent(type: .slide)) // ✅ Tambahkan tag
             await applyStaticMeshCollision(to: slide)
+        }
+        
+        if let chocoShader = scene.findEntity(named: "world_shader_slide_1") {
+            chocoShader.components.set(GameTagComponent(type: .slide)) // ✅ Tambahkan tag
+            await applyStaticMeshCollision(to: chocoShader)
+        }
+        
+        if let chocoShader = scene.findEntity(named: "world_shader_slide_4") {
+            chocoShader.components.set(GameTagComponent(type: .slide)) // ✅ Tambahkan tag
+            await applyStaticMeshCollision(to: chocoShader)
         }
     }
     
     private func setupControllers() {
         var config = GameConfiguration()
-
-        config.leftBoundary = -1.65
-        config.rightBoundary = 2.2
-        config.countdownDuration = 1.0
-
+        config.leftBoundary = -1.5
+        config.rightBoundary = 1.8
         gameController.configure(with: config)
         
         playerController.setGameController(gameController)
@@ -172,6 +213,31 @@ struct GameView: View {
         gameController.onReset = {
             self.resetPowerItems()
             self.playerController.cleanup()
+        }
+        
+        gameController.onEffectVisualApplied = { entity, effect in
+            Task {
+                if effect == .shield {
+                    toggleShieldBubbleEffect(for: entity, enable: true)
+                }else if effect == .splash {
+                    print("apply splash")
+                    self.splashVisible = true
+                }else if effect == .speedBoost {
+                    print("apply speed boost")
+                    toggleSpeedBoostEffect(for: entity, status: true)
+                }
+            }
+        }
+
+        gameController.onEffectVisualRemoved = { entity, effect in
+            if effect == .shield {
+                toggleShieldBubbleEffect(for: entity, enable: false)
+            } else if effect == .splash {
+                print("remove splash")
+                self.splashVisible = false
+            }else if effect == .speedBoost {
+                toggleSpeedBoostEffect(for: entity, status: false)
+            }
         }
     }
     
@@ -220,11 +286,12 @@ struct GameView: View {
         }
     }
     
+    //FCS: 
     private func resetPowerItems() {
         if let scene = playerEntity?.parent {
             walkThroughEntities(entity: scene) { entity in
                 if let tagComponent = entity.components[GameTagComponent.self] {
-                    if tagComponent.type == .powerup || tagComponent.type == .powerdown {
+                    if tagComponent.type == .speedUp || tagComponent.type == .slowDown || tagComponent.type == .protection || tagComponent.type == .bom || tagComponent.type == .obstacle{
                         entity.isEnabled = true
                     }
                 }
@@ -242,6 +309,45 @@ struct GameView: View {
         }
         collisionSubscriptions.removeAll()
     }
+    
+
+    //FCS:
+    func lockTranslation(for entity: Entity, lockX: Bool = true, lockY: Bool = true, lockZ: Bool = true) {
+        guard var physics = entity.components[PhysicsBodyComponent.self] else {
+            print("Entity does not have a PhysicsBodyComponent")
+            return
+        }
+
+        physics.isTranslationLocked = (x: lockX, y: lockY, z: lockZ)
+        entity.components.set(physics)
+    }
+    
+    //ACS:
+    private func toggleShieldBubbleEffect(for entity: Entity, enable: Bool) {
+        if let bubble = entity.findEntity(named: "ShieldBubble") {
+            bubble.isEnabled = enable
+            print("🛡️ Shield bubble effect \(enable ? "enabled" : "disabled") for \(entity.name)")
+        }
+    }
+    
+    private func toggleSpeedBoostEffect(for entity: Entity, status enable: Bool) {
+        if let powerUpEntity = entity.findEntity(named: "speedBoost") {
+            // Atur status dari PowerUp atau Boost (aktif/tidak)
+            powerUpEntity.isEnabled = enable
+            if enable {
+                       // Aktifkan efek partikel atau visual terkait lainnya untuk SpeedBoost
+                       print("⚡ Speed boost effect enabled for \(entity.name)")
+                       // Tambahkan logika untuk mengaktifkan visual efek speed boost, misalnya memulai animasi atau efek partikel
+                   } else {
+                       // Nonaktifkan efek partikel atau visual terkait lainnya
+                       print("⚡ Speed boost effect disabled for \(entity.name)")
+                       // Tambahkan logika untuk menghentikan visual efek speed boost, seperti menghentikan animasi atau partikel
+                   }
+            
+        }
+    }
+
+
     
     @MainActor
     private func applyStaticMeshCollision(to entity: Entity) async {

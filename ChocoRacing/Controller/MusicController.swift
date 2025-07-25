@@ -1,0 +1,160 @@
+//
+//  MusicController.swift
+//  ChocoRacing
+//
+//  Created by Lydia Mulyani on 24/07/25.
+//
+
+import RealityKit
+
+final class MusicController {
+    static let shared = MusicController()
+    
+    private let entity = Entity()
+    
+    // MARK: - Sound Resources
+    private var backgroundMusic: AudioFileResource?
+    private var beforePlayMusic: AudioFileResource?
+    private var readyGoSound: AudioFileResource?
+    private var clickSound: AudioFileResource?
+    private var slowdown4Sound: AudioFileResource?
+    private var speedUpSound: AudioFileResource?
+    private var protectionSound: AudioFileResource?
+    private var boingSound: AudioFileResource?
+    private var slideStoneSound: AudioFileResource?
+
+    // MARK: - Init
+    private init() {
+        entity.channelAudio = ChannelAudioComponent()
+        loadAllSounds()
+    }
+    
+    // MARK: - Load Sounds
+    private func loadAllSounds() {
+        Task {
+            do {
+                slowdown4Sound = try await AudioFileResource.load(named: "slowdown4", in: nil)
+                backgroundMusic = try await AudioFileResource.load(named: "background", in: nil)
+                beforePlayMusic = try await AudioFileResource.load(named: "beforeplay", in: nil)
+                readyGoSound = try await AudioFileResource.load(named: "readygo", in: nil)
+                clickSound = try await AudioFileResource.load(named: "click", in: nil)
+                speedUpSound = try await AudioFileResource.load(named: "speedup", in: nil)
+                protectionSound = try await AudioFileResource.load(named: "pop1", in: nil)
+                boingSound = try await AudioFileResource.load(named: "boing3", in: nil)
+                slideStoneSound = try await AudioFileResource.load(named: "stone2", in: nil)
+            } catch {
+                print("❌ Error loading sounds: \(error)")
+            }
+        }
+    }
+    
+    /// Menunggu hingga semua sound selesai dimuat
+    func ensureAllSoundsLoaded() async {
+        while backgroundMusic == nil ||
+              beforePlayMusic == nil ||
+              readyGoSound == nil ||
+              clickSound == nil {
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 detik
+        }
+    }
+
+    // MARK: - Scene Management
+    func addToScene(to parent: Entity) {
+        parent.addChild(entity)
+    }
+    
+    func stopAllAudio() {
+        entity.stopAllAudio()
+    }
+
+    // MARK: - Playback Functions
+    func playBeforePlayMusic() {
+        guard let resource = beforePlayMusic else {
+            print("❌ beforeplay sound not loaded")
+            return
+        }
+        stopAllAudio()
+        entity.playAudio(resource)
+    }
+    
+    func playBackgroundMusic() {
+        guard let resource = backgroundMusic else {
+            print("❌ background music not loaded")
+            return
+        }
+        stopAllAudio()
+        entity.playAudio(resource)
+    }
+    
+    func playReadyGo() async {
+        guard let resource = readyGoSound else {
+            print("❌ readygo sound not loaded")
+            return
+        }
+        stopAllAudio()
+        await entity.playAudio(resource)
+        try? await Task.sleep(nanoseconds: 2_500_000_000)
+    }
+    
+    func playslowdown4Sound() {
+        guard let resource = slowdown4Sound else {
+            print("❌ slowdown4 sound not loaded")
+            return
+        }
+        entity.playAudio(resource)
+    }
+    
+    func playReadyGoAndThenBackground() async {
+        guard let readyGo = readyGoSound else {
+            print("❌ readygo sound not loaded")
+            return
+        }
+        guard let background = backgroundMusic else {
+            print("❌ background music not loaded")
+            return
+        }
+        
+        entity.playAudio(readyGo)
+        try? await Task.sleep(nanoseconds: 2_500_000_000)
+        
+        stopAllAudio()
+        entity.playAudio(background)
+    }
+    func playSpeedUpSound() {
+        guard let resource = speedUpSound else {
+            print("❌ speed up sound not loaded")
+            return
+        }
+        entity.playAudio(resource)
+    }
+    func playProtectionSound() {
+        guard let resource = protectionSound else {
+            print("❌ protection sound not loaded")
+            return
+        }
+        entity.playAudio(resource)
+    }
+    func playObstacleSound() {
+        guard let resource = boingSound else {
+            print("❌ obstacle sound not loaded")
+            return
+        }
+        entity.playAudio(resource)
+    }
+    func playSlideStoneSound() {
+        guard let resource = slideStoneSound else {
+            print("❌ stone2 sound not loaded")
+            return
+        }
+        print("✅ stone2 sound berhasil diputar!")
+        entity.playAudio(resource)
+    }
+
+    func playClickSound() {
+        guard let resource = clickSound else {
+            print("❌ click sound not loaded")
+            return
+        }
+        entity.playAudio(resource)
+    }
+}

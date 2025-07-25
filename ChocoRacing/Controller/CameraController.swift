@@ -13,6 +13,7 @@ class CameraController: ObservableObject {
     @Published var followDistance: Float = 6.2 //Jarak dengan character
     @Published var followHeight: Float = 2.3 // Ketinggian kamera
     @Published var followSmoothness: Float = 1
+
     @Published var lookAtTarget = true
     @Published var isFollowActive = false
     
