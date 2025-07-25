@@ -30,7 +30,7 @@ class GameController: ObservableObject {
     private var finalPositions: [String: Int] = [:]
     private var positionSnapshot: [String: Int] = [:]
     private var allEntityPositions: [String: Int] = [:]
-    private var totalEntityCount: Int = 5
+    private var totalEntityCount: Int = 4
     
     private var startLineEntity: Entity?
     var finishEntity: Entity?
@@ -475,67 +475,29 @@ class GameController: ObservableObject {
             return
         }
         
-        if entityName == "player" {
-            print("🎯 Player finished at position: \(playerFinalPosition)")
-        }
-        
         if var racingEntity = racingEntities[entityName] {
             racingEntity.isFinished = true
             racingEntities[entityName] = racingEntity
         }
         
-        let entityPosition = allEntityPositions[entityName] ?? finishedEntities.count + 1
+        let finishPosition = finishedEntities.count + 1
+        
+        if entityName == "player" {
+            print("🎯 Player finished at position: \(playerFinalPosition)")
+        }
+        
         
         let finishInfo = FinishInfo(
             entityName: entityName,
             finishTime: Date(),
-            position: entityPosition
+            position: finishPosition
         )
         
         finishedEntities.append(finishInfo)
         onEntityFinished?(finishInfo)
         
-        print("🏁 \(entityName) finished in position \(entityPosition)")
+        print("🏁 \(entityName) finished in position \(finishPosition)")
         
-        //        for (name, racingEntity) in racingEntities {
-        //            if !racingEntity.isFinished {
-        //                if name == "player" {
-        //                    positionSnapshot[name] = playerCurrentPosition
-        //                } else {
-        //                    // Hitung posisi bot berdasarkan distance
-        //                    let botDistance = simd_distance(racingEntity.entity.position, finishEntity?.position ?? SIMD3<Float>(0, 0, 0))
-        //                    var botPosition = 1
-        //
-        //                    // Bandingkan dengan entity lain untuk menentukan posisi
-        //                    for (otherName, otherEntity) in racingEntities {
-        //                        if otherName != name && !otherEntity.isFinished {
-        //                            let otherDistance = simd_distance(otherEntity.entity.position, finishEntity?.position ?? SIMD3<Float>(0, 0, 0))
-        //                            if botDistance > otherDistance {
-        //                                botPosition += 1
-        //                            }
-        //                        }
-        //                    }
-        //                    positionSnapshot[name] = min(botPosition, 5)
-        //                }
-        //            }
-        //        }
-        
-        // Mark entity as finished
-        //        if var racingEntity = racingEntities[entityName] {
-        //            racingEntity.isFinished = true
-        //            racingEntities[entityName] = racingEntity
-        //        }
-        //
-        //        let finishInfo = FinishInfo(
-        //            entityName: entityName,
-        //            finishTime: Date(),
-        //            position: finishedEntities.count + 1
-        //        )
-        //
-        //        finishedEntities.append(finishInfo)
-        //        onEntityFinished?(finishInfo)
-        //
-        //        print("🏁 \(entityName) finished in position \(finishInfo.position)")
     }
     
     
