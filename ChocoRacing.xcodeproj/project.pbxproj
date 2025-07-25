@@ -13,6 +13,7 @@
 		5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA783B2E2D03E900808F5A /* PlayTest */; };
 		5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA787D2E2D0F5C00808F5A /* PlayTest */; };
 		6DDDC0522E323B5B00020553 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 6DDDC0512E323B5B00020553 /* PlayTest */; };
+		6DDDC0E52E3384A900020553 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 6DDDC0E42E3384A900020553 /* PlayTest */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 			files = (
 				5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */,
 				5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */,
+				6DDDC0E52E3384A900020553 /* PlayTest in Frameworks */,
 				2C1DA7DA2E321DC00042CA58 /* PlayTest in Frameworks */,
 				6DDDC0522E323B5B00020553 /* PlayTest in Frameworks */,
 				2C3AB6FE2E2E3835000B21DF /* PlayTest in Frameworks */,
@@ -121,6 +123,7 @@
 				2C3AB6FD2E2E3835000B21DF /* PlayTest */,
 				2C1DA7D92E321DC00042CA58 /* PlayTest */,
 				6DDDC0512E323B5B00020553 /* PlayTest */,
+				6DDDC0E42E3384A900020553 /* PlayTest */,
 			);
 			productName = ChocoRacing;
 			productReference = 5CFA77BB2E2A44F100808F5A /* ChocoRacing.app */;
@@ -199,7 +202,7 @@
 			mainGroup = 5CFA77B22E2A44F100808F5A;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				6DDDC0502E323B5B00020553 /* XCLocalSwiftPackageReference "Package" */,
+				6DDDC0E32E3384A900020553 /* XCLocalSwiftPackageReference "Package" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5CFA77BC2E2A44F100808F5A /* Products */;
@@ -571,7 +574,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		6DDDC0502E323B5B00020553 /* XCLocalSwiftPackageReference "Package" */ = {
+		6DDDC0E32E3384A900020553 /* XCLocalSwiftPackageReference "Package" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Package;
 		};
@@ -595,6 +598,10 @@
 			productName = PlayTest;
 		};
 		6DDDC0512E323B5B00020553 /* PlayTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayTest;
+		};
+		6DDDC0E42E3384A900020553 /* PlayTest */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayTest;
 		};

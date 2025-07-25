@@ -1,6 +1,24 @@
 {
   "pathsToIds" : {
+    "Package\/Sources\/PlayTest\/PlayTest.rkassets\/New Folder\/Scene.usda" : "A44C2B43-E066-4E89-AC13-F21109AE98F8",
+    "Package\/Sources\/PlayTest\/PlayTest.rkassets\/New Folder\/blink.usda" : "672C0507-21C0-4910-935D-D77ED80E9E50",
+    "Package\/Sources\/PlayTest\/PlayTest.rkassets\/Scene.usda" : "E4B22B7A-362C-484F-AB0B-D6661FB85899",
+    "Package\/Sources\/PlayTest\/PlayTest.rkassets\/ShieldBubble.usda" : "3419AD33-FC01-4034-814B-B9FA509D7753",
+    "Package\/Sources\/PlayTest\/PlayTest.rkassets\/boost.usda" : "6E20746C-80D1-4DB0-9DDD-5938033C8816",
     "Package\/Sources\/environment_slide\/environment_slide.rkassets\/Scene.usda" : "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
     "environment_slide\/Sources\/environment_slide\/environment_slide.rkassets\/Scene.usda" : "B6613891-0877-4625-883C-781989A64D0A"
+<<<<<<< HEAD
+=======
+  },
+  "projectID" : -8390983223816146947,
+  "uuidToIntID" : {
+    "3419AD33-FC01-4034-814B-B9FA509D7753" : 2729600744816838432,
+    "672C0507-21C0-4910-935D-D77ED80E9E50" : 381242778028929608,
+    "6E20746C-80D1-4DB0-9DDD-5938033C8816" : 5944424930232327936,
+    "A44C2B43-E066-4E89-AC13-F21109AE98F8" : -7003499434619428209,
+    "B6613891-0877-4625-883C-781989A64D0A" : -1980126605932202522,
+    "C03681F5-C48D-4F4E-B0F2-AB057DC63D90" : -3240134330940638954,
+    "E4B22B7A-362C-484F-AB0B-D6661FB85899" : -5247829074214487662
+>>>>>>> collision
   }
 }

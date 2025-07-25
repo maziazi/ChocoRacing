@@ -220,11 +220,8 @@ class GameController: ObservableObject {
         let entityName = getEntityName(entity)
         guard var racingEntity = racingEntities[entityName] else { return }
         
-        //NYALAIN KALAU MAU PAS ADA SHIELD GA ISA AMBIL ITEM BURUK DAN ITEMNYA ILANG
-//         If the player has shield, prevent slowDown or bom effects
         if racingEntity.powerEffect == .shield {
             if effectType == .speedReduction || effectType == .splash {
-                // If shield is active, ignore slowDown or bomb effects
                 print("🛡️ Shield prevents effect: \(effectType)!")
                 return
             }
