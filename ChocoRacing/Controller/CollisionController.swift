@@ -1,6 +1,12 @@
+//
+//  GameController.swift
+//  ChocoRacing
+//
+//  Created by Muhamad Azis on 20/07/25.
+//
+
 import RealityKit
 import SwiftUI
-
 
 class CollisionController {
     let entityTypes: [GameEntityType] = [.speedUp, .slowDown, .protection, .bom, .finish, .obstacle, .slide]
@@ -27,7 +33,7 @@ class CollisionController {
         guard let tA = typeA, let tB = typeB else { return }
         
         // Check if entity A or B is player or bot, and if the other entity is in entityTypes
-        if (tA == .player || tA == .bot), entityTypes.contains(tB) {    
+        if (tA == .player || tA == .bot), entityTypes.contains(tB) {
             applyCollisionEffect(to: entityA, collidedWith: tB, otherEntity: entityB)
         }
     }
@@ -68,6 +74,7 @@ class CollisionController {
             // Bomb effect logic
             gameController.applyPowerEffect(to: entity, effectType: .splash, duration: 3.0)
             otherEntity.isEnabled = false
+            
             print("💥 Bomb exploded!")
             
         case .slide:

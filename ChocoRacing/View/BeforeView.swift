@@ -8,17 +8,18 @@
 import SwiftUI
 import RealityKit
 import PlayTest
+import AVFoundation
 
 struct BeforeView: View {
     @ObservedObject var gameController: GameController
     @State private var isLoadingComplete = false
     @State private var navigateToPlayButton = false
     @State private var navigateToCharacter = false
+    @State private var audioPlayer: AVAudioPlayer?
 
     var body: some View {
         ZStack {
             if isLoadingComplete {
-                // Background images with original size (not stretched)
                 ZStack {
                     Image("background")
                         .resizable()
@@ -33,7 +34,6 @@ struct BeforeView: View {
                         .clipped()
                 }
 
-                // Center content (logo + buttons)
                 VStack(spacing: 5) {
                     Image("logo")
                         .resizable()
@@ -43,11 +43,11 @@ struct BeforeView: View {
                         .padding(.top, 130)
                         .padding(.bottom, 150)
 
-                    // PLAY Button
                     NavigationLink(destination: GameView(gameController: gameController), isActive: $navigateToPlayButton) {
                         EmptyView()
                     }
                     Button(action: {
+                        playClickSound()
                         navigateToPlayButton = true
                     }) {
                         Image("Button_Play")
@@ -60,6 +60,7 @@ struct BeforeView: View {
                         EmptyView()
                     }
                     Button(action: {
+                        playClickSound()
                         navigateToCharacter = true
                     }) {
                         Image("button_changeCharacter")
@@ -72,6 +73,7 @@ struct BeforeView: View {
             } else {
                 SplashView {
                     isLoadingComplete = true
+                    playIntroSound()
                 }
             }
         }
@@ -79,6 +81,34 @@ struct BeforeView: View {
         .task {
             await preloadAssets()
             isLoadingComplete = true
+        }
+    }
+    func playIntroSound() {
+        guard let soundURL = Bundle.main.url(forResource: "beforeplay", withExtension: "mp3") else {
+            print("❌ beforeplay sound file not found")
+            return
+        }
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            audioPlayer?.prepareToPlay()
+            audioPlayer?.play()
+            print("▶️ Playing beforeplay sound")
+        } catch {
+            print("❌ Error playing beforeplay sound: \(error.localizedDescription)")
+        }
+    }
+    func playClickSound() {
+        if let url = Bundle.main.url(forResource: "click", withExtension: "wav") {
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.prepareToPlay()
+                audioPlayer?.play()
+            } catch {
+                print("❌ Failed to play click sound: \(error.localizedDescription)")
+            }
+        } else {
+            print("❌ click.mp3 not found in bundle")
         }
     }
 

@@ -90,8 +90,7 @@ struct GameView: View {
             content.add(scene)
             
             MusicController.shared.addToScene(to: scene)
-                    await MusicController.shared.ensureAllSoundsLoaded()
-                    MusicController.shared.playBeforePlayMusic()
+            await MusicController.shared.ensureAllSoundsLoaded()
 
             await setupGameEntities(in: scene)
             setupControllers()

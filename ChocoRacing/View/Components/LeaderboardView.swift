@@ -7,11 +7,13 @@
 
 import SwiftUI
 import simd
+import AVFoundation
 
 struct LeaderboardView: View {
     @ObservedObject var gameController: GameController
     @State private var stableResults: [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] = []
     @Environment(\.presentationMode) var presentationMode
+    @State private var clickPlayer: AVAudioPlayer?
     
     var body: some View {
         if gameController.showLeaderboard && !gameController.finishedEntities.isEmpty {
@@ -35,7 +37,7 @@ struct LeaderboardView: View {
                                     Text(result.displayName)
                                         .font(.title2)
                                         .fontWeight(.semibold)
-                                        .foregroundColor(result.isPlayer ? .yellow : .white)
+                                        .foregroundColor(result.isPlayer ? .yellow : .black)
                                     
                                     Spacer()
                                 }
@@ -43,14 +45,15 @@ struct LeaderboardView: View {
                                 .padding(.vertical, 8)
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(result.isPlayer ? Color.black.opacity(0.3) : Color.white.opacity(0.3))
+                                        .fill(result.isPlayer ? Color.black.opacity(1) : Color.white.opacity(1))
                                 )
                             }
                         }
                         .frame(maxWidth: 200)
-                        .offset(y: 20)
+                        .offset(y: 10)
                     }
                     Button(action: {
+                        playClickSound()
                         gameController.resetGame()
                     }){
                         HStack {
@@ -62,6 +65,7 @@ struct LeaderboardView: View {
                     .offset(y: -60)
                     
                     Button(action: {
+                        playClickSound()
                         gameController.resetGame()
                         presentationMode.wrappedValue.dismiss()
                     }){
@@ -113,7 +117,7 @@ struct LeaderboardView: View {
             return AnyView(
                 Image("badge_fourth")
                     .resizable()
-                    .frame(width: 18, height: 27)
+                    .frame(width: 0, height: 0)
             )
         }
     }
@@ -168,6 +172,20 @@ struct LeaderboardView: View {
         }
         
         return results
+    }
+    
+    func playClickSound() {
+        if let url = Bundle.main.url(forResource: "click", withExtension: "wav") {
+            do {
+                clickPlayer = try AVAudioPlayer(contentsOf: url)
+                clickPlayer?.prepareToPlay()
+                clickPlayer?.play()
+            } catch {
+                print("❌ Gagal memutar click: \(error.localizedDescription)")
+            }
+        } else {
+            print("❌ File click.mp3 tidak ditemukan")
+        }
     }
 }
 

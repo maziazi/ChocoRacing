@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct ChangeCharacterView: View {
     let characters = [
@@ -17,6 +18,8 @@ struct ChangeCharacterView: View {
 
     @State private var currentIndex = 0
     @Environment(\.dismiss) var dismiss
+    
+    @State private var clickPlayer: AVAudioPlayer?
 
     var body: some View {
         ZStack {
@@ -28,6 +31,7 @@ struct ChangeCharacterView: View {
             VStack(spacing: 0) {
                 HStack {
                     Button(action: {
+                        playClickSound()
                         dismiss()
                     }) {
                         Image("button_back")
@@ -40,12 +44,12 @@ struct ChangeCharacterView: View {
                     Spacer()
                 }
 
-                Spacer().frame(height: 180) // Adjusted spacing between back and content
+                Spacer().frame(height: 180)
 
                 ZStack {
-                    // Character selection box and content
                     HStack(alignment: .center, spacing: 0) {
                         Button(action: {
+                            playClickSound()
                             currentIndex = (currentIndex - 1 + characters.count) % characters.count
                         }) {
                             Image("button_leftArrow")
@@ -59,6 +63,7 @@ struct ChangeCharacterView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 300)
+
                             VStack(spacing: 20) {
                                 Spacer().frame(height: 80)
 
@@ -82,8 +87,9 @@ struct ChangeCharacterView: View {
                             .padding(.horizontal, 10)
                             .frame(maxWidth: 260)
                         }
-                        
+
                         Button(action: {
+                            playClickSound()
                             currentIndex = (currentIndex + 1) % characters.count
                         }) {
                             Image("button_rightArrow")
@@ -93,7 +99,6 @@ struct ChangeCharacterView: View {
                         }
                     }
 
-                    // Character image overlaid above the box
                     Image(characters[currentIndex].1)
                         .resizable()
                         .scaledToFit()
@@ -111,6 +116,20 @@ struct ChangeCharacterView: View {
                let index = characters.firstIndex(where: { $0.0 == savedName }) {
                 currentIndex = index
             }
+        }
+    }
+
+    func playClickSound() {
+        if let url = Bundle.main.url(forResource: "click", withExtension: "wav") {
+            do {
+                clickPlayer = try AVAudioPlayer(contentsOf: url)
+                clickPlayer?.prepareToPlay()
+                clickPlayer?.play()
+            } catch {
+                print("❌ Gagal memutar click: \(error.localizedDescription)")
+            }
+        } else {
+            print("❌ File click.mp3 tidak ditemukan")
         }
     }
 }
