@@ -48,16 +48,14 @@ final class MusicController {
         }
     }
     
-    /// Menunggu hingga semua sound selesai dimuat
     func ensureAllSoundsLoaded() async {
         while backgroundMusic == nil ||
               readyGoSound == nil ||
               clickSound == nil {
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 detik
+            try? await Task.sleep(nanoseconds: 100_000_000)
         }
     }
 
-    // MARK: - Scene Management
     func addToScene(to parent: Entity) {
         parent.addChild(entity)
     }
@@ -66,7 +64,6 @@ final class MusicController {
         entity.stopAllAudio()
     }
 
-    // MARK: - Playback Functions
     func playBackgroundMusic() {
         guard let resource = backgroundMusic else {
             print("❌ background music not loaded")

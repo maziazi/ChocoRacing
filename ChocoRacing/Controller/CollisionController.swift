@@ -47,7 +47,6 @@ class CollisionController {
         case .speedUp:
             gameController.applyPowerEffect(to: entity, effectType: .speedBoost, duration: 5.0)
             otherEntity.isEnabled = false
-            // Hanya mainkan sound jika entity-nya adalah player
             if gameController.getEntityName(entity) == "player" {
                 MusicController.shared.playSpeedUpSound()
             }
@@ -71,10 +70,11 @@ class CollisionController {
             print("🛡️ Protection activated!")
             
         case .bom:
-            // Bomb effect logic
             gameController.applyPowerEffect(to: entity, effectType: .splash, duration: 3.0)
             otherEntity.isEnabled = false
-            
+            if gameController.getEntityName(entity) == "player" {
+                MusicController.shared.playBombSound()
+            }
             print("💥 Bomb exploded!")
             
         case .slide:
@@ -84,7 +84,6 @@ class CollisionController {
             print("🪨 Slide wall touched!")
             
         case .finish:
-//            gameController.checkFinish(for: entity)
             print("🏁 Finish line reached!")
         
         case .obstacle:
@@ -93,7 +92,6 @@ class CollisionController {
                    MusicController.shared.playObstacleSound()
                }
                print("💥 Obstacle hit!")
-//           print("⚠️ Collision with obstacle!")
         default:
             print("masuk default di collisionControl")
 
