@@ -10,15 +10,15 @@ import RealityKit
 
 class CameraController: ObservableObject {
     
-    @Published var followDistance: Float = 6.2 //Jarak dengan character
-    @Published var followHeight: Float = 2.3 // Ketinggian kamera
+    @Published var followDistance: Float = 3.8 //Jarak dengan character
+    @Published var followHeight: Float = 1.0 // Ketinggian kamera
     @Published var followSmoothness: Float = 1
 
     @Published var lookAtTarget = true
     @Published var isFollowActive = false
     
     private let lockedFollowDistance: Float = 2.5
-    private let lockedFollowHeight: Float = 2.3
+    private let lockedFollowHeight: Float = 1.5
     private let lockedSmoothness: Float = 0.05
     
     private var cameraEntity: Entity?
@@ -29,8 +29,8 @@ class CameraController: ObservableObject {
         camera.name = "follow_camera"
         
         camera.components.set(PerspectiveCameraComponent(
-            near: 0.2,
-            far: 80.0,
+            near: 1,
+            far: 2000.0,
             fieldOfViewInDegrees: 60
         ))
         
