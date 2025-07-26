@@ -190,7 +190,7 @@ struct GameView: View {
     
     private func setupControllers() {
         var config = GameConfiguration()
-        config.leftBoundary = -1.5
+        config.leftBoundary = -1.8
         config.rightBoundary = 1.8
         gameController.configure(with: config)
         
@@ -259,7 +259,7 @@ struct GameView: View {
     
     private func startCameraUpdate() {
         cameraController.startFollowing()
-        cameraUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.00000064, repeats: true) { _ in
+        cameraUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
             cameraController.updateCameraPosition()
         }
     }
@@ -332,23 +332,16 @@ struct GameView: View {
     
     private func toggleSpeedBoostEffect(for entity: Entity, status enable: Bool) {
         if let powerUpEntity = entity.findEntity(named: "speedBoost") {
-            // Atur status dari PowerUp atau Boost (aktif/tidak)
             powerUpEntity.isEnabled = enable
             if enable {
-                       // Aktifkan efek partikel atau visual terkait lainnya untuk SpeedBoost
                        print("⚡ Speed boost effect enabled for \(entity.name)")
-                       // Tambahkan logika untuk mengaktifkan visual efek speed boost, misalnya memulai animasi atau efek partikel
                    } else {
-                       // Nonaktifkan efek partikel atau visual terkait lainnya
                        print("⚡ Speed boost effect disabled for \(entity.name)")
-                       // Tambahkan logika untuk menghentikan visual efek speed boost, seperti menghentikan animasi atau partikel
                    }
             
         }
     }
 
-
-    
     @MainActor
     private func applyStaticMeshCollision(to entity: Entity) async {
         for child in entity.children {
