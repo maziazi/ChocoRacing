@@ -3,7 +3,8 @@
     "objectMetadataList" : [
       [
         "3419AD33-FC01-4034-814B-B9FA509D7753",
-        "Root"
+        "Root",
+        "ShieldBubble"
       ],
       {
         "isExpanded" : true,
@@ -11,9 +12,7 @@
       },
       [
         "3419AD33-FC01-4034-814B-B9FA509D7753",
-        "Root",
-
-        "ShieldBubble"
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -71,6 +70,25 @@
       [
         "B6613891-0877-4625-883C-781989A64D0A",
         "Root",
+        "SkyDome"
+      ],
+      {
+        "disallowsFraming" : true,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "B6613891-0877-4625-883C-781989A64D0A",
+        "Root",
+        "material_water"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B6613891-0877-4625-883C-781989A64D0A",
+        "Root",
         "SkySphere"
       ],
       {
@@ -94,26 +112,6 @@
       {
         "isExpanded" : true,
         "isLocked" : false
-      },
-      [
-        "B6613891-0877-4625-883C-781989A64D0A",
-        "Root",
-        "material_water"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B6613891-0877-4625-883C-781989A64D0A",
-        "Root",
-
-        "SkyDome"
-      ],
-      {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
-        "isLocked" : false
       }
     ]
   },
@@ -121,18 +119,26 @@
     "objectMetadataList" : [
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
-        "Root",
-        "world_shader_slide_2"
+        "Root"
       ],
       {
         "isExpanded" : true,
         "isLocked" : false
       },
       [
-
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
         "SkyDome"
+      ],
+      {
+        "disallowsFraming" : true,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
+        "Root",
+        "SkySphere"
       ],
       {
         "disallowsFraming" : true,
@@ -150,31 +156,20 @@
       },
       [
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
-        "Root"
+        "Root",
+        "world_shader_slide_2"
       ],
       {
         "isExpanded" : true,
         "isLocked" : false
       },
       [
-
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
         "bubble"
-
       ],
       {
         "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
-        "Root",
-        "SkySphere"
-      ],
-      {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
         "isLocked" : false
       }
     ]
@@ -182,7 +177,47 @@
   "E4B22B7A-362C-484F-AB0B-D6661FB85899" : {
     "objectMetadataList" : [
       [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "Mangko",
+        "Sphere"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "Floor",
+        "Sphere_1",
+        "Mangkok",
+        "Sphere"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
         "E4B22B7A-362C-484F-AB0B-D6661FB85899",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "PLETES_Plan_B_1",
+        "Choco_Fountain_2"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
         "Root"
       ],
       {
@@ -202,10 +237,17 @@
       [
         "F4762315-832E-41D1-9BAC-90989898ACD1",
         "Root",
-        "Floor",
-        "Sphere_1",
-        "Mangkok",
-        "Sphere"
+        "Slide",
+        "B__zierCurve_001"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "F4762315-832E-41D1-9BAC-90989898ACD1",
+        "Root",
+        "Mangkok"
       ],
       {
         "isExpanded" : true,
@@ -223,56 +265,9 @@
       },
       [
         "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "PLETES_Plan_B_1",
-        "Choco_Fountain_2"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Slide",
-        "B__zierCurve_001"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
         "Root",
         "Mangkok_2",
         "Sphere"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Mangko",
-        "Sphere"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "F4762315-832E-41D1-9BAC-90989898ACD1",
-        "Root",
-        "Mangkok"
       ],
       {
         "isExpanded" : true,
