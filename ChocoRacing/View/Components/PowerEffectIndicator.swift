@@ -68,18 +68,16 @@ struct PowerEffectIndicator: View {
                 Image("powerDown_slowDown")
                     .resizable()
                     .frame(width: 32, height: 32)
+            case .shield:
+                Image("powerUp_protection")
+                    .resizable()
+                    .frame(width: 32, height: 32)
+            case .splash:
+                Image("powerDown_bomb")
+                    .resizable()
+                    .frame(width: 32, height: 32)
             case .none:
                 EmptyView()
-
-                
-                case .shield:
-                    Image(systemName: "shield.fill") // Icon for shield effect
-                
-                case .splash:
-                    Image(systemName: "flame.fill") // Icon for splash effect
-                
-                case .none:
-                    EmptyView()
             }
         }
     }
@@ -91,9 +89,9 @@ struct PowerEffectIndicator: View {
         case .speedReduction:
             return .orange
         case .shield:
-            return .blue // Color for shield effect
+            return .blue
         case .splash:
-            return .red // Color for splash effect
+            return .red
         case .none:
             return .clear
         }
