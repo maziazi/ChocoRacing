@@ -14,6 +14,7 @@ struct LeaderboardView: View {
     @State private var stableResults: [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] = []
     @Environment(\.presentationMode) var presentationMode
     @State private var clickPlayer: AVAudioPlayer?
+    @State private var hasPlayedResultSound = false
     
     var body: some View {
         if gameController.showLeaderboard && !gameController.finishedEntities.isEmpty {
@@ -83,10 +84,30 @@ struct LeaderboardView: View {
             .animation(.easeInOut(duration: 0.5), value: gameController.showLeaderboard)
             .onAppear {
                 stableResults = getStableRaceResults()
+                if !hasPlayedResultSound {
+                    playResultSound()
+                    hasPlayedResultSound = true
+                }
             }
         }
     }
     
+    private func playResultSound() {
+            if let playerResult = stableResults.first(where: { $0.isPlayer }) {
+                let playerPosition = playerResult.finalPosition
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if playerPosition <= 3 {
+                        MusicController.shared.playWinSound()
+                        print("🎉 Player menang! Posisi: \(playerPosition)")
+                    } else {
+                        MusicController.shared.playLoseSound()
+                        print("😞 Player kalah! Posisi: \(playerPosition)")
+                    }
+                }
+            }
+        }
+        
     private func getPositionEmoji(_ position: Int) -> AnyView {
         switch position {
         case 1:

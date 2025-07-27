@@ -22,6 +22,8 @@ final class MusicController {
     private var boingSound: AudioFileResource?
     private var slideStoneSound: AudioFileResource?
     private var bombSound: AudioFileResource?
+    private var winSound: AudioFileResource?
+    private var loseSound: AudioFileResource?
     
     // MARK: - Init
     private init() {
@@ -42,6 +44,8 @@ final class MusicController {
                 boingSound = try await AudioFileResource.load(named: "boing3", in: nil)
                 slideStoneSound = try await AudioFileResource.load(named: "stone1", in: nil)
                 bombSound = try await AudioFileResource.load(named: "splat1", in: nil)
+                winSound = try await AudioFileResource.load(named: "win1", in: nil)
+                loseSound = try await AudioFileResource.load(named: "lose1", in: nil)
             } catch {
                 print("❌ Error loading sounds: \(error)")
             }
@@ -152,6 +156,22 @@ final class MusicController {
     func playClickSound() {
         guard let resource = clickSound else {
             print("❌ click sound not loaded")
+            return
+        }
+        entity.playAudio(resource)
+    }
+    
+    func playWinSound() {
+        guard let resource = winSound else {
+            print("❌ win sound not loaded")
+            return
+        }
+        entity.playAudio(resource)
+    }
+    
+    func playLoseSound() {
+        guard let resource = loseSound else {
+            print("❌ lose sound not loaded")
             return
         }
         entity.playAudio(resource)
