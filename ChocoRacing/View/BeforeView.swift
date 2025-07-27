@@ -60,6 +60,7 @@ struct BeforeView: View {
     @State private var isLoadingComplete = false
     @State private var navigateToPlayButton = false
     @State private var navigateToCharacter = false
+    @State private var clickPlayer: AVAudioPlayer?
     @StateObject private var menuAudio = MenuAudioManager.shared
 
     var body: some View {
@@ -144,22 +145,6 @@ struct BeforeView: View {
             }
         }
     }
-    
-    func playClickSound() {
-        guard let url = Bundle.main.url(forResource: "click", withExtension: "wav") else {
-            print("❌ click.wav not found in bundle")
-            return
-        }
-        
-        do {
-            let clickPlayer = try AVAudioPlayer(contentsOf: url)
-            clickPlayer.prepareToPlay()
-            clickPlayer.play()
-        } catch {
-            print("❌ Failed to play click sound: \(error.localizedDescription)")
-        }
-    }
-
     func preloadAssets() async {
         let assetNames = [
             "CloudChunk", "Floor", "Mangkok", "PillBottle", "PLETES_Plan B_1",
@@ -184,5 +169,18 @@ struct BeforeView: View {
         await MusicController.shared.ensureAllSoundsLoaded()
         
         print("🎵 MusicController setup completed in BeforeView")
+    }
+    func playClickSound() {
+        if let url = Bundle.main.url(forResource: "click", withExtension: "wav") {
+            do {
+                clickPlayer = try AVAudioPlayer(contentsOf: url)
+                clickPlayer?.prepareToPlay()
+                clickPlayer?.play()
+            } catch {
+                print("❌ Gagal memutar click: \(error.localizedDescription)")
+            }
+        } else {
+            print("❌ File click.wav tidak ditemukan")
+        }
     }
 }
