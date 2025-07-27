@@ -9,6 +9,8 @@ import SwiftUI
 import RealityKit
 import Combine
 
+
+
 class GameController: ObservableObject {
     
     @Published var gameState: GameState = .waiting
@@ -46,6 +48,7 @@ class GameController: ObservableObject {
     
     private var configuration = GameConfiguration()
     var racingEntities: [String: RacingEntity] = [:]
+    var obstacleEntities: [Entity] = []
     private var gameStartTime: Date?
     
     private var countdownTimer: Timer?
@@ -95,6 +98,10 @@ class GameController: ObservableObject {
 
     func configure(with config: GameConfiguration) {
         self.configuration = config
+    }
+    
+    func setObstacleEntities(_ obstacles: [Entity]) {
+        self.obstacleEntities = obstacles
     }
     
     func setEntities(player: Entity?, bots: [Entity]) {
@@ -214,10 +221,16 @@ class GameController: ObservableObject {
         showLeaderboard = true
         
         onGameEnd?()
+        //loop untuk setiap racingentities
+        for (_, racingEntity) in racingEntities {
+           lockTranslation(for: racingEntity.entity, lockX: false, lockY: false, lockZ: false)
+        }
+           
         print("🏁 Game ended")
     }
     
     func resetGame() {
+        print("reset game")
         gameState = .waiting
         countdownNumber = 3
         isCountdownVisible = false
@@ -249,7 +262,7 @@ class GameController: ObservableObject {
             racingEntity.isFinished = false
             racingEntities[name] = racingEntity
         }
-
+        
         finishedEntities.removeAll()
         
         onReset?()
@@ -356,8 +369,18 @@ class GameController: ObservableObject {
 
         print("⚠️ \(entityName) collided with obstacle!")
 
+//marge kedua-duanya
         if entityName == "player" {
             setPlayerPenaltyState(duration: 1.0)
+            stopPlayerMovement()
+            playerMovementTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+                guard self.gameState == .playing else { return }
+                
+                if let playerEntity = self.racingEntities["player"] {
+                    self.applyBackwardMovement(to: playerEntity.entity, racingEntity: playerEntity)
+                }
+            }
+            
         } else {
             setBotPenaltyState(botName: entityName, duration: 1.0)
         }
@@ -493,7 +516,8 @@ class GameController: ObservableObject {
         isCountdownVisible = true
  
         countdownTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            print ("timer count")
+            print ("timer count 1")
+
             self.updateCountdown()
         }
 
@@ -522,7 +546,11 @@ class GameController: ObservableObject {
         startAllMovement()
         onCountdownFinish?()
         onGameStart?()
-        
+       //loop untuk setiap racingentities
+       for (_, racingEntity) in racingEntities {
+          lockTranslation(for: racingEntity.entity, lockX: false, lockY: true, lockZ: false)
+       }
+          
         print("🚀 Game started!")
     }
     
@@ -570,6 +598,7 @@ class GameController: ObservableObject {
     }
     
     private func stopAllMovement() {
+        print("stop al movement")
         stopAllTimers()
         freezeAllEntities()
     }
@@ -672,7 +701,6 @@ class GameController: ObservableObject {
         let targetVelocityZ: Float = 6.0  // Backward speed
         let currentVelocityZ = motion.linearVelocity.z
         
-        // ✅ SMOOTH BACKWARD TRANSITION
         let lerpFactor: Float = 0.2
         let newVelocityZ = currentVelocityZ + (targetVelocityZ - currentVelocityZ) * lerpFactor
         
@@ -685,11 +713,12 @@ class GameController: ObservableObject {
 
     
     private func startBotAI() {
-        botAITimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+        botAITimer = Timer.scheduledTimer(withTimeInterval:   0.016, repeats: true) { _ in
             guard self.gameState == .playing else { return }
             
             for (name, racingEntity) in self.racingEntities {
                 if racingEntity.type == .bot {
+//                    print("INI KEPANGGILLLL BOT AIIIIIIIIIIIIIIIIFF")
                     self.updateBotAI(racingEntity.entity, name: name)
                 }
             }
@@ -698,22 +727,96 @@ class GameController: ObservableObject {
     
     private func updateBotAI(_ bot: Entity, name: String) {
         guard var motion = bot.components[PhysicsMotionComponent.self] else { return }
-        
-        let currentX = bot.position.x
-        let randomDirection = Float.random(in: -1.0...1.0)
-        var targetHorizontalSpeed = randomDirection * 0.8
-        
-        if currentX <= configuration.leftBoundary && targetHorizontalSpeed < 0 {
-            targetHorizontalSpeed = abs(targetHorizontalSpeed)
-        } else if currentX >= configuration.rightBoundary && targetHorizontalSpeed > 0 {
-            targetHorizontalSpeed = -abs(targetHorizontalSpeed)
+
+        if let targetX = findSafeXTarget(for: bot, obstacles: obstacleEntities) {
+            let currentX = bot.position.x
+            let diff = targetX - currentX
+
+            let arah = diff > 0 ? "kanan ➡️" : "kiri ⬅️"
+            print("🤖 \(name) memilih jalur aman di x = \(String(format: "%.2f", targetX)) → belok ke \(arah)")
+
+            motion.linearVelocity.x = (diff > 0 ? 1 : -1) * Float.random(in: 0.8...1.2)
+        } else {
+            print("⚠️ \(name) tidak menemukan jalur aman, tetap lurus")
+            motion.linearVelocity.x = 0
         }
-        
-        let speedDiff = targetHorizontalSpeed - motion.linearVelocity.x
-        motion.linearVelocity.x += speedDiff * 0.1
-        
+
         bot.components.set(motion)
     }
+
+    
+    private func findSafeXTarget(for bot: Entity, obstacles: [Entity], zRange: Float = 15.0, sideTolerance: Float = 0.5) -> Float? {
+        let botPos = bot.position
+        let left = configuration.leftBoundary
+        let right = configuration.rightBoundary
+
+        var leftBlocked = false
+        var rightBlocked = false
+
+        for obs in obstacles {
+
+            let dz = botPos.z - obs.position.z
+            let x = obs.position.x
+
+            if dz > 0 && dz <= zRange {
+                if abs(x - left) < sideTolerance {
+                    leftBlocked = true
+                }
+                if abs(x - right) < sideTolerance {
+                    rightBlocked = true
+                }
+            }
+        }
+
+        if !rightBlocked {
+            print("🟢 Kanan aman → pilih ke kanan")
+            return right - 0.2 // ke arah kanan
+        } else if !leftBlocked {
+            print("🟢 Kiri aman → pilih ke kiri")
+            return left + 0.2 // ke arah kiri
+        } else {
+            print("⚠️ Kanan & kiri terblokir → fallback ke tengah")
+
+            // Fallback: cari posisi aman yang tidak terlalu pinggir
+            let midLeft = left + 0.5
+            let midRight = right - 0.5
+            let candidates: [Float] = [midLeft, midRight]
+
+            for x in candidates {
+                let isBlocked = obstacles.contains { obs in
+                    guard let tag = obs.components[GameTagComponent.self]?.type, tag == .obstacle else { return false }
+                    let dz = botPos.z - obs.position.z
+                    let dx = abs(obs.position.x - x)
+                    return dz > 0 && dz <= zRange && dx < 0.4
+                }
+
+                if !isBlocked {
+                    return x
+                }
+            }
+
+            return nil
+        }
+    }
+
+
+    
+
+
+    private func isObstacleInFront(of bot: Entity, in obstacles: [Entity], detectionRangeZ: Float = 15, lateralRangeX: Float = 1) -> Bool {
+        let botPos = bot.position
+
+        for entity in obstacles {
+            let dx = abs(entity.position.x - botPos.x)
+            let dz = botPos.z - entity.position.z
+
+            if dz > 0 && dz <= detectionRangeZ && dx <= lateralRangeX {
+                return true
+            }
+        }
+
+        return false
+    }    
     
     private func startBoundaryCheck() {
         boundaryCheckTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
@@ -1099,6 +1202,18 @@ class GameController: ObservableObject {
     
     func getEntityPosition(_ entityName: String) -> Int {
         return allEntityPositions[entityName] ?? totalEntityCount
+    }
+    
+    //FCS:
+    func lockTranslation(for entity: Entity, lockX: Bool = true, lockY: Bool = true, lockZ: Bool = true) {
+        guard var physics = entity.components[PhysicsBodyComponent.self] else {
+            print("Entity does not have a PhysicsBodyComponent")
+            return
+        }
+
+        physics.isTranslationLocked = (x: lockX, y: lockY, z: lockZ)
+        entity.components.set(physics)
+        print("Translation locked - x: \(lockX), y: \(lockY), z: \(lockZ)")
     }
 
 }

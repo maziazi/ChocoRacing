@@ -24,7 +24,8 @@
     "objectMetadataList" : [
       [
         "672C0507-21C0-4910-935D-D77ED80E9E50",
-        "Root"
+        "Root",
+        "player_smores"
       ],
       {
         "isExpanded" : true,
@@ -32,8 +33,7 @@
       },
       [
         "672C0507-21C0-4910-935D-D77ED80E9E50",
-        "Root",
-        "player_smores"
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -99,10 +99,11 @@
       [
         "B6613891-0877-4625-883C-781989A64D0A",
         "Root",
-        "shader_color_water"
+        "SkySphere"
       ],
       {
-        "isExpanded" : true,
+        "disallowsFraming" : true,
+        "isExpanded" : false,
         "isLocked" : false
       },
       [
@@ -112,6 +113,7 @@
       {
         "isExpanded" : true,
         "isLocked" : false
+
       }
     ]
   },
@@ -167,10 +169,12 @@
         "C03681F5-C48D-4F4E-B0F2-AB057DC63D90",
         "Root",
         "bubble"
+
       ],
       {
         "isExpanded" : true,
         "isLocked" : false
+
       }
     ]
   },

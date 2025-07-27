@@ -21,7 +21,7 @@ struct SplashEffectView: View {
                 .scaledToFit()
                 .frame(width: 200, height: 200)
                 .padding(.bottom, 100)
-                .opacity(splashVisible ? 1.0 : 0.0) // Menambahkan animasi fade in/out pada opacity
+                .opacity(splashVisible ? 1.0 : 0.0)
                 .onAppear {
                     // Terapkan animasi scale pada splash saat muncul
                     withAnimation(.easeIn(duration: 0.2)) {
