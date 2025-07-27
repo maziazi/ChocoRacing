@@ -9,6 +9,8 @@ import SwiftUI
 import RealityKit
 import Combine
 
+
+
 class GameController: ObservableObject {
     
     @Published var gameState: GameState = .waiting
@@ -40,6 +42,7 @@ class GameController: ObservableObject {
     
     private var configuration = GameConfiguration()
     var racingEntities: [String: RacingEntity] = [:]
+    var obstacleEntities: [Entity] = []
     private var gameStartTime: Date?
     
     private var countdownTimer: Timer?
@@ -95,6 +98,10 @@ class GameController: ObservableObject {
 
     func configure(with config: GameConfiguration) {
         self.configuration = config
+    }
+    
+    func setObstacleEntities(_ obstacles: [Entity]) {
+        self.obstacleEntities = obstacles
     }
     
     func setEntities(player: Entity?, bots: [Entity]) {
@@ -598,35 +605,140 @@ class GameController: ObservableObject {
     }
     
     private func startBotAI() {
-        botAITimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+        botAITimer = Timer.scheduledTimer(withTimeInterval:   0.016, repeats: true) { _ in
             guard self.gameState == .playing else { return }
             
             for (name, racingEntity) in self.racingEntities {
                 if racingEntity.type == .bot {
+//                    print("INI KEPANGGILLLL BOT AIIIIIIIIIIIIIIIIFF")
                     self.updateBotAI(racingEntity.entity, name: name)
                 }
             }
         }
     }
     
+//    private func updateBotAI(_ bot: Entity, name: String) {
+//        guard var motion = bot.components[PhysicsMotionComponent.self] else { return }
+//
+//        let currentX = bot.position.x
+//
+//        // Tentukan arah acak: -1 untuk kiri, 1 untuk kanan
+//        let direction: Float = Bool.random() ? -1.0 : 1.0
+//        var horizontalSpeed: Float = direction * Float.random(in: 0.3...1.2)
+//
+//        // Koreksi jika bot menyentuh batas lintasan
+//        if currentX <= configuration.leftBoundary && direction < 0 {
+//            horizontalSpeed = abs(horizontalSpeed) // Paksa ke kanan
+//        } else if currentX >= configuration.rightBoundary && direction > 0 {
+//            horizontalSpeed = -abs(horizontalSpeed) // Paksa ke kiri
+//        }
+//
+//        // Set langsung velocity horizontal
+//        motion.linearVelocity.x = horizontalSpeed
+//        bot.components.set(motion)
+//
+//        // Log nama bot dan velocity-nya
+//        let arah = horizontalSpeed > 0 ? "kanan ➡️" : "kiri ⬅️"
+//        print("🤖 \(name) bergerak ke \(arah) dengan velocityX = \(String(format: "%.2f", horizontalSpeed))")
+//    }
+    
+    //BCS:Start
     private func updateBotAI(_ bot: Entity, name: String) {
         guard var motion = bot.components[PhysicsMotionComponent.self] else { return }
-        
-        let currentX = bot.position.x
-        let randomDirection = Float.random(in: -1.0...1.0)
-        var targetHorizontalSpeed = randomDirection * 0.8
-        
-        if currentX <= configuration.leftBoundary && targetHorizontalSpeed < 0 {
-            targetHorizontalSpeed = abs(targetHorizontalSpeed)
-        } else if currentX >= configuration.rightBoundary && targetHorizontalSpeed > 0 {
-            targetHorizontalSpeed = -abs(targetHorizontalSpeed)
+
+        if let targetX = findSafeXTarget(for: bot, obstacles: obstacleEntities) {
+            let currentX = bot.position.x
+            let diff = targetX - currentX
+
+            let arah = diff > 0 ? "kanan ➡️" : "kiri ⬅️"
+            print("🤖 \(name) memilih jalur aman di x = \(String(format: "%.2f", targetX)) → belok ke \(arah)")
+
+            motion.linearVelocity.x = (diff > 0 ? 1 : -1) * Float.random(in: 0.8...1.2)
+        } else {
+            print("⚠️ \(name) tidak menemukan jalur aman, tetap lurus")
+            motion.linearVelocity.x = 0
         }
-        
-        let speedDiff = targetHorizontalSpeed - motion.linearVelocity.x
-        motion.linearVelocity.x += speedDiff * 0.1
-        
+
         bot.components.set(motion)
     }
+
+    
+    private func findSafeXTarget(for bot: Entity, obstacles: [Entity], zRange: Float = 15.0, sideTolerance: Float = 0.5) -> Float? {
+        let botPos = bot.position
+        let left = configuration.leftBoundary
+        let right = configuration.rightBoundary
+
+        var leftBlocked = false
+        var rightBlocked = false
+
+        for obs in obstacles {
+
+            let dz = botPos.z - obs.position.z
+            let x = obs.position.x
+
+            if dz > 0 && dz <= zRange {
+                if abs(x - left) < sideTolerance {
+                    leftBlocked = true
+                }
+                if abs(x - right) < sideTolerance {
+                    rightBlocked = true
+                }
+            }
+        }
+
+        // Logika yang kamu minta
+        if !rightBlocked {
+            print("🟢 Kanan aman → pilih ke kanan")
+            return right - 0.2 // ke arah kanan
+        } else if !leftBlocked {
+            print("🟢 Kiri aman → pilih ke kiri")
+            return left + 0.2 // ke arah kiri
+        } else {
+            print("⚠️ Kanan & kiri terblokir → fallback ke tengah")
+
+            // Fallback: cari posisi aman yang tidak terlalu pinggir
+            let midLeft = left + 0.5
+            let midRight = right - 0.5
+            let candidates: [Float] = [midLeft, midRight]
+
+            for x in candidates {
+                let isBlocked = obstacles.contains { obs in
+                    guard let tag = obs.components[GameTagComponent.self]?.type, tag == .obstacle else { return false }
+                    let dz = botPos.z - obs.position.z
+                    let dx = abs(obs.position.x - x)
+                    return dz > 0 && dz <= zRange && dx < 0.4
+                }
+
+                if !isBlocked {
+                    return x
+                }
+            }
+
+            return nil
+        }
+    }
+
+
+    
+
+
+    private func isObstacleInFront(of bot: Entity, in obstacles: [Entity], detectionRangeZ: Float = 15, lateralRangeX: Float = 1) -> Bool {
+        let botPos = bot.position
+
+        for entity in obstacles {
+            let dx = abs(entity.position.x - botPos.x)
+            let dz = botPos.z - entity.position.z
+
+            if dz > 0 && dz <= detectionRangeZ && dx <= lateralRangeX {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    //BCS:Close
+    
     
     private func startBoundaryCheck() {
         boundaryCheckTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in

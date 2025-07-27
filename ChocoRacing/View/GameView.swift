@@ -105,7 +105,7 @@ struct GameView: View {
         var foundBots: [Entity] = []
         var finishEntity: Entity?
         var startEntity: Entity?
-        	
+        var foundObstacles: [Entity] = []
         walkThroughEntities(entity: scene) { entity in
             if entity.name.contains("player") {
                 entity.components.set(GameTagComponent(type: .player))
@@ -134,6 +134,7 @@ struct GameView: View {
                 
             }else if entity.name.contains("obstacle") {
                 entity.components.set(GameTagComponent(type: .obstacle))
+                foundObstacles.append(entity)
                 
             }else if entity.name.lowercased().contains("choco") && entity.name.lowercased().contains("fountain") {
                 entity.components.set(GameTagComponent(type: .finish))
@@ -149,6 +150,7 @@ struct GameView: View {
         botEntities = foundBots
         
         gameController.setEntities(player: playerEntity, bots: botEntities)
+        gameController.setObstacleEntities(foundObstacles)
         
         if let player = playerEntity {
             let startLine = Entity()
