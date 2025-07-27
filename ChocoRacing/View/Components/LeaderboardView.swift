@@ -9,6 +9,33 @@ import SwiftUI
 import simd
 import AVFoundation
 
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3:
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6:
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8:
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (1, 1, 1, 0)
+        }
+
+        self.init(
+            .sRGB,
+            red: Double(r) / 255,
+            green: Double(g) / 255,
+            blue:  Double(b) / 255,
+            opacity: Double(a) / 255
+        )
+    }
+}
+
 struct LeaderboardView: View {
     @ObservedObject var gameController: GameController
     @State private var stableResults: [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] = []
@@ -33,12 +60,20 @@ struct LeaderboardView: View {
                         VStack(spacing: 8) {
                             ForEach(Array(stableResults.prefix(4).enumerated()), id: \.element.entityName) { index, result in
                                 HStack {
-                                    getPositionEmoji(result.finalPosition)
+                                    HStack {
+                                        getPositionEmoji(result.finalPosition)
+                                                                            
+                                        if result.finalPosition == 4 {
+                                            Spacer()
+                                                .frame(width: 5)
+                                        }
+                                    }
+                                    .frame(width: 35, alignment: .leading)
                                     
                                     Text(result.displayName)
                                         .font(.title2)
                                         .fontWeight(.semibold)
-                                        .foregroundColor(result.isPlayer ? .yellow : .black)
+                                        .foregroundColor(result.isPlayer ? Color(hex: "#EB5F4D") : Color(hex: "#A25E3B"))
                                     
                                     Spacer()
                                 }
@@ -46,7 +81,7 @@ struct LeaderboardView: View {
                                 .padding(.vertical, 8)
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(result.isPlayer ? Color.black.opacity(1) : Color.white.opacity(1))
+                                        .fill(result.isPlayer ? Color(hex: "#FAE392") : Color(hex: "#F6CD9B"))
                                 )
                             }
                         }
@@ -89,60 +124,73 @@ struct LeaderboardView: View {
                     hasPlayedResultSound = true
                 }
             }
+            .onDisappear {
+                hasPlayedResultSound = false
+            }
         }
     }
     
     private func playResultSound() {
-            if let playerResult = stableResults.first(where: { $0.isPlayer }) {
-                let playerPosition = playerResult.finalPosition
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    if playerPosition <= 3 {
-                        MusicController.shared.playWinSound()
-                        print("🎉 Player menang! Posisi: \(playerPosition)")
-                    } else {
-                        MusicController.shared.playLoseSound()
-                        print("😞 Player kalah! Posisi: \(playerPosition)")
-                    }
+        if let playerResult = stableResults.first(where: { $0.isPlayer }) {
+            let playerPosition = playerResult.finalPosition
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                if playerPosition <= 3 {
+                    MusicController.shared.playWinSound()
+                    print("🎉 Player menang! Posisi: \(playerPosition)")
+                } else {
+                    MusicController.shared.playLoseSound()
+                    print("😞 Player kalah! Posisi: \(playerPosition)")
                 }
             }
         }
-        
+    }
+    
     private func getPositionEmoji(_ position: Int) -> AnyView {
         switch position {
         case 1:
             return AnyView(
                 Image("badge_first")
                     .resizable()
-                    .frame(width: 26, height: 36)
+                    .scaledToFit()
+                    .frame(width: 30, height: 40)
+                    .clipped()
             )
         case 2:
             return AnyView(
                 Image("badge_second")
                     .resizable()
-                    .frame(width: 26, height: 36)
+                    .scaledToFit()
+                    .frame(width: 30, height: 40)
+                    .clipped()
             )
         case 3:
             return AnyView(
                 Image("badge_third")
                     .resizable()
-                    .frame(width: 26, height: 36)
+                    .scaledToFit()
+                    .frame(width: 30, height: 40)
+                    .clipped()
             )
         case 4:
             return AnyView(
                 Image("badge_fourth")
                     .resizable()
-                    .frame(width: 26, height: 36)
+                    .scaledToFit()
+                    .frame(width: 20, height: 28)
+                    .clipped()
+                    .offset(y: 3)
             )
         default:
             return AnyView(
                 Image("badge_fourth")
                     .resizable()
-                    .frame(width: 0, height: 0)
+                    .scaledToFit()
+                    .frame(width: 20, height: 28)
+                    .clipped()
             )
         }
     }
-    
     private func getStableRaceResults() -> [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] {
         var results: [(entityName: String, displayName: String, finalPosition: Int, isPlayer: Bool, isFinished: Bool)] = []
         
@@ -205,8 +253,7 @@ struct LeaderboardView: View {
                 print("❌ Gagal memutar click: \(error.localizedDescription)")
             }
         } else {
-            print("❌ File click.mp3 tidak ditemukan")
+            print("❌ File click.wav tidak ditemukan")
         }
     }
 }
-
