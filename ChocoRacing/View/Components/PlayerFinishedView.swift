@@ -26,33 +26,28 @@ struct PlayerFinishedView: View {
                         .animation(.spring(response: 0.5, dampingFraction: 0.3).repeatForever(autoreverses: true), value: gameController.showPlayerFinished)
                     
                     Text("YOU ARE FINISH!")
-                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .font(.custom("SuperVanilla", size: 48))
+//                        .font(.system(size: 48, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                         .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 5)
                         .multilineTextAlignment(.center)
                     
-                    Text("Position: \(getPositionText())")
-                        .font(.title)
-                        .fontWeight(.semibold)
-                        .foregroundColor(getPositionColor())
-                        .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 3)
-                    
-                    HStack(spacing: 10) {
-                        ForEach(0..<5, id: \.self) { index in
-                            Image(systemName: "star.fill")
-                                .font(.title2)
-                                .foregroundColor(.yellow)
-                                .opacity(0.8)
-                                .scaleEffect(0.8)
-                                .animation(
-                                    .spring(response: 0.4, dampingFraction: 0.3)
-                                    .delay(Double(index) * 0.1)
-                                    .repeatForever(autoreverses: true),
-                                    value: gameController.showPlayerFinished
-                                )
-                        }
-                    }
-                    .padding(.top, 10)
+//                    HStack(spacing: 10) {
+//                        ForEach(0..<5, id: \.self) { index in
+//                            Image(systemName: "star.fill")
+//                                .font(.title2)
+//                                .foregroundColor(.yellow)
+//                                .opacity(0.8)
+//                                .scaleEffect(0.8)
+//                                .animation(
+//                                    .spring(response: 0.4, dampingFraction: 0.3)
+//                                    .delay(Double(index) * 0.1)
+//                                    .repeatForever(autoreverses: true),
+//                                    value: gameController.showPlayerFinished
+//                                )
+//                        }
+//                    }
+//                    .padding(.top, 10)
                 }
                 .scaleEffect(gameController.showPlayerFinished ? 1.0 : 0.5)
                 .opacity(gameController.showPlayerFinished ? 1.0 : 0.0)

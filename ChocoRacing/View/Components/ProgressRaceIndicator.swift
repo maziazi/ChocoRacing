@@ -15,8 +15,8 @@ struct ProgressRaceIndicator: View {
             ZStack() {
                 Image("progressBar")
                     .resizable()
-                    .frame(width: 250, height: 60)
-                    .offset(x: 7, y: -10)
+                    .frame(width: 260, height: 130)
+                    .offset(x: 7, y: -40)
                 HStack {
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
@@ -43,8 +43,8 @@ struct ProgressRaceIndicator: View {
                             .frame(width: max(16, geometry.size.width * CGFloat(gameController.playerProgress)))
                         }
                     }
-                    .frame(width: 200, height: 8)
-                    .offset(x: 6, y:-3)
+                    .frame(width: 220, height: 40)
+                    .offset(x: 6, y:-25)
                 }
             }
             .padding(12)

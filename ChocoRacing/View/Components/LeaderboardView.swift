@@ -108,7 +108,7 @@ struct LeaderboardView: View {
                             }
                         }
                         .frame(maxWidth: 200)
-                        .offset(y: 10)
+                        .offset(y: 25)
                     }
                     
                     Button(action: {
@@ -203,16 +203,15 @@ struct LeaderboardView: View {
                 Image("badge_fourth")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 20, height: 28)
+                    .frame(width: 30, height: 40)
                     .clipped()
-                    .offset(y: 3)
             )
         default:
             return AnyView(
                 Image("badge_fourth")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 20, height: 28)
+                    .frame(width: 30, height: 40)
                     .clipped()
             )
         }

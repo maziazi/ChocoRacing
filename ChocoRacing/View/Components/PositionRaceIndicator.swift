@@ -50,16 +50,19 @@ struct PositionRaceIndicator: View {
                 Image("badge_fourth")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 32, height: 44)
+                    .frame(width: 52, height: 71)
                     .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+                    .offset(x: -3, y: -10)
             )
         default:
             return AnyView(
                 Image("badge_fourth")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 32, height: 44)
+                    .frame(width: 52, height: 71)
                     .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+                    .offset(x: -3, y: -10)
             )
         }
     }
