@@ -95,7 +95,7 @@ struct LeaderboardView: View {
                                     Text(result.displayName)
                                         .font(.custom("SuperVanilla", size: 22))
                                         .fontWeight(.semibold)
-                                        .foregroundColor(result.isPlayer ? Color(hex: "#EB5F4D") : Color(hex: "#A25E3B"))
+                                        .foregroundColor(result.isPlayer ? Color(hex: "#EB5F4D") : Color(hex: "#F6CDB2"))
                                     
                                     Spacer()
                                 }
@@ -103,7 +103,7 @@ struct LeaderboardView: View {
                                 .padding(.vertical, 8)
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(result.isPlayer ? Color(hex: "#FAE392") : Color(hex: "#F6CD9B"))
+                                        .fill(result.isPlayer ? Color(hex: "#FAE392") : Color(hex: "#A25E3B"))
                                 )
                             }
                         }
