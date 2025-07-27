@@ -26,11 +26,17 @@ class GameController: ObservableObject {
     @Published var playerDistanceToFinish: Float = 0.0
     @Published var showPlayerFinished = false
     @Published var playerFinalPosition: Int = 1
+    @Published var hasPlayedSlideSound = false
+    @Published var botAITimer: Timer?
+    @Published var powerEffectTimers: [String: Timer] = [:]
     
     private var finalPositions: [String: Int] = [:]
     private var positionSnapshot: [String: Int] = [:]
     private var allEntityPositions: [String: Int] = [:]
     private var totalEntityCount: Int = 4
+    
+    private var playerPenaltyEndTime: Date?
+    private var botPenaltyEndTimes: [String: Date] = [:]
     
     private var startLineEntity: Entity?
     var finishEntity: Entity?
@@ -45,13 +51,8 @@ class GameController: ObservableObject {
     private var countdownTimer: Timer?
     private var playerMovementTimer: Timer?  // Player's movement timer
     private var botMovementTimers: [String: Timer] = [:]  // Bot-specific timers
-
-    private var botAITimer: Timer?
     private var boundaryCheckTimer: Timer?
-    private var powerEffectTimers: [String: Timer] = [:]
-    
     private var oneSec: Bool = false
-    private var hasPlayedSlideSound = false
     
     var onGameStart: (() -> Void)?
     var onGameEnd: (() -> Void)?
@@ -64,31 +65,30 @@ class GameController: ObservableObject {
     var onEntityFinished: ((FinishInfo) -> Void)?
     var onAllEntitiesFinished: (([FinishInfo]) -> Void)?
     var gameConfig: GameConfiguration?
+    var botAI_timer: Timer?
+//    var boundaryCheckTimer: Timer?
         
     func checkSlideBoundary(for entity: Entity) {
         let name = getEntityName(entity)
         guard name == "player" else { fatalError("name is not player") }
         
-//        guard let config = gameConfig else { fatalError("config is nil")  }
         let config = gameConfig ?? configuration
         let x = entity.position.x
-        let left = config.leftBoundary
-        let right = config.rightBoundary
+        _ = config.leftBoundary
+        _ = config.rightBoundary
 
-        if x <= -1.5 || x >= 1.8 {
+        if x <= -1.8 || x >= 1.8 {
             print("🎯 Menyentuh batas: \(x)")
             if !hasPlayedSlideSound {
                 print("🔊 Mainkan suara slide")
                 MusicController.shared.playSlideStoneSound()
                 hasPlayedSlideSound = true
 
-                // Reset flag setelah 1 detik
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.hasPlayedSlideSound = false
                 }
             }
         } else {
-            // kalau bukan x <= -1.5 || x >= 1.8
             print("🎯 sudah aman")
         }
     }
@@ -131,8 +131,8 @@ class GameController: ObservableObject {
             print("🤖 Bot \(index + 1) setup: \(bot.name)")
         }
         
-        stopAllMovement()
-        print("✅ Game setup complete - \(racingEntities.count) entities ready")
+        stopAllMovementClean()
+        print("Game setup complete - \(racingEntities.count) entities ready")
     }
     
     func setStartLineEntity(_ entity: Entity) {
@@ -168,12 +168,17 @@ class GameController: ObservableObject {
         gameStartTime = Date()
         
         clearAllPowerEffects()
-        stopAllMovement()
+        stopAllMovementClean()
         startCountdown()
         
-        Task {
-            await MusicController.shared.playReadyGoAndThenBackground()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            Task {
+                await MusicController.shared.ensureAllSoundsLoaded()
+                await MusicController.shared.playReadyGoAndThenBackground()
+                print("🎵 Playing ready go and background music")
+            }
         }
+        
         print("🎯 Starting game with \(racingEntities.count) entities...")
     }
     
@@ -182,7 +187,7 @@ class GameController: ObservableObject {
         
         gameState = .paused
         canControlPlayer = false
-        stopAllMovement()
+        stopAllMovementClean()
         pauseAllPowerEffectTimers()
         
         print("⏸️ Game paused")
@@ -204,7 +209,7 @@ class GameController: ObservableObject {
         canControlPlayer = false
         showPlayButton = true
         
-        stopAllMovement()
+        stopAllMovementClean()
         clearAllPowerEffects()
         showLeaderboard = true
         
@@ -246,12 +251,57 @@ class GameController: ObservableObject {
         }
 
         finishedEntities.removeAll()
-        MusicController.shared.playBeforePlayMusic()
-
         
         onReset?()
         print("🔄 Game reset complete")
     }
+    
+    func restartGame() {
+        print("🔄 Restarting game with countdown...")
+        
+        gameState = .waiting
+        countdownNumber = 3
+        isCountdownVisible = false
+        showPlayButton = false 
+        canControlPlayer = false
+        showLeaderboard = false
+        showPlayerFinished = false
+        
+        stopAllTimers()
+        stopAllMovement()
+        
+        clearAllPowerEffects()
+        currentPowerEffect = .none
+        powerEffectTimeRemaining = 0.0
+        
+        finishedEntities.removeAll()
+        gameStartTime = nil
+        playerCurrentPosition = 1
+        playerProgress = 0.0
+        playerDistanceToFinish = 0.0
+        playerHasCrossedFinish = false
+        
+        playerFinalPosition = 1
+        allEntityPositions.removeAll()
+        
+        resetAllPositions()
+        
+        for (name, var racingEntity) in racingEntities {
+            racingEntity.isFinished = false
+            racingEntities[name] = racingEntity
+        }
+
+        finishedEntities.removeAll()
+        
+        onReset?()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.startGame()
+        }
+        
+        print("🔄 Game restart initiated - will start countdown automatically")
+    }
+
 
     func playSound(named soundName: String, on entity: Entity) {
         do {
@@ -297,9 +347,8 @@ class GameController: ObservableObject {
         guard gameState == .playing else { return }
         
         let entityName = getEntityName(entity)
-        guard var racingEntity = racingEntities[entityName] else { return }
+        guard let racingEntity = racingEntities[entityName] else { return }
         
-        // Jika punya shield, tidak kena penalti
         if racingEntity.powerEffect == .shield {
             print("🛡️ \(entityName) protected by shield, no penalty.")
             return
@@ -307,46 +356,39 @@ class GameController: ObservableObject {
 
         print("⚠️ \(entityName) collided with obstacle!")
 
-        // Hentikan gerakan sementara
         if entityName == "player" {
-            print("Stop PLAYER")
-            stopPlayerMovement()
-            playerMovementTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
-                guard self.gameState == .playing else { return }
-                
-                if let playerEntity = self.racingEntities["player"] {
-                    self.applyBackwardMovement(to: playerEntity.entity, racingEntity: playerEntity)
-                }
-            }
-            
+            setPlayerPenaltyState(duration: 1.0)
         } else {
-            print("Stop bot \(entityName)")
-            stopBotMovement(botName: entityName)
-            self.botMovementTimers[entityName] = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
-                guard self.gameState == .playing else { return }
-                if let botEntity = self.racingEntities[entityName] {
-                    self.applyBackwardMovement(to: botEntity.entity, racingEntity: botEntity)
-                }
-            }
+            setBotPenaltyState(botName: entityName, duration: 1.0)
         }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            if self.gameState == .playing {
-                if entityName == "player" {
-                    self.stopPlayerMovement()
-                    self.startPlayerMovement()
-                } else {
-                    self.stopBotMovement(botName: entityName)
-                    self.botMovementTimers[entityName] = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
-                        guard self.gameState == .playing else { return }
-                        if let botEntity = self.racingEntities[entityName] {
-                            self.applyForwardMovement(to: botEntity.entity, racingEntity: botEntity)
-                        }
-                    }
-                }
-                print("✅ \(entityName) resumed after penalty")
-            }
+    }
+
+    private func setPlayerPenaltyState(duration: Double) {
+        playerPenaltyEndTime = Date().addingTimeInterval(duration)
+        print("🚫 Player penalty for \(duration) seconds")
+    }
+
+    private func setBotPenaltyState(botName: String, duration: Double) {
+        botPenaltyEndTimes[botName] = Date().addingTimeInterval(duration)
+        print("🚫 Bot \(botName) penalty for \(duration) seconds")
+    }
+
+    private func isPlayerInPenalty() -> Bool {
+        guard let endTime = playerPenaltyEndTime else { return false }
+        if Date() > endTime {
+            playerPenaltyEndTime = nil
+            return false
         }
+        return true
+    }
+
+    private func isBotInPenalty(_ botName: String) -> Bool {
+        guard let endTime = botPenaltyEndTimes[botName] else { return false }
+        if Date() > endTime {
+            botPenaltyEndTimes[botName] = nil
+            return false
+        }
+        return true
     }
 
     func checkFinish(for entity: Entity) {
@@ -419,9 +461,7 @@ class GameController: ObservableObject {
             default:
                 break
             }
-            
-//            motion.linearVelocity.z = -speed
-        }
+                    }
         
         player.components.set(motion)
     }
@@ -443,22 +483,20 @@ class GameController: ObservableObject {
         motion.linearVelocity = SIMD3<Float>(0, 0, 0)
         motion.angularVelocity = SIMD3<Float>(0, 0, 0)
         entity.components.set(motion)
+        
+        print("✅ Stable physics setup for: \(entity.name)")
     }
     
     func startCountdown() {
         print ("Start Count Down")
         countdownNumber = 3
         isCountdownVisible = true
-
-//        stopCountdownTimer()
  
         countdownTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             print ("timer count")
             self.updateCountdown()
         }
-        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.updateCountdown()
-        }
+
         print("🔁 Countdown started from 3")
     }
     
@@ -489,9 +527,46 @@ class GameController: ObservableObject {
     }
     
     private func startAllMovement() {
-        startForwardMovement()
+        playerMovementTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+            guard self.gameState == .playing else { return }
+                
+            self.updateAllEntitiesMovement()
+            self.updateBoundariesAndPositions()
+            self.updateFinishChecking()
+        }
+            
         startBotAI()
-        startBoundaryCheck()
+    }
+    
+    private func updateAllEntitiesMovement() {
+        if let playerEntity = racingEntities["player"] {
+            if isPlayerInPenalty() {
+                applyBackwardMovement(to: playerEntity.entity, racingEntity: playerEntity)
+            } else {
+                applyForwardMovement(to: playerEntity.entity, racingEntity: playerEntity)
+            }
+            checkSlideBoundary(for: playerEntity.entity)
+        }
+        
+        // Update bots dengan penalty check
+        for (botName, racingEntity) in racingEntities where racingEntity.type == .bot {
+            if isBotInPenalty(botName) {
+                applyBackwardMovement(to: racingEntity.entity, racingEntity: racingEntity)
+            } else {
+                applyForwardMovement(to: racingEntity.entity, racingEntity: racingEntity)
+            }
+        }
+    }
+
+    private func updateBoundariesAndPositions() {
+        checkPlayerBoundaries()
+        updatePlayerPosition()
+    }
+
+    private func updateFinishChecking() {
+        for (_, racingEntity) in racingEntities {
+            checkFinish(for: racingEntity.entity)
+        }
     }
     
     private func stopAllMovement() {
@@ -499,7 +574,17 @@ class GameController: ObservableObject {
         freezeAllEntities()
     }
     
-    //FCS
+    private func stopAllMovementClean() {
+        stopAllTimers()
+        
+        for (_, racingEntity) in racingEntities {
+            var motion = racingEntity.entity.components[PhysicsMotionComponent.self] ?? PhysicsMotionComponent()
+            motion.linearVelocity = SIMD3<Float>(0, 0, 0)
+            motion.angularVelocity = SIMD3<Float>(0, 0, 0)
+            racingEntity.entity.components.set(motion)
+        }
+        
+    }
     private func startForwardMovement() {
         // Start the player's forward movement
         startPlayerMovement()
@@ -555,42 +640,49 @@ class GameController: ObservableObject {
     
     //FCS: ini dipanggil setiap waktu
     private func applyForwardMovement(to entity: Entity, racingEntity: RacingEntity) {
-//        print("move forward")
         guard var motion = entity.components[PhysicsMotionComponent.self] else { return }
         
         var entitySpeed = racingEntity.originalSpeed
         
         switch racingEntity.powerEffect {
-            case .speedBoost:
-                entitySpeed *= 2.0
-            case .speedReduction:
-                entitySpeed *= 0.3
-            case .none:
-                break
-            default:
-                break
+        case .speedBoost:
+            entitySpeed *= 2.0
+        case .speedReduction:
+            entitySpeed *= 0.3
+        case .none:
+            break
+        default:
+            break
         }
         
-        motion.linearVelocity.z = -entitySpeed
-        motion.linearVelocity.x *= 0.98
-        motion.linearVelocity.y *= 0.95
+        let targetVelocityZ = -entitySpeed
+        let currentVelocityZ = motion.linearVelocity.z
         
+        // ✅ SMOOTH TRANSITION INSTEAD OF INSTANT CHANGE
+        let lerpFactor: Float = 0.15  // Adjust untuk smoothness
+        let newVelocityZ = currentVelocityZ + (targetVelocityZ - currentVelocityZ) * lerpFactor
+        
+        motion.linearVelocity.z = newVelocityZ
         entity.components.set(motion)
     }
     
-    //FCS
     private func applyBackwardMovement(to entity: Entity, racingEntity: RacingEntity) {
         guard var motion = entity.components[PhysicsMotionComponent.self] else { return }
 
-        // Dorong ke belakang (z positif)
-        motion.linearVelocity.z = 8.0  // dorong ke belakang dengan kecepatan 8
-
-        // Kurangi kontrol horizontal untuk mencegah pergerakan lateral
-        motion.linearVelocity.x *= 0.3  // Kurangi kontrol horizontal
-        motion.linearVelocity.y = 0.0  // Netralisir gerakan vertikal (menghindari lonjakan)
-
-        entity.components.set(motion)  // Terapkan perubahan pada entitas
+        let targetVelocityZ: Float = 6.0  // Backward speed
+        let currentVelocityZ = motion.linearVelocity.z
+        
+        // ✅ SMOOTH BACKWARD TRANSITION
+        let lerpFactor: Float = 0.2
+        let newVelocityZ = currentVelocityZ + (targetVelocityZ - currentVelocityZ) * lerpFactor
+        
+        motion.linearVelocity.z = newVelocityZ
+        motion.linearVelocity.x *= 0.8  // Gradual horizontal reduction
+        motion.linearVelocity.y = 0.0
+        
+        entity.components.set(motion)
     }
+
     
     private func startBotAI() {
         botAITimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
@@ -633,21 +725,34 @@ class GameController: ObservableObject {
     
     private func checkPlayerBoundaries() {
         guard gameState == .playing,
-              let player = getPlayerEntity() else { return }
+              let player = getPlayerEntity(),
+              var motion = player.components[PhysicsMotionComponent.self] else { return }
         
         let currentX = player.position.x
+        let buffer: Float = 0.2  // Lebih besar untuk smooth transition
         
-        if currentX < configuration.leftBoundary {
-            player.position.x = configuration.leftBoundary
-            if var motion = player.components[PhysicsMotionComponent.self] {
-                motion.linearVelocity.x = max(0, motion.linearVelocity.x)
+        if currentX < configuration.leftBoundary + buffer {
+            // Hitung seberapa jauh dari boundary
+            let distance = (configuration.leftBoundary + buffer) - currentX
+            let pushForce = distance * 3.0  // Semakin jauh, semakin kuat push
+            
+            // Hanya push jika sedang bergerak ke kiri atau diam
+            if motion.linearVelocity.x <= 0 {
+                motion.linearVelocity.x = max(motion.linearVelocity.x, pushForce)
                 player.components.set(motion)
+                print("🔄 Boundary push RIGHT: \(pushForce)")
             }
-        } else if currentX > configuration.rightBoundary {
-            player.position.x = configuration.rightBoundary
-            if var motion = player.components[PhysicsMotionComponent.self] {
-                motion.linearVelocity.x = min(0, motion.linearVelocity.x)
+            
+        } else if currentX > configuration.rightBoundary - buffer {
+            // Hitung seberapa jauh dari boundary
+            let distance = currentX - (configuration.rightBoundary - buffer)
+            let pushForce = -(distance * 3.0)  // Negative untuk push ke kiri
+            
+            // Hanya push jika sedang bergerak ke kanan atau diam
+            if motion.linearVelocity.x >= 0 {
+                motion.linearVelocity.x = min(motion.linearVelocity.x, pushForce)
                 player.components.set(motion)
+                print("🔄 Boundary push LEFT: \(pushForce)")
             }
         }
     }
@@ -852,17 +957,16 @@ class GameController: ObservableObject {
     }
     
     private func stopAllTimers() {
-        stopCountdownTimer()
-        playerMovementTimer?.invalidate()  // Invalidate the timer to stop it
-        playerMovementTimer = nil  // Reset the timer to release resources
+        playerMovementTimer?.invalidate()
+        playerMovementTimer = nil
+        
         for (_, botTimer) in botMovementTimers {
-                botTimer.invalidate()  // Invalidate each bot's movement timer
-            }
-        botMovementTimers.removeAll()  // Clear the dictionary
+            botTimer.invalidate()
+        }
+        botMovementTimers.removeAll()
         botAITimer?.invalidate()
         botAITimer = nil
-        boundaryCheckTimer?.invalidate()
-        boundaryCheckTimer = nil
+
         
         for (entityName, _) in powerEffectTimers {
             powerEffectTimers[entityName]?.invalidate()
@@ -872,7 +976,7 @@ class GameController: ObservableObject {
     
     func cleanup() {
         stopAllTimers()
-        stopAllMovement()
+        stopAllMovementClean()
         clearAllPowerEffects()
         racingEntities.removeAll()
         finishedEntities.removeAll()
@@ -998,4 +1102,3 @@ class GameController: ObservableObject {
     }
 
 }
-    
