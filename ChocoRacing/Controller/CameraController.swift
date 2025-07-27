@@ -10,11 +10,16 @@ import RealityKit
 
 class CameraController: ObservableObject {
     
-    @Published var followDistance: Float = 1.2//Jarak dengan character
-    @Published var followHeight: Float = 0.6 // Ketinggian kamera
-    @Published var followSmoothness: Float = 0.2
+    @Published var followDistance: Float = 6.8 //Jarak dengan character
+    @Published var followHeight: Float = 1.5 // Ketinggian kamera
+    @Published var followSmoothness: Float = 1
+
     @Published var lookAtTarget = true
     @Published var isFollowActive = false
+    
+    private let lockedFollowDistance: Float = 2.5
+    private let lockedFollowHeight: Float = 1.5
+    private let lockedSmoothness: Float = 0.05
     
     private var cameraEntity: Entity?
     private var targetEntity: Entity?
@@ -24,8 +29,8 @@ class CameraController: ObservableObject {
         camera.name = "follow_camera"
         
         camera.components.set(PerspectiveCameraComponent(
-            near: 0.2,
-            far: 80.0,
+            near: 1,
+            far: 2000.0,
             fieldOfViewInDegrees: 60
         ))
         
@@ -66,7 +71,10 @@ class CameraController: ObservableObject {
         let currentPosition = camera.position
         let newPosition = simd_mix(currentPosition, desiredCameraPosition, SIMD3<Float>(repeating: followSmoothness))
         
-        camera.position = newPosition
+        let positionDelta = newPosition - currentPosition
+        if simd_length(positionDelta) > 0.001 {  
+            camera.position = newPosition
+        }
         
         if lookAtTarget {
             camera.look(at: targetPosition, from: newPosition, relativeTo: nil)

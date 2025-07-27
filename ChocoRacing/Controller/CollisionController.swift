@@ -1,13 +1,18 @@
 //
-//  CollisionController.swift
+//  GameController.swift
 //  ChocoRacing
 //
 //  Created by Muhamad Azis on 20/07/25.
 //
 
 import RealityKit
+import SwiftUI
 
 class CollisionController {
+    let entityTypes: [GameEntityType] = [.speedUp, .slowDown, .protection, .bom, .finish, .obstacle, .slide]
+    
+    private var oneSec: Bool = false
+    private var oneSec2: Bool = false
     
     private weak var gameController: GameController?
     
@@ -27,33 +32,69 @@ class CollisionController {
         
         guard let tA = typeA, let tB = typeB else { return }
         
-        if (tA == .player || tA == .bot) && (tB == .powerup || tB == .powerdown || tB == .finish) {
+        // Check if entity A or B is player or bot, and if the other entity is in entityTypes
+        if (tA == .player || tA == .bot), entityTypes.contains(tB) {
             applyCollisionEffect(to: entityA, collidedWith: tB, otherEntity: entityB)
-        } else if (tB == .player || tB == .bot) && (tA == .powerup || tA == .powerdown || tA == .finish) {
-            applyCollisionEffect(to: entityB, collidedWith: tA, otherEntity: entityA)
         }
     }
+    
+    
     
     private func applyCollisionEffect(to entity: Entity, collidedWith type: GameEntityType, otherEntity: Entity) {
         guard let gameController = gameController else { return }
         
         switch type {
-        case .powerup:
+        case .speedUp:
             gameController.applyPowerEffect(to: entity, effectType: .speedBoost, duration: 5.0)
             otherEntity.isEnabled = false
+            if gameController.getEntityName(entity) == "player" {
+                MusicController.shared.playSpeedUpSound()
+            }
+            
             print("⚡ Speed boost applied!")
             
-        case .powerdown:
+        case .slowDown:
             gameController.applyPowerEffect(to: entity, effectType: .speedReduction, duration: 3.0)
             otherEntity.isEnabled = false
+            if gameController.getEntityName(entity) == "player" {
+                MusicController.shared.playslowdown4Sound()
+            }
             print("🐌 Speed reduced!")
             
-        case .finish:
-            gameController.checkFinish(for: entity)
-            print("🏁 Finish line reached!")
+        case .protection:
+            gameController.applyPowerEffect(to: entity, effectType: .shield, duration: 5.0)
+            otherEntity.isEnabled = false
+            if gameController.getEntityName(entity) == "player" {
+                MusicController.shared.playProtectionSound()
+            }
+            print("🛡️ Protection activated!")
             
+        case .bom:
+            gameController.applyPowerEffect(to: entity, effectType: .splash, duration: 3.0)
+            otherEntity.isEnabled = false
+            if gameController.getEntityName(entity) == "player" {
+                MusicController.shared.playBombSound()
+            }
+            print("💥 Bomb exploded!")
+            
+        case .slide:
+            if gameController.getEntityName(entity) == "player" {
+                MusicController.shared.playSlideStoneSound()
+            }
+            print("🪨 Slide wall touched!")
+            
+        case .finish:
+            print("🏁 Finish line reached!")
+        
+        case .obstacle:
+            gameController.handleObstacleCollision(entity: entity, otherEntity: otherEntity)
+            if gameController.getEntityName(entity) == "player" && gameController.currentPowerEffect != .shield {
+                   MusicController.shared.playObstacleSound()
+               }
+               print("💥 Obstacle hit!")
         default:
-            break
+            print("masuk default di collisionControl")
+
         }
     }
 }

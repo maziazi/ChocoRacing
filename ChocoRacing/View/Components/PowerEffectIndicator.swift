@@ -1,10 +1,3 @@
-//
-//  PowerEffectIndicator.swift
-//  ChocoRacing
-//
-//  Created by Muhamad Azis on 20/07/25.
-//
-
 import SwiftUI
 
 struct PowerEffectIndicator: View {
@@ -15,12 +8,16 @@ struct PowerEffectIndicator: View {
         
         let maxDuration: Double
         switch gameController.currentPowerEffect {
-        case .speedBoost:
-            maxDuration = 5.0
-        case .speedReduction:
-            maxDuration = 3.0
-        case .none:
-            maxDuration = 1.0
+            case .speedBoost:
+                maxDuration = 5.0
+            case .speedReduction:
+                maxDuration = 3.0
+            case .shield:
+                maxDuration = 5.0
+            case .splash:
+                maxDuration = 3.0
+            case .none:
+                maxDuration = 1.0
         }
         
         return gameController.powerEffectTimeRemaining / maxDuration
@@ -29,28 +26,24 @@ struct PowerEffectIndicator: View {
     var body: some View {
         if gameController.currentPowerEffect != .none {
             HStack(spacing: 8) {
-                // Circle Timer
                 ZStack {
-                    // Background circle
-                    Circle()
-                        .stroke(Color.black.opacity(0.3), lineWidth: 6)
-                        .frame(width: 60, height: 60)
+                    Image("indicator")
+                        .resizable()
+                        .frame(width: 50, height: 50)
                     
-                    // Progress circle (countdown from full to empty)
                     Circle()
                         .trim(from: 0, to: progress)
                         .stroke(
                             effectColor,
                             style: StrokeStyle(
-                                lineWidth: 6,
+                                lineWidth: 5,
                                 lineCap: .round
                             )
                         )
-                        .frame(width: 60, height: 60)
+                        .frame(width: 50, height: 50)
                         .rotationEffect(.degrees(-90))
                         .animation(.linear(duration: 0.1), value: progress)
                     
-                    // Center icon
                     effectIcon
                         .font(.title3)
                         .foregroundColor(effectColor)
@@ -68,9 +61,21 @@ struct PowerEffectIndicator: View {
         Group {
             switch gameController.currentPowerEffect {
             case .speedBoost:
-                Image(systemName: "bolt.fill")
+                Image("powerUp_speedUp")
+                    .resizable()
+                    .frame(width: 32, height: 32)
             case .speedReduction:
-                Image(systemName: "tortoise.fill")
+                Image("powerDown_slowDown")
+                    .resizable()
+                    .frame(width: 32, height: 32)
+            case .shield:
+                Image("powerUp_protection")
+                    .resizable()
+                    .frame(width: 32, height: 32)
+            case .splash:
+                Image("powerDown_bomb")
+                    .resizable()
+                    .frame(width: 32, height: 32)
             case .none:
                 EmptyView()
             }
@@ -83,6 +88,10 @@ struct PowerEffectIndicator: View {
             return .yellow
         case .speedReduction:
             return .orange
+        case .shield:
+            return .blue
+        case .splash:
+            return .red
         case .none:
             return .clear
         }
