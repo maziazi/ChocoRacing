@@ -140,9 +140,6 @@ struct GameView: View {
                 entity.components.set(GameTagComponent(type: .obstacle))
                 foundObstacles.append(entity)
                 
-            }else if entity.name.lowercased().contains("choco") && entity.name.lowercased().contains("fountain") {
-                entity.components.set(GameTagComponent(type: .finish))
-                finishEntity = entity
             }
         }
         

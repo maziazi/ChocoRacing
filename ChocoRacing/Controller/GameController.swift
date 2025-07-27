@@ -360,8 +360,9 @@ class GameController: ObservableObject {
         guard gameState == .playing else { return }
         
         let entityName = getEntityName(entity)
-        guard let racingEntity = racingEntities[entityName] else { return }
+        guard var racingEntity = racingEntities[entityName] else { return }
         
+        // Jika punya shield, tidak kena penalti
         if racingEntity.powerEffect == .shield {
             print("🛡️ \(entityName) protected by shield, no penalty.")
             return
@@ -369,9 +370,8 @@ class GameController: ObservableObject {
 
         print("⚠️ \(entityName) collided with obstacle!")
 
-//marge kedua-duanya
-        if entityName == "player" {
-            setPlayerPenaltyState(duration: 1.0)
+        // Hentikan gerakan sementara
+        if entityName == "player"{
             stopPlayerMovement()
             playerMovementTimer = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
                 guard self.gameState == .playing else { return }
@@ -382,7 +382,32 @@ class GameController: ObservableObject {
             }
             
         } else {
-            setBotPenaltyState(botName: entityName, duration: 1.0)
+            print("Stop bot \(entityName)")
+            stopBotMovement(botName: entityName)
+            self.botMovementTimers[entityName] = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+                guard self.gameState == .playing else { return }
+                if let botEntity = self.racingEntities[entityName] {
+                    self.applyBackwardMovement(to: botEntity.entity, racingEntity: botEntity)
+                }
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            if self.gameState == .playing {
+                if entityName == "player" {
+                    self.stopPlayerMovement()
+                    self.startPlayerMovement()
+                } else {
+                    self.stopBotMovement(botName: entityName)
+                    self.botMovementTimers[entityName] = Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { _ in
+                        guard self.gameState == .playing else { return }
+                        if let botEntity = self.racingEntities[entityName] {
+                            self.applyForwardMovement(to: botEntity.entity, racingEntity: botEntity)
+                        }
+                    }
+                }
+                print("✅ \(entityName) resumed after penalty")
+            }
         }
     }
 
