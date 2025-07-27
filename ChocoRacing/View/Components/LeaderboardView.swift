@@ -55,7 +55,7 @@ struct LeaderboardView: View {
                     }
                     Button(action: {
                         playClickSound()
-                        gameController.resetGame()
+                        gameController.restartGame()
                     }){
                         HStack {
                             Image("button_playAgain")
