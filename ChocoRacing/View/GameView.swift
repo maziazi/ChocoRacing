@@ -45,7 +45,7 @@ struct GameView: View {
                     
                     ProgressRaceIndicator(gameController: gameController)
                         .frame(width: 250, alignment: .center)
-                        .offset(x: -30)
+                        .offset(x: -27)
                     
                     ZStack {
                         Rectangle()

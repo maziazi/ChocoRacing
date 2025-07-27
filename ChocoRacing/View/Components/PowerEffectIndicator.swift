@@ -13,9 +13,9 @@ struct PowerEffectIndicator: View {
             case .speedReduction:
                 maxDuration = 3.0
             case .shield:
-                maxDuration = 5.0 // Or whatever duration you choose for the shield
+                maxDuration = 5.0
             case .splash:
-                maxDuration = 3.0 // Or whatever duration you choose for the splash
+                maxDuration = 3.0
             case .none:
                 maxDuration = 1.0
         }
@@ -29,18 +29,18 @@ struct PowerEffectIndicator: View {
                 ZStack {
                     Image("indicator")
                         .resizable()
-                        .frame(width: 60, height: 60)
+                        .frame(width: 50, height: 50)
                     
                     Circle()
                         .trim(from: 0, to: progress)
                         .stroke(
                             effectColor,
                             style: StrokeStyle(
-                                lineWidth: 6,
+                                lineWidth: 5,
                                 lineCap: .round
                             )
                         )
-                        .frame(width: 60, height: 60)
+                        .frame(width: 50, height: 50)
                         .rotationEffect(.degrees(-90))
                         .animation(.linear(duration: 0.1), value: progress)
                     
