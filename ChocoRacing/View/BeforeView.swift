@@ -10,12 +10,57 @@ import RealityKit
 import PlayTest
 import AVFoundation
 
+class MenuAudioManager: ObservableObject {
+    static let shared = MenuAudioManager()
+    private var audioPlayer: AVAudioPlayer?
+    @Published var isPlaying = false
+    
+    private init() {}
+    
+    func playMenuMusic() {
+        guard !isPlaying else { return }
+        
+        guard let soundURL = Bundle.main.url(forResource: "beforeplay", withExtension: "mp3") else {
+            print("❌ beforeplay sound file not found")
+            return
+        }
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            audioPlayer?.numberOfLoops = -1
+            audioPlayer?.prepareToPlay()
+            audioPlayer?.play()
+            isPlaying = true
+            print("▶️ Playing menu music (beforeplay)")
+        } catch {
+            print("❌ Error playing menu music: \(error.localizedDescription)")
+        }
+    }
+    
+    func stopMenuMusic() {
+        audioPlayer?.stop()
+        audioPlayer = nil
+        isPlaying = false
+        print("🔇 Stopped menu music")
+    }
+    
+    func pauseMenuMusic() {
+        audioPlayer?.pause()
+        print("⏸️ Paused menu music")
+    }
+    
+    func resumeMenuMusic() {
+        audioPlayer?.play()
+        print("▶️ Resumed menu music")
+    }
+}
+
 struct BeforeView: View {
     @ObservedObject var gameController: GameController
     @State private var isLoadingComplete = false
     @State private var navigateToPlayButton = false
     @State private var navigateToCharacter = false
-    @State private var audioPlayer: AVAudioPlayer?
+    @StateObject private var menuAudio = MenuAudioManager.shared
 
     var body: some View {
         ZStack {
@@ -48,6 +93,7 @@ struct BeforeView: View {
                     }
                     Button(action: {
                         playClickSound()
+                        menuAudio.stopMenuMusic() 
                         navigateToPlayButton = true
                     }) {
                         Image("Button_Play")
@@ -73,42 +119,44 @@ struct BeforeView: View {
             } else {
                 SplashView {
                     isLoadingComplete = true
-                    playIntroSound()
+                    menuAudio.playMenuMusic()
                 }
             }
         }
         .ignoresSafeArea()
         .task {
             await preloadAssets()
+            await setupMusicController()
             isLoadingComplete = true
         }
+        .onAppear {
+            if isLoadingComplete {
+                menuAudio.playMenuMusic()
+                print("🔊 BeforeView appeared - starting menu music")
+            }
+        }
+        .onDisappear {
+            if navigateToPlayButton {
+                menuAudio.stopMenuMusic()
+                print("🔇 BeforeView -> GameView: stopping menu music")
+            } else {
+                print("🎵 BeforeView -> ChangeCharacterView: keeping menu music")
+            }
+        }
     }
-    func playIntroSound() {
-        guard let soundURL = Bundle.main.url(forResource: "beforeplay", withExtension: "mp3") else {
-            print("❌ beforeplay sound file not found")
+    
+    func playClickSound() {
+        guard let url = Bundle.main.url(forResource: "click", withExtension: "wav") else {
+            print("❌ click.wav not found in bundle")
             return
         }
-
+        
         do {
-            audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
-            audioPlayer?.prepareToPlay()
-            audioPlayer?.play()
-            print("▶️ Playing beforeplay sound")
+            let clickPlayer = try AVAudioPlayer(contentsOf: url)
+            clickPlayer.prepareToPlay()
+            clickPlayer.play()
         } catch {
-            print("❌ Error playing beforeplay sound: \(error.localizedDescription)")
-        }
-    }
-    func playClickSound() {
-        if let url = Bundle.main.url(forResource: "click", withExtension: "wav") {
-            do {
-                audioPlayer = try AVAudioPlayer(contentsOf: url)
-                audioPlayer?.prepareToPlay()
-                audioPlayer?.play()
-            } catch {
-                print("❌ Failed to play click sound: \(error.localizedDescription)")
-            }
-        } else {
-            print("❌ click.mp3 not found in bundle")
+            print("❌ Failed to play click sound: \(error.localizedDescription)")
         }
     }
 
@@ -127,5 +175,14 @@ struct BeforeView: View {
                 print("❌ Failed to load: \(name) — \(error.localizedDescription)")
             }
         }
+    }
+    
+    private func setupMusicController() async {
+        let tempParent = Entity()
+        MusicController.shared.addToScene(to: tempParent)
+        
+        await MusicController.shared.ensureAllSoundsLoaded()
+        
+        print("🎵 MusicController setup completed in BeforeView")
     }
 }

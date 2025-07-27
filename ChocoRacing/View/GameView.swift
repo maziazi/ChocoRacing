@@ -71,7 +71,11 @@ struct GameView: View {
             LeaderboardView(gameController: gameController)
         }
         .navigationBarBackButtonHidden(true)
-        .gesture(DragGesture())             
+        .gesture(DragGesture())
+        .onAppear {
+            MenuAudioManager.shared.stopMenuMusic()
+            print("🎮 GameView appeared - stopped menu music")
+        }
         .task{
             print("on apear ")
             gameController.startGame()
@@ -91,6 +95,7 @@ struct GameView: View {
             
             MusicController.shared.addToScene(to: scene)
             await MusicController.shared.ensureAllSoundsLoaded()
+            print("🎵 MusicController added to scene and sounds loaded")
 
             await setupGameEntities(in: scene)
             setupControllers()

@@ -18,6 +18,7 @@ struct ChangeCharacterView: View {
 
     @State private var currentIndex = 0
     @Environment(\.dismiss) var dismiss
+    @StateObject private var menuAudio = MenuAudioManager.shared
     
     @State private var clickPlayer: AVAudioPlayer?
 
@@ -116,6 +117,7 @@ struct ChangeCharacterView: View {
                let index = characters.firstIndex(where: { $0.0 == savedName }) {
                 currentIndex = index
             }
+            menuAudio.playMenuMusic()
         }
     }
 
