@@ -7,6 +7,7 @@
 
 import SwiftUI
 import simd
+import ConfettiSwiftUI
 import AVFoundation
 
 extension Color {
@@ -42,6 +43,8 @@ struct LeaderboardView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var clickPlayer: AVAudioPlayer?
     @State private var hasPlayedResultSound = false
+    @State private var confettiTrigger = 0
+
     
     var body: some View {
         if gameController.showLeaderboard && !gameController.finishedEntities.isEmpty {
@@ -50,7 +53,26 @@ struct LeaderboardView: View {
                     .ignoresSafeArea()
                 
                 VStack{
-                    ZStack{
+                    ZStack {
+                        // Confetti Cannon Modifier
+                        Color.clear
+                            .confettiCannon(
+                                trigger: $confettiTrigger,
+                                num: 60,
+                                colors: [.yellow, .white, .brown, .pink],
+                                confettiSize: 15,
+                                rainHeight: 700,
+                                fadesOut: true,
+                                opacity: 1,
+                                openingAngle: .degrees(60),
+                                closingAngle: .degrees(120),
+                                radius: 400,
+                                repetitions: 2,
+                                repetitionInterval: 0.6,
+                                hapticFeedback: true
+                            )
+                            .frame(height: 0)
+                        
                         HStack {
                             Image("Leaderboard_1")
                                 .resizable()
@@ -71,7 +93,7 @@ struct LeaderboardView: View {
                                     .frame(width: 35, alignment: .leading)
                                     
                                     Text(result.displayName)
-                                        .font(.title2)
+                                        .font(.custom("SuperVanilla", size: 22))
                                         .fontWeight(.semibold)
                                         .foregroundColor(result.isPlayer ? Color(hex: "#EB5F4D") : Color(hex: "#A25E3B"))
                                     
@@ -88,6 +110,7 @@ struct LeaderboardView: View {
                         .frame(maxWidth: 200)
                         .offset(y: 10)
                     }
+                    
                     Button(action: {
                         playClickSound()
                         gameController.restartGame()
@@ -119,10 +142,13 @@ struct LeaderboardView: View {
             .animation(.easeInOut(duration: 0.5), value: gameController.showLeaderboard)
             .onAppear {
                 stableResults = getStableRaceResults()
+
                 if !hasPlayedResultSound {
                     playResultSound()
                     hasPlayedResultSound = true
                 }
+                
+                confettiTrigger += 1
             }
             .onDisappear {
                 hasPlayedResultSound = false
