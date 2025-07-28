@@ -77,12 +77,6 @@ class CollisionController {
             }
             print("💥 Bomb exploded!")
             
-        case .slide:
-            if gameController.getEntityName(entity) == "player" {
-                MusicController.shared.playSlideStoneSound()
-            }
-            print("🪨 Slide wall touched!")
-            
         case .finish:
             print("🏁 Finish line reached!")
         

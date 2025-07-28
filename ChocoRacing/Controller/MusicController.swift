@@ -35,14 +35,14 @@ final class MusicController {
     private func loadAllSounds() {
         Task {
             do {
-                slowdown4Sound = try await AudioFileResource.load(named: "slowdown4", in: nil)
+                slowdown4Sound = try await AudioFileResource.load(named: "slowdown10", in: nil)
                 backgroundMusic = try await AudioFileResource.load(named: "background", in: nil)
                 readyGoSound = try await AudioFileResource.load(named: "readygo", in: nil)
                 clickSound = try await AudioFileResource.load(named: "click", in: nil)
                 speedUpSound = try await AudioFileResource.load(named: "speedup", in: nil)
                 protectionSound = try await AudioFileResource.load(named: "pop1", in: nil)
                 boingSound = try await AudioFileResource.load(named: "boing3", in: nil)
-                slideStoneSound = try await AudioFileResource.load(named: "stone1", in: nil)
+//                slideStoneSound = try await AudioFileResource.load(named: "stone1", in: nil)
                 bombSound = try await AudioFileResource.load(named: "splat1", in: nil)
                 winSound = try await AudioFileResource.load(named: "win1", in: nil)
                 loseSound = try await AudioFileResource.load(named: "lose1", in: nil)
@@ -133,15 +133,6 @@ final class MusicController {
             print("❌ obstacle sound not loaded")
             return
         }
-        entity.playAudio(resource)
-    }
-
-    func playSlideStoneSound() {
-        guard let resource = slideStoneSound else {
-            print("❌ stone1 sound not loaded")
-            return
-        }
-        print("✅ stone1 sound berhasil diputar!")
         entity.playAudio(resource)
     }
 

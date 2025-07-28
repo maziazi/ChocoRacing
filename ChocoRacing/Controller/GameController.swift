@@ -84,7 +84,6 @@ class GameController: ObservableObject {
             print("🎯 Menyentuh batas: \(x)")
             if !hasPlayedSlideSound {
                 print("🔊 Mainkan suara slide")
-                MusicController.shared.playSlideStoneSound()
                 hasPlayedSlideSound = true
 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
