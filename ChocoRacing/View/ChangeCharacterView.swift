@@ -10,7 +10,7 @@ import AVFoundation
 
 struct ChangeCharacterView: View {
     let characters = [
-        ("octodonut", "player_octodonut"),
+        ("octodonut", "player_octoDonut"),
         ("sheepberry", "player_sheepberry"),
         ("bunsmores", "player_bunsmores"),
         ("whaleffle", "player_whaleffle")
