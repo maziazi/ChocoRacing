@@ -13,6 +13,7 @@
 		5C4CFA862E33924F000861AA /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5C4CFA852E33924F000861AA /* PlayTest */; };
 		5C7143212E36134C00B34090 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7143202E36134C00B34090 /* ConfettiSwiftUI */; };
 		5C7145C02E362F8C00B34090 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7145BF2E362F8C00B34090 /* PlayTest */; };
+		5C7146372E373A8C00B34090 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7146362E373A8C00B34090 /* PlayTest */; };
 		5CFA78002E2A53F000808F5A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 5CFA77FF2E2A53EA00808F5A /* .gitignore */; };
 		5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA783B2E2D03E900808F5A /* PlayTest */; };
 		5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA787D2E2D0F5C00808F5A /* PlayTest */; };
@@ -72,6 +73,7 @@
 			files = (
 				5C7143212E36134C00B34090 /* ConfettiSwiftUI in Frameworks */,
 				5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */,
+				5C7146372E373A8C00B34090 /* PlayTest in Frameworks */,
 				5C4CFA862E33924F000861AA /* PlayTest in Frameworks */,
 				5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */,
 				6DDDC0E52E3384A900020553 /* PlayTest in Frameworks */,
@@ -149,6 +151,7 @@
 				5C2721092E35049A005A7559 /* PlayTest */,
 				5C7143202E36134C00B34090 /* ConfettiSwiftUI */,
 				5C7145BF2E362F8C00B34090 /* PlayTest */,
+				5C7146362E373A8C00B34090 /* PlayTest */,
 			);
 			productName = ChocoRacing;
 			productReference = 5CFA77BB2E2A44F100808F5A /* ChocoRacing.app */;
@@ -228,7 +231,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5C71431F2E36134C00B34090 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
-				5C7145BE2E362F8C00B34090 /* XCLocalSwiftPackageReference "../../../Downloads/PackageIv" */,
+				5C7146352E373A8C00B34090 /* XCLocalSwiftPackageReference "../../../Downloads/Packagefix" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5CFA77BC2E2A44F100808F5A /* Products */;
@@ -604,9 +607,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		5C7145BE2E362F8C00B34090 /* XCLocalSwiftPackageReference "../../../Downloads/PackageIv" */ = {
+		5C7146352E373A8C00B34090 /* XCLocalSwiftPackageReference "../../../Downloads/Packagefix" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../Downloads/PackageIv;
+			relativePath = ../../../Downloads/Packagefix;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -644,6 +647,10 @@
 			productName = ConfettiSwiftUI;
 		};
 		5C7145BF2E362F8C00B34090 /* PlayTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayTest;
+		};
+		5C7146362E373A8C00B34090 /* PlayTest */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayTest;
 		};
