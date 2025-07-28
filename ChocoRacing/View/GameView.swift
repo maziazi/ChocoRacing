@@ -115,6 +115,7 @@ struct GameView: View {
                 entity.components.set(GameTagComponent(type: .player))
                 toggleShieldBubbleEffect(for: entity, enable: false)
                 toggleSpeedBoostEffect(for: entity, status: false)
+                toggleSpeedReductionEffect(for: entity, status: false)
                 playerEntity = entity
                 cameraController.setTarget(entity)
                 playerController.setPlayer(entity)
@@ -122,6 +123,8 @@ struct GameView: View {
             } else if entity.name.contains("bot_") {
                 entity.components.set(GameTagComponent(type: .bot))
                 toggleShieldBubbleEffect(for: entity, enable: false)
+                toggleSpeedBoostEffect(for: entity, status: false)
+                toggleSpeedReductionEffect(for: entity, status: false)
                 foundBots.append(entity)
                 
             } else if entity.name.contains("speedUp") {
@@ -226,6 +229,8 @@ struct GameView: View {
                 }else if effect == .speedBoost {
                     print("apply speed boost")
                     toggleSpeedBoostEffect(for: entity, status: true)
+                }else if effect == .speedReduction {
+                    toggleSpeedReductionEffect(for: entity, status: true)
                 }
             }
         }
@@ -233,11 +238,16 @@ struct GameView: View {
         gameController.onEffectVisualRemoved = { entity, effect in
             if effect == .shield {
                 toggleShieldBubbleEffect(for: entity, enable: false)
+                
             } else if effect == .splash && entity.name.contains("player") {
                 print("remove splash")
                 self.splashVisible = false
+                
             }else if effect == .speedBoost {
                 toggleSpeedBoostEffect(for: entity, status: false)
+                
+            }else if effect == .speedReduction {
+                toggleSpeedReductionEffect(for: entity, status: false)
             }
         }
     }
@@ -321,16 +331,27 @@ struct GameView: View {
     }
     
     private func toggleSpeedBoostEffect(for entity: Entity, status enable: Bool) {
-        if let powerUpEntity = entity.findEntity(named: "speedBoost") {
+        if let powerUpEntity = entity.findEntity(named: "emmision_afterEffect_speedUp") {
             powerUpEntity.isEnabled = enable
             if enable {
                        print("⚡ Speed boost effect enabled for \(entity.name)")
                    } else {
                        print("⚡ Speed boost effect disabled for \(entity.name)")
                    }
-            
         }
     }
+    
+    private func toggleSpeedReductionEffect(for entity: Entity, status enable: Bool) {
+        if let powerDownEntity = entity.findEntity(named: "emmision_afterEffect_slowDown") {
+            powerDownEntity.isEnabled = enable
+            if enable {
+                print("🐌 Speed reduction effect enabled for \(entity.name)")
+            } else {
+                print("🐌 Speed reduction effect disabled for \(entity.name)")
+            }
+        }
+    }
+
 
     @MainActor
     private func applyStaticMeshCollision(to entity: Entity) async {
