@@ -576,6 +576,7 @@ class GameController: ObservableObject {
           lockTranslation(for: racingEntity.entity, lockX: false, lockY: true, lockZ: false)
        }
           
+        startBoundaryCheck()
         print("🚀 Game started!")
     }
     
@@ -586,6 +587,10 @@ class GameController: ObservableObject {
             self.updateAllEntitiesMovement()
             self.updateBoundariesAndPositions()
             self.updateFinishChecking()
+            
+            DispatchQueue.main.async {
+                self.updatePlayerPosition()
+            }
         }
             
         startBotAI()
