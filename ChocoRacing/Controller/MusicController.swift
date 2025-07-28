@@ -42,7 +42,6 @@ final class MusicController {
                 speedUpSound = try await AudioFileResource.load(named: "speedup", in: nil)
                 protectionSound = try await AudioFileResource.load(named: "pop1", in: nil)
                 boingSound = try await AudioFileResource.load(named: "boing3", in: nil)
-//                slideStoneSound = try await AudioFileResource.load(named: "stone1", in: nil)
                 bombSound = try await AudioFileResource.load(named: "splat1", in: nil)
                 winSound = try await AudioFileResource.load(named: "win1", in: nil)
                 loseSound = try await AudioFileResource.load(named: "lose1", in: nil)
