@@ -65,6 +65,7 @@ class GameController: ObservableObject {
     var onPowerEffectEnded: (() -> Void)?
     var onEffectVisualApplied: ((Entity, PowerEffectType) -> Void)?
     var onEffectVisualRemoved: ((Entity, PowerEffectType) -> Void)?
+    var onResetEffectVisualRemoved: (([Entity]) -> Void)?
     var onEntityFinished: ((FinishInfo) -> Void)?
     var onAllEntitiesFinished: (([FinishInfo]) -> Void)?
     var gameConfig: GameConfiguration?
@@ -220,6 +221,7 @@ class GameController: ObservableObject {
         clearAllPowerEffects()
         showLeaderboard = true
         
+       
         onGameEnd?()
         //loop untuk setiap racingentities
         for (_, racingEntity) in racingEntities {
@@ -257,6 +259,8 @@ class GameController: ObservableObject {
         allEntityPositions.removeAll()
         
         resetAllPositions()
+        
+      
         
         for (name, var racingEntity) in racingEntities {
             racingEntity.isFinished = false
@@ -311,6 +315,10 @@ class GameController: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.startGame()
         }
+        
+        
+        print("mau masuk effect removed")
+        onResetEffectVisualRemoved?( racingEntities.values.map { $0.entity })
         
         print("🔄 Game restart initiated - will start countdown automatically")
     }

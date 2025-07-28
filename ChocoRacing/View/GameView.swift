@@ -250,6 +250,17 @@ struct GameView: View {
                 toggleSpeedReductionEffect(for: entity, status: false)
             }
         }
+        
+        gameController.onResetEffectVisualRemoved = { entities in
+            print("Reset Effect Visual Removed")
+            for entity in entities {
+                print("Entity Name Reset effect: \(entity.name)")
+                toggleShieldBubbleEffect(for: entity, enable: false)
+                toggleSpeedBoostEffect(for: entity, status: false)
+                toggleSpeedReductionEffect(for: entity, status: false)
+            }
+            
+        }
     }
     
     private func setupCollisionDetection(content: any RealityViewContentProtocol) {
