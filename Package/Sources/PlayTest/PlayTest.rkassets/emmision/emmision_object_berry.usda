@@ -1,0 +1,96 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "Reality Composer Pro Version 2.0 (448.60.4)"
+    }
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+def Xform "Root"
+{
+    def Xform "ParticleEmitter"
+    {
+        float3 xformOp:scale = (2, 2, 2)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "VFXEmitter"
+        {
+            token info:id = "RealityKit.VFXEmitter"
+
+            def RealityKitStruct "currentState"
+            {
+                token birthDirection = "Constant"
+                token birthLocation = "Volume"
+                int64 burstCount = 5
+                float3 emissionDirection = (0, 1, 0)
+                double emissionDuration = 1
+                double emissionDurationVariation = 0
+                token emitterShape = "Cylinder"
+                double idleDuration = 0
+                double idleDurationVariation = 0
+                bool isLocal = 0
+                bool isSpawningEnabled = 0
+                bool loops = 1
+                float particleSpeed = 0.09
+                float particleSpeedVariation = 0.04
+                float3 shapeSize = (0.3, 0.4, 0.3)
+                bool spawnInheritParentColor = 0
+                token spawnOccasion = "OnUpdate"
+                float spawnSpreadFactor = 0
+                float spawnSpreadFactorVariation = 0
+                float spawnVelocityFactor = 1
+                double warmupDuration = 0
+
+                def RealityKitStruct "mainEmitter"
+                {
+                    float3 acceleration = (0, 0, 0)
+                    token billboardMode = "Billboard"
+                    float birthRate = 10
+                    float birthRateVariation = 10
+                    token blendMode = "Alpha"
+                    float colorEvolutionPower = 0
+                    float dampingFactor = 0
+                    float4 endColorA = (0.15055344, 0.57862663, 1, 1)
+                    float4 endColorB = (1, 0.6822663, 0.71603036, 1)
+                    bool isLightingEnabled = 0
+                    float noiseAnimationSpeed = 2
+                    float noiseScale = 1
+                    float noiseStrength = 0.1
+                    token opacityOverLife = "GradualFadeInOut"
+                    float particleAngle = 3.1415925
+                    float particleAngleVariation = 3.1415925
+                    float particleAngularVelocity = 0
+                    float particleAngularVelocityVariation = 0.5
+                    asset particleImage = @../ParticleEmitterPresetTextures/snow.png@
+                    double particleLifeSpan = 3
+                    double particleLifeSpanVariation = 0.2
+                    float particleMass = 1
+                    float particleMassVariation = 0
+                    float particleSize = 0.07
+                    float particleSizeVariation = 0.007
+                    float3 radialGravityCenter = (1, 1, 0)
+                    float radialGravityStrength = 0
+                    float sizeMultiplierAtEndOfLifespan = 0.8
+                    float sizeMultiplierAtEndOfLifespanPower = 10
+                    token sortOrder = "IncreasingDepth"
+                    float spreadingAngle = 0
+                    float4 startColorA = (0.9512984, 0.53966796, 0.6721321, 1)
+                    float4 startColorB = (0.32492837, 0.41825563, 0.97950035, 1)
+                    float stretchFactor = 0
+                    bool useEndColor = 0
+                    bool useEndColorRange = 1
+                    bool useStartColorRange = 1
+                    float3 vortexDirection = (0, 1, 0)
+                    float vortexStrength = 0
+                }
+
+                def RealityKitStruct "spawnedEmitter"
+                {
+                }
+            }
+        }
+    }
+}
+

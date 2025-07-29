@@ -14,6 +14,8 @@
 		5C7143212E36134C00B34090 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7143202E36134C00B34090 /* ConfettiSwiftUI */; };
 		5C7145C02E362F8C00B34090 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7145BF2E362F8C00B34090 /* PlayTest */; };
 		5C7146372E373A8C00B34090 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7146362E373A8C00B34090 /* PlayTest */; };
+		5C71463E2E38BA3700B34090 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5C71463D2E38BA3700B34090 /* PlayTest */; };
+		5C7146412E38BBA600B34090 /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7146402E38BBA600B34090 /* PlayTest */; };
 		5CFA78002E2A53F000808F5A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 5CFA77FF2E2A53EA00808F5A /* .gitignore */; };
 		5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA783B2E2D03E900808F5A /* PlayTest */; };
 		5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFA787D2E2D0F5C00808F5A /* PlayTest */; };
@@ -73,9 +75,11 @@
 			files = (
 				5C7143212E36134C00B34090 /* ConfettiSwiftUI in Frameworks */,
 				5CFA787E2E2D0F5C00808F5A /* PlayTest in Frameworks */,
+				5C71463E2E38BA3700B34090 /* PlayTest in Frameworks */,
 				5C7146372E373A8C00B34090 /* PlayTest in Frameworks */,
 				5C4CFA862E33924F000861AA /* PlayTest in Frameworks */,
 				5CFA783C2E2D03E900808F5A /* PlayTest in Frameworks */,
+				5C7146412E38BBA600B34090 /* PlayTest in Frameworks */,
 				6DDDC0E52E3384A900020553 /* PlayTest in Frameworks */,
 				2C1DA7DA2E321DC00042CA58 /* PlayTest in Frameworks */,
 				6DDDC0522E323B5B00020553 /* PlayTest in Frameworks */,
@@ -152,6 +156,8 @@
 				5C7143202E36134C00B34090 /* ConfettiSwiftUI */,
 				5C7145BF2E362F8C00B34090 /* PlayTest */,
 				5C7146362E373A8C00B34090 /* PlayTest */,
+				5C71463D2E38BA3700B34090 /* PlayTest */,
+				5C7146402E38BBA600B34090 /* PlayTest */,
 			);
 			productName = ChocoRacing;
 			productReference = 5CFA77BB2E2A44F100808F5A /* ChocoRacing.app */;
@@ -231,7 +237,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5C71431F2E36134C00B34090 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
-				5C7146352E373A8C00B34090 /* XCLocalSwiftPackageReference "../../../Downloads/Packagefix" */,
+				5C71463F2E38BBA600B34090 /* XCLocalSwiftPackageReference "Package" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5CFA77BC2E2A44F100808F5A /* Products */;
@@ -440,7 +446,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ChocoRacing/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_CFBundleDisplayName = "Choco Rush";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -472,7 +478,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ChocoRacing/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_CFBundleDisplayName = "Choco Rush";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -607,9 +613,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		5C7146352E373A8C00B34090 /* XCLocalSwiftPackageReference "../../../Downloads/Packagefix" */ = {
+		5C71463F2E38BBA600B34090 /* XCLocalSwiftPackageReference "Package" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../Downloads/Packagefix;
+			relativePath = Package;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -651,6 +657,14 @@
 			productName = PlayTest;
 		};
 		5C7146362E373A8C00B34090 /* PlayTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayTest;
+		};
+		5C71463D2E38BA3700B34090 /* PlayTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayTest;
+		};
+		5C7146402E38BBA600B34090 /* PlayTest */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayTest;
 		};

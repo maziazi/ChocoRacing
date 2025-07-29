@@ -1,0 +1,13 @@
+#usda 1.0
+(
+    defaultPrim = "emmision_object_bonBomb"
+)
+
+def "emmision_object_bonBomb" (
+    active = true
+    prepend references = @emmision_object_bonBomb.usda@
+)
+{
+    float3 xformOp:scale = (1, 1, 1)
+}
+
