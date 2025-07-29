@@ -20,12 +20,13 @@ struct SplashEffectView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 200, height: 200)
-                .padding(.bottom, 100)
+                .padding(.bottom, 50)
+                .padding(.leading, 15)
                 .opacity(splashVisible ? 1.0 : 0.0)
                 .onAppear {
                     // Terapkan animasi scale pada splash saat muncul
                     withAnimation(.easeIn(duration: 0.2)) {
-                        splashScale = 1.5 // Efek scale pada splash
+                        splashScale = 2.5// Efek scale pada splash
                     }
                 }
                 .scaleEffect(splashScale) // Terapkan efek scale yang diubah di atas
