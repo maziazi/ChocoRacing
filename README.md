@@ -25,23 +25,20 @@ Choco Rush is a fast-paced 3D racing game built entirely within the Apple ecosys
 
 ## 📸 Mobile Previews
 
+![Mobile Preview](ChocoRacing/Resources/img/Preview.PNG)
 ### Preview 1: Character Selection
-![Mobile Preview 1](ChocoRacing/Resources/img/1-MobilePreview.PNG)
 
 **Choose Your Racer:** Select from a variety of adorable chocolate-themed characters, each with unique personality and style. Customize your racing experience by picking your favorite sweet friend!
 
 ---
 
 ### Preview 2: Dynamic Racing Gameplay
-![Mobile Preview 2](ChocoRacing/Resources/img/2-MobilePreview.PNG)
 
 **Race & Compete:** Navigate through thrilling tracks filled with obstacles and power-ups. Compete against smart bots that adapt to your performance, creating challenging and engaging races every time.
 
 ---
 
 ### Preview 3: Race Results & Leaderboard
-![Mobile Preview 3](ChocoRacing/Resources/img/3-MobilePreview.PNG)
-
 **Earn Rewards:** Complete races to earn badges (1st, 2nd, 3rd, 4th place) and track your progress on the leaderboard. Master the tracks and become the ultimate racing champion!
 
 ---
